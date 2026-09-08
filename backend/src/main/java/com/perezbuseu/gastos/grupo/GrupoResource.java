@@ -5,6 +5,7 @@ import com.perezbuseu.gastos.gasto.GastoRepository;
 import com.perezbuseu.gastos.gasto.RepartoGasto;
 import com.perezbuseu.gastos.gasto.RepartoGastoRepository;
 import com.perezbuseu.gastos.gasto.dto.BalanceUsuarioResponse;
+import com.perezbuseu.gastos.gasto.dto.LiquidacionResponse;
 import com.perezbuseu.gastos.miembro.MiembroGrupo;
 import com.perezbuseu.gastos.miembro.MiembroGrupoRepository;
 
@@ -67,9 +68,7 @@ public class GrupoResource {
     public List<BalanceUsuarioResponse> obtenerBalance(
             @PathParam("id") Long id) {
 
-
         Grupo grupo = grupoRepository.findById(id);
-
 
         if (grupo == null) {
 
@@ -79,10 +78,6 @@ public class GrupoResource {
         }
 
 
-        /*
-         * Buscamos los miembros
-         * pertenecientes al grupo.
-         */
         List<MiembroGrupo> miembros =
                 miembroGrupoRepository.list(
                         "grupo.id",
@@ -95,11 +90,16 @@ public class GrupoResource {
 
 
         /*
-         * Calculamos el balance
-         * de cada miembro.
+         * Buscamos los gastos una sola vez.
          */
-        for (MiembroGrupo miembro : miembros) {
+        List<Gasto> gastos =
+                gastoRepository.list(
+                        "grupo.id",
+                        id
+                );
 
+
+        for (MiembroGrupo miembro : miembros) {
 
             BalanceUsuarioResponse balance =
                     new BalanceUsuarioResponse();
@@ -111,10 +111,6 @@ public class GrupoResource {
             balance.nombreUsuario =
                     miembro.usuario.nombre;
 
-
-            /*
-             * Inicializamos los importes.
-             */
             balance.totalPagado =
                     BigDecimal.ZERO;
 
@@ -122,29 +118,12 @@ public class GrupoResource {
                     BigDecimal.ZERO;
 
 
-            /*
-             * Buscamos los gastos
-             * del grupo.
-             */
-            List<Gasto> gastos =
-                    gastoRepository.list(
-                            "grupo.id",
-                            id
-                    );
-
-
-            /*
-             * Recorremos todos
-             * los gastos.
-             */
             for (Gasto gasto : gastos) {
 
 
                 /*
-                 * Si este usuario
-                 * fue el pagador,
-                 * sumamos el importe
-                 * completo del gasto.
+                 * Si fue el pagador,
+                 * sumamos el importe completo.
                  */
                 if (gasto.pagador != null
                         && gasto.pagador.id.equals(
@@ -159,9 +138,8 @@ public class GrupoResource {
 
 
                 /*
-                 * Buscamos cuánto
-                 * le corresponde pagar
-                 * en este gasto.
+                 * Buscamos los repartos
+                 * de este gasto.
                  */
                 List<RepartoGasto> repartos =
                         repartoGastoRepository.list(
@@ -171,7 +149,6 @@ public class GrupoResource {
 
 
                 for (RepartoGasto reparto : repartos) {
-
 
                     if (reparto.usuario.id.equals(
                             miembro.usuario.id
@@ -189,8 +166,8 @@ public class GrupoResource {
             /*
              * Saldo:
              *
-             * Positivo -> ha pagado más
-             * Negativo -> debe dinero
+             * Positivo -> le deben dinero.
+             * Negativo -> debe dinero.
              */
             balance.saldo =
                     balance.totalPagado.subtract(
@@ -203,5 +180,184 @@ public class GrupoResource {
 
 
         return balances;
+    }
+
+
+    /*
+     * Calcula quién debe pagar a quién.
+     */
+    @GET
+    @Path("/{id}/liquidacion")
+    public List<LiquidacionResponse> obtenerLiquidacion(
+            @PathParam("id") Long id) {
+
+
+        /*
+         * Comprobamos que existe el grupo.
+         */
+        Grupo grupo = grupoRepository.findById(id);
+
+        if (grupo == null) {
+
+            throw new NotFoundException(
+                    "Grupo no encontrado"
+            );
+        }
+
+
+        /*
+         * Obtenemos los balances.
+         */
+        List<BalanceUsuarioResponse> balances =
+                obtenerBalance(id);
+
+
+        /*
+         * Listas de deudores y acreedores.
+         */
+        List<BalanceUsuarioResponse> deudores =
+                new ArrayList<>();
+
+        List<BalanceUsuarioResponse> acreedores =
+                new ArrayList<>();
+
+
+        for (BalanceUsuarioResponse balance : balances) {
+
+            if (balance.saldo.compareTo(
+                    BigDecimal.ZERO
+            ) < 0) {
+
+                deudores.add(balance);
+
+            } else if (balance.saldo.compareTo(
+                    BigDecimal.ZERO
+            ) > 0) {
+
+                acreedores.add(balance);
+            }
+        }
+
+
+        List<LiquidacionResponse> liquidaciones =
+                new ArrayList<>();
+
+
+        int indiceDeudor = 0;
+        int indiceAcreedor = 0;
+
+
+        /*
+         * Vamos compensando deudas.
+         */
+        while (indiceDeudor < deudores.size()
+                && indiceAcreedor < acreedores.size()) {
+
+
+            BalanceUsuarioResponse deudor =
+                    deudores.get(indiceDeudor);
+
+            BalanceUsuarioResponse acreedor =
+                    acreedores.get(indiceAcreedor);
+
+
+            /*
+             * El saldo del deudor es negativo.
+             * Necesitamos su valor absoluto.
+             */
+            BigDecimal deuda =
+                    deudor.saldo.abs();
+
+
+            BigDecimal credito =
+                    acreedor.saldo;
+
+
+            /*
+             * La cantidad a pagar será
+             * la menor de las dos.
+             */
+            BigDecimal importe;
+
+
+            if (deuda.compareTo(credito) <= 0) {
+
+                importe = deuda;
+
+            } else {
+
+                importe = credito;
+            }
+
+
+            /*
+             * Creamos la liquidación.
+             */
+            LiquidacionResponse liquidacion =
+                    new LiquidacionResponse();
+
+
+            liquidacion.deudorId =
+                    deudor.usuarioId;
+
+            liquidacion.nombreDeudor =
+                    deudor.nombreUsuario;
+
+            liquidacion.acreedorId =
+                    acreedor.usuarioId;
+
+            liquidacion.nombreAcreedor =
+                    acreedor.nombreUsuario;
+
+            liquidacion.importe =
+                    importe;
+
+
+            liquidaciones.add(liquidacion);
+
+
+            /*
+             * Actualizamos los saldos.
+             */
+            deudor.saldo =
+                    deudor.saldo.add(
+                            importe
+                    );
+
+
+            acreedor.saldo =
+                    acreedor.saldo.subtract(
+                            importe
+                    );
+
+
+            /*
+             * Si el deudor ya ha pagado
+             * toda su deuda, pasamos
+             * al siguiente.
+             */
+            if (deudor.saldo.compareTo(
+                    BigDecimal.ZERO
+            ) == 0) {
+
+                indiceDeudor++;
+            }
+
+
+            /*
+             * Si el acreedor ya ha recibido
+             * todo su dinero, pasamos
+             * al siguiente.
+             */
+            if (acreedor.saldo.compareTo(
+                    BigDecimal.ZERO
+            ) == 0) {
+
+                indiceAcreedor++;
+            }
+        }
+
+
+        return liquidaciones;
     }
 }
