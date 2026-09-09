@@ -1,9 +1,6 @@
 package com.perezbuseu.gastos.grupo;
 
-import com.perezbuseu.gastos.gasto.Gasto;
-import com.perezbuseu.gastos.gasto.GastoRepository;
-import com.perezbuseu.gastos.gasto.RepartoGasto;
-import com.perezbuseu.gastos.gasto.RepartoGastoRepository;
+import com.perezbuseu.gastos.gasto.BalanceService;
 import com.perezbuseu.gastos.gasto.dto.BalanceUsuarioResponse;
 import com.perezbuseu.gastos.gasto.dto.LiquidacionResponse;
 import com.perezbuseu.gastos.miembro.MiembroGrupo;
@@ -29,25 +26,27 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Path("/api/grupos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class GrupoResource {
 
+
     @Inject
     GrupoRepository grupoRepository;
+
 
     @Inject
     MiembroGrupoRepository miembroGrupoRepository;
 
+
     @Inject
     UsuarioRepository usuarioRepository;
 
-    @Inject
-    GastoRepository gastoRepository;
 
     @Inject
-    RepartoGastoRepository repartoGastoRepository;
+    BalanceService balanceService;
 
 
     /*
@@ -57,6 +56,7 @@ public class GrupoResource {
     public List<Grupo> listar() {
 
         return grupoRepository.listAll();
+
     }
 
 
@@ -65,11 +65,15 @@ public class GrupoResource {
      */
     @POST
     @Transactional
-    public Grupo crear(Grupo grupo) {
+    public Grupo crear(
+            Grupo grupo) {
 
-        grupoRepository.persist(grupo);
+        grupoRepository.persist(
+                grupo
+        );
 
         return grupo;
+
     }
 
 
@@ -82,19 +86,24 @@ public class GrupoResource {
     public List<MiembroGrupo> obtenerMiembros(
             @PathParam("id") Long id) {
 
-        Grupo grupo = grupoRepository.findById(id);
+        Grupo grupo =
+                grupoRepository.findById(id);
+
 
         if (grupo == null) {
 
             throw new NotFoundException(
                     "Grupo no encontrado"
             );
+
         }
+
 
         return miembroGrupoRepository.list(
                 "grupo.id",
                 id
         );
+
     }
 
 
@@ -109,18 +118,23 @@ public class GrupoResource {
             @PathParam("id") Long id,
             @PathParam("usuarioId") Long usuarioId) {
 
-        Grupo grupo = grupoRepository.findById(id);
+        Grupo grupo =
+                grupoRepository.findById(id);
+
 
         if (grupo == null) {
 
             throw new NotFoundException(
                     "Grupo no encontrado"
             );
+
         }
 
 
         Usuario usuario =
-                usuarioRepository.findById(usuarioId);
+                usuarioRepository.findById(
+                        usuarioId
+                );
 
 
         if (usuario == null) {
@@ -128,6 +142,7 @@ public class GrupoResource {
             throw new NotFoundException(
                     "Usuario no encontrado"
             );
+
         }
 
 
@@ -148,20 +163,33 @@ public class GrupoResource {
             throw new BadRequestException(
                     "El usuario ya pertenece al grupo"
             );
+
         }
 
 
-        MiembroGrupo miembro = new MiembroGrupo();
-
-        miembro.grupo = grupo;
-        miembro.usuario = usuario;
-        miembro.fechaAlta = LocalDateTime.now();
+        MiembroGrupo miembro =
+                new MiembroGrupo();
 
 
-        miembroGrupoRepository.persist(miembro);
+        miembro.grupo =
+                grupo;
+
+
+        miembro.usuario =
+                usuario;
+
+
+        miembro.fechaAlta =
+                LocalDateTime.now();
+
+
+        miembroGrupoRepository.persist(
+                miembro
+        );
 
 
         return miembro;
+
     }
 
 
@@ -176,13 +204,16 @@ public class GrupoResource {
             @PathParam("id") Long id,
             @PathParam("usuarioId") Long usuarioId) {
 
-        Grupo grupo = grupoRepository.findById(id);
+        Grupo grupo =
+                grupoRepository.findById(id);
+
 
         if (grupo == null) {
 
             throw new NotFoundException(
                     "Grupo no encontrado"
             );
+
         }
 
 
@@ -199,131 +230,14 @@ public class GrupoResource {
             throw new NotFoundException(
                     "El usuario no pertenece al grupo"
             );
+
         }
 
 
-        miembroGrupoRepository.delete(miembro);
-    }
+        miembroGrupoRepository.delete(
+                miembro
+        );
 
-
-    /*
-     * Obtiene el balance de todos
-     * los miembros de un grupo.
-     */
-    @GET
-    @Path("/{id}/balance")
-    public List<BalanceUsuarioResponse> obtenerBalance(
-            @PathParam("id") Long id) {
-
-        Grupo grupo = grupoRepository.findById(id);
-
-        if (grupo == null) {
-
-            throw new NotFoundException(
-                    "Grupo no encontrado"
-            );
-        }
-
-
-        List<MiembroGrupo> miembros =
-                miembroGrupoRepository.list(
-                        "grupo.id",
-                        id
-                );
-
-
-        List<BalanceUsuarioResponse> balances =
-                new ArrayList<>();
-
-
-        /*
-         * Buscamos los gastos una sola vez.
-         */
-        List<Gasto> gastos =
-                gastoRepository.list(
-                        "grupo.id",
-                        id
-                );
-
-
-        for (MiembroGrupo miembro : miembros) {
-
-            BalanceUsuarioResponse balance =
-                    new BalanceUsuarioResponse();
-
-
-            balance.usuarioId =
-                    miembro.usuario.id;
-
-            balance.nombreUsuario =
-                    miembro.usuario.nombre;
-
-            balance.totalPagado =
-                    BigDecimal.ZERO;
-
-            balance.totalDebe =
-                    BigDecimal.ZERO;
-
-
-            for (Gasto gasto : gastos) {
-
-                /*
-                 * Si fue el pagador,
-                 * sumamos el importe completo.
-                 */
-                if (gasto.pagador != null
-                        && gasto.pagador.id.equals(
-                                miembro.usuario.id
-                        )) {
-
-                    balance.totalPagado =
-                            balance.totalPagado.add(
-                                    gasto.importe
-                            );
-                }
-
-
-                /*
-                 * Buscamos los repartos
-                 * de este gasto.
-                 */
-                List<RepartoGasto> repartos =
-                        repartoGastoRepository.list(
-                                "gasto.id",
-                                gasto.id
-                        );
-
-
-                for (RepartoGasto reparto : repartos) {
-
-                    if (reparto.usuario.id.equals(
-                            miembro.usuario.id
-                    )) {
-
-                        balance.totalDebe =
-                                balance.totalDebe.add(
-                                        reparto.importe
-                                );
-                    }
-                }
-            }
-
-
-            /*
-             * Positivo -> le deben dinero.
-             * Negativo -> debe dinero.
-             */
-            balance.saldo =
-                    balance.totalPagado.subtract(
-                            balance.totalDebe
-                    );
-
-
-            balances.add(balance);
-        }
-
-
-        return balances;
     }
 
 
@@ -335,22 +249,33 @@ public class GrupoResource {
     public List<LiquidacionResponse> obtenerLiquidacion(
             @PathParam("id") Long id) {
 
-        Grupo grupo = grupoRepository.findById(id);
+        Grupo grupo =
+                grupoRepository.findById(id);
+
 
         if (grupo == null) {
 
             throw new NotFoundException(
                     "Grupo no encontrado"
             );
+
         }
 
 
+        /*
+         * Usamos BalanceService para que
+         * los balances tengan en cuenta
+         * los pagos realizados.
+         */
         List<BalanceUsuarioResponse> balances =
-                obtenerBalance(id);
+                balanceService.obtenerBalances(
+                        id
+                );
 
 
         List<BalanceUsuarioResponse> deudores =
                 new ArrayList<>();
+
 
         List<BalanceUsuarioResponse> acreedores =
                 new ArrayList<>();
@@ -362,14 +287,20 @@ public class GrupoResource {
                     BigDecimal.ZERO
             ) < 0) {
 
-                deudores.add(balance);
+                deudores.add(
+                        balance
+                );
 
             } else if (balance.saldo.compareTo(
                     BigDecimal.ZERO
             ) > 0) {
 
-                acreedores.add(balance);
+                acreedores.add(
+                        balance
+                );
+
             }
+
         }
 
 
@@ -378,25 +309,36 @@ public class GrupoResource {
 
 
         int indiceDeudor = 0;
+
+
         int indiceAcreedor = 0;
 
 
         /*
          * Vamos compensando deudas.
          */
-        while (indiceDeudor < deudores.size()
-                && indiceAcreedor < acreedores.size()) {
+        while (
+                indiceDeudor < deudores.size()
+                        &&
+                indiceAcreedor < acreedores.size()
+        ) {
 
 
             BalanceUsuarioResponse deudor =
-                    deudores.get(indiceDeudor);
+                    deudores.get(
+                            indiceDeudor
+                    );
+
 
             BalanceUsuarioResponse acreedor =
-                    acreedores.get(indiceAcreedor);
+                    acreedores.get(
+                            indiceAcreedor
+                    );
 
 
             BigDecimal deuda =
                     deudor.saldo.abs();
+
 
             BigDecimal credito =
                     acreedor.saldo;
@@ -405,13 +347,18 @@ public class GrupoResource {
             BigDecimal importe;
 
 
-            if (deuda.compareTo(credito) <= 0) {
+            if (deuda.compareTo(
+                    credito
+            ) <= 0) {
 
-                importe = deuda;
+                importe =
+                        deuda;
 
             } else {
 
-                importe = credito;
+                importe =
+                        credito;
+
             }
 
 
@@ -422,20 +369,26 @@ public class GrupoResource {
             liquidacion.deudorId =
                     deudor.usuarioId;
 
+
             liquidacion.nombreDeudor =
                     deudor.nombreUsuario;
+
 
             liquidacion.acreedorId =
                     acreedor.usuarioId;
 
+
             liquidacion.nombreAcreedor =
                     acreedor.nombreUsuario;
+
 
             liquidacion.importe =
                     importe;
 
 
-            liquidaciones.add(liquidacion);
+            liquidaciones.add(
+                    liquidacion
+            );
 
 
             /*
@@ -458,6 +411,7 @@ public class GrupoResource {
             ) == 0) {
 
                 indiceDeudor++;
+
             }
 
 
@@ -466,10 +420,14 @@ public class GrupoResource {
             ) == 0) {
 
                 indiceAcreedor++;
+
             }
+
         }
 
 
         return liquidaciones;
+
     }
+
 }

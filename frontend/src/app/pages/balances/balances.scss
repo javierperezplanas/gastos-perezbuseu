@@ -402,11 +402,277 @@
 
 
 .deuda-texto {
-  margin: 8px 0 0;
+  margin: 8px 0 15px;
 
   color: #777777;
 
   font-size: 14px;
+}
+
+
+/* =========================
+ *  BOTÓN REGISTRAR PAGO
+ * ========================= */
+
+.btn-registrar-pago {
+  background: #2f9e94;
+
+  border: none;
+
+  border-radius: 6px;
+
+  padding: 10px 16px;
+
+  cursor: pointer;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  transition:
+  background-color 0.2s,
+  transform 0.1s;
+}
+
+
+.btn-registrar-pago:hover {
+  background: #27877e;
+}
+
+
+.btn-registrar-pago:active {
+  transform: scale(0.98);
+}
+
+
+/* =========================
+ *  FORMULARIO DE PAGO
+ * ========================= */
+
+.formulario-pago {
+  margin-top: 30px;
+
+  padding: 25px;
+
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 10px;
+}
+
+
+.formulario-pago h2 {
+  margin: 0 0 15px;
+
+  font-size: 21px;
+
+  color: #333333;
+}
+
+
+.formulario-pago p {
+  margin: 0 0 20px;
+
+  color: #666666;
+
+  font-size: 15px;
+}
+
+
+.formulario-pago label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #555555;
+
+  font-size: 14px;
+
+  font-weight: 500;
+}
+
+
+.formulario-pago input {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 11px 12px;
+
+  border: 1px solid #cccccc;
+
+  border-radius: 6px;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+
+.formulario-pago input:focus {
+  border-color: #2f9e94;
+}
+
+
+/* =========================
+ *  BOTONES FORMULARIO
+ * ========================= */
+
+.formulario-pago-botones {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+
+.btn-cancelar {
+  background: white;
+
+  border: 1px solid #cccccc;
+
+  border-radius: 6px;
+
+  padding: 10px 16px;
+
+  cursor: pointer;
+
+  color: #555555;
+
+  font-size: 14px;
+}
+
+
+.btn-cancelar:hover {
+  background: #f5f5f5;
+}
+
+
+.btn-confirmar-pago {
+  background: #2f9e94;
+
+  border: none;
+
+  border-radius: 6px;
+
+  padding: 10px 16px;
+
+  cursor: pointer;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 500;
+}
+
+
+.btn-confirmar-pago:hover {
+  background: #27877e;
+}
+
+
+/* =========================
+ *  HISTORIAL DE PAGOS
+ * ========================= */
+
+.historial-pagos {
+  margin-top: 30px;
+
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+
+.historial-cabecera {
+  padding: 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+
+.historial-cabecera h2 {
+  margin: 0;
+
+  font-size: 21px;
+
+  color: #333333;
+}
+
+
+.historial-cabecera p {
+  margin: 6px 0 0;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+.pago {
+  padding: 18px 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+
+.pago:last-child {
+  border-bottom: none;
+}
+
+
+.pago-personas {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: #333333;
+
+  font-size: 16px;
+}
+
+
+.pago-personas span {
+  color: #2f9e94;
+
+  font-size: 20px;
+
+  font-weight: bold;
+}
+
+
+.pago-importe {
+  margin-top: 8px;
+
+  font-size: 21px;
+
+  font-weight: 600;
+
+  color: #27877e;
+}
+
+
+.pago small {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #888888;
+
+  font-size: 13px;
 }
 
 
@@ -558,6 +824,40 @@
 
   .deuda-importe {
     font-size: 23px;
+  }
+
+
+  .formulario-pago {
+    margin-top: 20px;
+
+    padding: 20px;
+  }
+
+
+  .formulario-pago-botones {
+    flex-direction: column-reverse;
+  }
+
+
+  .btn-cancelar,
+  .btn-confirmar-pago,
+  .btn-registrar-pago {
+    width: 100%;
+  }
+
+
+  .historial-pagos {
+    margin-top: 20px;
+  }
+
+
+  .historial-cabecera {
+    padding: 18px;
+  }
+
+
+  .pago {
+    padding: 18px;
   }
 
 

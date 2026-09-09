@@ -5,16 +5,29 @@ import {
   Router
 } from '@angular/router';
 
-import { CommonModule } from '@angular/common';
+import {
+  CommonModule
+} from '@angular/common';
 
-import { Gastos } from '../../services/gastos';
+import {
+  FormsModule
+} from '@angular/forms';
+
+import {
+  Gastos
+} from '../../services/gastos';
+
+import {
+  Pagos
+} from '../../services/pagos';
 
 
 @Component({
   selector: 'app-balances',
 
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
 
   templateUrl: './balances.html',
@@ -34,6 +47,15 @@ export class Balances implements OnInit {
   liquidaciones: any[] = [];
 
 
+  pagos: any[] = [];
+
+
+  deudaSeleccionada: any = null;
+
+
+  importePago: number = 0;
+
+
   cargando: boolean = true;
 
 
@@ -46,7 +68,9 @@ export class Balances implements OnInit {
 
       private router: Router,
 
-        private gastosService: Gastos
+        private gastosService: Gastos,
+
+          private pagosService: Pagos
 
   ) {}
 
@@ -71,6 +95,8 @@ export class Balances implements OnInit {
     this.cargarBalances();
 
     this.cargarLiquidaciones();
+
+    this.cargarPagos();
 
   }
 
@@ -157,6 +183,172 @@ export class Balances implements OnInit {
         console.error(
           'Error cargando liquidaciones:',
           error
+        );
+
+      }
+
+    });
+
+  }
+
+
+  cargarPagos(): void {
+
+
+    this.pagosService
+    .obtenerPagosPorGrupo(
+      this.grupoId
+    )
+    .subscribe({
+
+      next: (pagos: any[]) => {
+
+
+        console.log(
+          'Pagos recibidos:',
+          pagos
+        );
+
+
+        this.pagos =
+        pagos;
+
+      },
+
+
+      error: (error: any) => {
+
+
+        console.error(
+          'Error cargando pagos:',
+          error
+        );
+
+      }
+
+    });
+
+  }
+
+
+  seleccionarDeuda(
+    liquidacion: any
+  ): void {
+
+
+    this.deudaSeleccionada =
+    liquidacion;
+
+
+    /*
+     * Por defecto proponemos
+     * pagar toda la deuda.
+     */
+    this.importePago =
+    liquidacion.importe;
+
+  }
+
+
+  cancelarPago(): void {
+
+
+    this.deudaSeleccionada =
+    null;
+
+
+    this.importePago =
+    0;
+
+  }
+
+
+  registrarPago(): void {
+
+
+    if (!this.deudaSeleccionada) {
+
+      return;
+
+    }
+
+
+    if (
+      !this.importePago ||
+      this.importePago <= 0
+    ) {
+
+      alert(
+        'El importe debe ser mayor que cero.'
+      );
+
+      return;
+
+    }
+
+
+    const pago = {
+
+      grupoId:
+      this.grupoId,
+
+
+      deudorId:
+      this.deudaSeleccionada.deudorId,
+
+
+      acreedorId:
+      this.deudaSeleccionada.acreedorId,
+
+
+      importe:
+      this.importePago
+
+    };
+
+
+    this.pagosService
+    .registrarPago(pago)
+    .subscribe({
+
+      next: (response: any) => {
+
+
+        console.log(
+          'Pago registrado:',
+          response
+        );
+
+
+        /*
+         * Cerramos el formulario.
+         */
+        this.cancelarPago();
+
+
+        /*
+         * Recargamos toda la información.
+         */
+        this.cargarBalances();
+
+        this.cargarLiquidaciones();
+
+        this.cargarPagos();
+
+      },
+
+
+      error: (error: any) => {
+
+
+        console.error(
+          'Error registrando pago:',
+          error
+        );
+
+
+        alert(
+          'No se ha podido registrar el pago.'
         );
 
       }

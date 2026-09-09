@@ -190,7 +190,7 @@
   </div>
 
 
-  <!-- PAGAR DEUDAS -->
+  <!-- DEUDAS PENDIENTES -->
 
   <div
     class="pagar-deudas"
@@ -206,7 +206,7 @@
       <div>
 
         <h2>
-          💸 Pagar deudas
+          💸 Deudas pendientes
         </h2>
 
         <p>
@@ -267,6 +267,157 @@
         {{ liquidacion.nombreAcreedor }}.
 
       </p>
+
+
+      <!-- BOTÓN REGISTRAR PAGO DE DEUDA -->
+
+      <button
+        class="btn-registrar-pago"
+        (click)="seleccionarDeuda(liquidacion)"
+      >
+
+        💸 Registrar pago de deuda
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- FORMULARIO DE PAGO DE DEUDA -->
+
+  <div
+    class="formulario-pago"
+    *ngIf="deudaSeleccionada"
+  >
+
+    <h2>
+      Registrar pago de deuda
+    </h2>
+
+
+    <p>
+
+      <strong>
+        {{ deudaSeleccionada.nombreDeudor }}
+      </strong>
+
+      pagará a
+
+      <strong>
+        {{ deudaSeleccionada.nombreAcreedor }}
+      </strong>
+
+    </p>
+
+
+    <label>
+
+      Importe
+
+    </label>
+
+
+    <input
+      type="number"
+      [(ngModel)]="importePago"
+      min="0.01"
+      step="0.01"
+    />
+
+
+    <div class="formulario-pago-botones">
+
+      <button
+        class="btn-cancelar"
+        (click)="cancelarPago()"
+      >
+
+        Cancelar
+
+      </button>
+
+
+      <button
+        class="btn-confirmar-pago"
+        (click)="registrarPago()"
+      >
+
+        💸 Registrar pago de deuda
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- HISTORIAL DE PAGOS DE DEUDA -->
+
+  <div
+    class="historial-pagos"
+    *ngIf="
+      !cargando &&
+      pagos.length > 0
+    "
+  >
+
+    <div class="historial-cabecera">
+
+      <h2>
+        💳 Historial de pagos de deuda
+      </h2>
+
+      <p>
+        Pagos realizados para saldar deudas.
+      </p>
+
+    </div>
+
+
+    <div
+      class="pago"
+      *ngFor="let pago of pagos"
+    >
+
+      <div class="pago-personas">
+
+        <strong>
+
+          {{ pago.nombreDeudor }}
+
+        </strong>
+
+
+        <span>
+
+          →
+
+        </span>
+
+
+        <strong>
+
+          {{ pago.nombreAcreedor }}
+
+        </strong>
+
+      </div>
+
+
+      <div class="pago-importe">
+
+        {{ pago.importe | number:'1.2-2' }} €
+
+      </div>
+
+
+      <small>
+
+        {{ pago.fechaHora | date:'dd/MM/yyyy HH:mm' }}
+
+      </small>
 
     </div>
 
