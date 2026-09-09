@@ -28,8 +28,6 @@
         </label>
 
 
-        <!-- FOTO ACTUAL -->
-
         @if (foto) {
 
           <div class="foto-actual">
@@ -52,16 +50,12 @@
         }
 
 
-        <!-- SELECTOR DE FOTO -->
-
         <input
           type="file"
           accept="image/*"
           (change)="seleccionarFoto($event)"
         >
 
-
-        <!-- BOTÓN SUBIR FOTO -->
 
         @if (fotoSeleccionada) {
 
@@ -139,6 +133,215 @@
           placeholder="Describe el grupo"
           rows="4"
         ></textarea>
+
+      </div>
+
+
+      <!-- ======================== -->
+      <!-- MIEMBROS DEL GRUPO -->
+      <!-- ======================== -->
+
+      <div class="miembros-seccion">
+
+
+        <h2>
+          👥 Miembros del grupo
+        </h2>
+
+
+        @if (miembros.length === 0) {
+
+          <p class="sin-miembros">
+
+            No hay miembros en este grupo.
+
+          </p>
+
+        } @else {
+
+          <div class="lista-miembros">
+
+
+            @for (
+              miembro of miembros;
+              track miembro.id
+            ) {
+
+              <div class="miembro">
+
+
+                <div class="miembro-info">
+
+                  <div class="miembro-icono">
+
+                    👤
+
+                  </div>
+
+
+                  <div>
+
+                    <strong>
+
+                      {{ miembro.usuario.nombre }}
+
+                    </strong>
+
+
+                    <p>
+
+                      {{ miembro.usuario.email }}
+
+                    </p>
+
+                  </div>
+
+                </div>
+
+
+                <button
+                  type="button"
+                  class="btn-eliminar-miembro"
+                  (click)="eliminarMiembro(miembro)"
+                  [disabled]="
+                    eliminandoMiembroId === miembro.usuario.id
+                  "
+                >
+
+                  @if (
+                    eliminandoMiembroId
+                    ===
+                    miembro.usuario.id
+                  ) {
+
+                    ⏳
+
+                  } @else {
+
+                    🗑️
+
+                  }
+
+                </button>
+
+
+              </div>
+
+            }
+
+
+          </div>
+
+        }
+
+
+        <!-- ======================== -->
+        <!-- AÑADIR MIEMBRO -->
+        <!-- ======================== -->
+
+        <div class="anadir-miembro">
+
+
+          <h3>
+            ➕ Añadir miembro
+          </h3>
+
+
+          <div class="buscar-miembro">
+
+
+            <input
+              type="email"
+              [(ngModel)]="emailNuevoMiembro"
+              name="emailNuevoMiembro"
+              placeholder="Email del usuario"
+              [disabled]="
+                buscandoUsuario
+                ||
+                agregandoMiembro
+              "
+            >
+
+
+            <button
+              type="button"
+              class="btn-buscar"
+              (click)="buscarUsuario()"
+              [disabled]="
+                buscandoUsuario
+                ||
+                agregandoMiembro
+              "
+            >
+
+              @if (buscandoUsuario) {
+
+                ⏳ Buscando...
+
+              } @else {
+
+                🔎 Buscar
+
+              }
+
+            </button>
+
+
+          </div>
+
+
+          <!-- USUARIO ENCONTRADO -->
+
+          @if (usuarioEncontrado) {
+
+            <div class="usuario-encontrado">
+
+
+              <div>
+
+                <strong>
+
+                  👤 {{ usuarioEncontrado.nombre }}
+
+                </strong>
+
+
+                <p>
+
+                  {{ usuarioEncontrado.email }}
+
+                </p>
+
+              </div>
+
+
+              <button
+                type="button"
+                class="btn-anadir"
+                (click)="anadirMiembro()"
+                [disabled]="agregandoMiembro"
+              >
+
+                @if (agregandoMiembro) {
+
+                  ⏳ Añadiendo...
+
+                } @else {
+
+                  ➕ Añadir al grupo
+
+                }
+
+              </button>
+
+
+            </div>
+
+          }
+
+
+        </div>
+
 
       </div>
 

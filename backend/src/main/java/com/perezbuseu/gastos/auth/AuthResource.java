@@ -2,6 +2,7 @@ package com.perezbuseu.gastos.auth;
 
 import com.perezbuseu.gastos.auth.dto.LoginRequest;
 import com.perezbuseu.gastos.auth.dto.LoginResponse;
+import com.perezbuseu.gastos.auth.dto.RegisterRequest;
 
 import jakarta.inject.Inject;
 
@@ -27,12 +28,32 @@ public class AuthResource {
     AuthService authService;
 
 
+    /*
+     * Iniciar sesión.
+     */
     @POST
     @Path("/login")
     public LoginResponse login(
-            LoginRequest request) {
+            LoginRequest request
+    ) {
 
         return authService.login(
+                request
+        );
+
+    }
+
+
+    /*
+     * Registrar un nuevo usuario.
+     */
+    @POST
+    @Path("/register")
+    public LoginResponse register(
+            RegisterRequest request
+    ) {
+
+        return authService.register(
                 request
         );
 

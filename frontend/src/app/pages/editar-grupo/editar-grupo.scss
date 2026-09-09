@@ -219,7 +219,301 @@
 
 
 /*
- * BOTONES
+ * ========================
+ * MIEMBROS DEL GRUPO
+ * ========================
+ */
+
+.miembros-seccion {
+
+  padding: 20px;
+
+  border: 1px solid #dbeafe;
+
+  border-radius: 10px;
+
+  background: #f8fbff;
+
+}
+
+
+.miembros-seccion h2 {
+
+  margin-top: 0;
+
+  margin-bottom: 20px;
+
+  font-size: 20px;
+
+}
+
+
+/*
+ * CUANDO NO HAY MIEMBROS
+ */
+
+.sin-miembros {
+
+  padding: 15px;
+
+  text-align: center;
+
+  color: #666;
+
+}
+
+
+/*
+ * LISTA DE MIEMBROS
+ */
+
+.lista-miembros {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+}
+
+
+/*
+ * MIEMBRO
+ */
+
+.miembro {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 12px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 8px;
+
+  background: white;
+
+}
+
+
+.miembro-info {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+
+}
+
+
+.miembro-icono {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 42px;
+
+  height: 42px;
+
+  flex-shrink: 0;
+
+  font-size: 22px;
+
+  border-radius: 50%;
+
+  background: #e0e7ff;
+
+}
+
+
+.miembro-info strong {
+
+  display: block;
+
+}
+
+
+.miembro-info p {
+
+  margin: 3px 0 0;
+
+  color: #666;
+
+  font-size: 14px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+}
+
+
+/*
+ * BOTÓN ELIMINAR MIEMBRO
+ */
+
+.btn-eliminar-miembro {
+
+  flex-shrink: 0;
+
+  padding: 8px 12px;
+
+  background: #fee2e2;
+
+  color: #dc2626;
+
+}
+
+
+.btn-eliminar-miembro:hover:not(:disabled) {
+
+  background: #fecaca;
+
+}
+
+
+/*
+ * ========================
+ * AÑADIR MIEMBRO
+ * ========================
+ */
+
+.anadir-miembro {
+
+  margin-top: 25px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #dbeafe;
+
+}
+
+
+.anadir-miembro h3 {
+
+  margin-top: 0;
+
+  margin-bottom: 15px;
+
+  font-size: 17px;
+
+}
+
+
+/*
+ * BUSCADOR
+ */
+
+.buscar-miembro {
+
+  display: flex;
+
+  gap: 10px;
+
+}
+
+
+.buscar-miembro input {
+
+  width: 100%;
+
+  min-width: 0;
+
+  padding: 12px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 8px;
+
+  font-size: 15px;
+
+}
+
+
+.btn-buscar {
+
+  flex-shrink: 0;
+
+  background: #2563eb;
+
+  color: white;
+
+}
+
+
+/*
+ * USUARIO ENCONTRADO
+ */
+
+.usuario-encontrado {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 15px;
+
+  padding: 15px;
+
+  border: 1px solid #bbf7d0;
+
+  border-radius: 8px;
+
+  background: #f0fdf4;
+
+}
+
+
+.usuario-encontrado strong {
+
+  display: block;
+
+}
+
+
+.usuario-encontrado p {
+
+  margin: 5px 0 0;
+
+  color: #666;
+
+  font-size: 14px;
+
+}
+
+
+.btn-anadir {
+
+  flex-shrink: 0;
+
+  background: #16a34a;
+
+  color: white;
+
+}
+
+
+/*
+ * BOTONES PRINCIPALES
  */
 
 .acciones {
@@ -327,6 +621,10 @@ button {
 }
 
 
+/*
+ * ESTADOS DE BOTONES
+ */
+
 button:hover:not(:disabled) {
 
   opacity: 0.9;
@@ -361,7 +659,9 @@ button:disabled {
 
 
 /*
+ * ========================
  * MÓVIL
+ * ========================
  */
 
 @media (
@@ -415,6 +715,65 @@ button:disabled {
 
   }
 
+
+  /*
+   * MIEMBROS
+   */
+
+  .buscar-miembro {
+
+    flex-direction: column;
+
+  }
+
+
+  .buscar-miembro button {
+
+    width: 100%;
+
+  }
+
+
+  .usuario-encontrado {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+  }
+
+
+  .usuario-encontrado button {
+
+    width: 100%;
+
+  }
+
+
+  .miembro {
+
+    align-items: flex-start;
+
+  }
+
+
+  .miembro-info {
+
+    width: 100%;
+
+  }
+
+
+  .miembro-info p {
+
+    max-width: 180px;
+
+  }
+
+
+  /*
+   * ZONA DE PELIGRO
+   */
 
   .zona-peligro {
 

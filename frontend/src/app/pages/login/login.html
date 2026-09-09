@@ -20,9 +20,19 @@
       </h1>
 
 
-      <p>
-        Inicia sesión para continuar
-      </p>
+      @if (modoRegistro) {
+
+        <p>
+          Crea una cuenta para empezar
+        </p>
+
+      } @else {
+
+        <p>
+          Inicia sesión para continuar
+        </p>
+
+      }
 
     </div>
 
@@ -31,8 +41,39 @@
 
     <form
       class="login-formulario"
-      (ngSubmit)="iniciarSesion()"
+      (ngSubmit)="
+        modoRegistro
+        ? registrarse()
+        : iniciarSesion()
+      "
     >
+
+
+      <!-- NOMBRE -->
+
+      @if (modoRegistro) {
+
+        <div class="campo">
+
+          <label for="nombre">
+
+            Nombre
+
+          </label>
+
+
+          <input
+            id="nombre"
+            type="text"
+            placeholder="Tu nombre"
+            [(ngModel)]="nombre"
+            name="nombre"
+            [disabled]="cargando"
+          >
+
+        </div>
+
+      }
 
 
       <!-- EMAIL -->
@@ -81,19 +122,47 @@
       </div>
 
 
+      <!-- CONFIRMAR CONTRASEÑA -->
+
+      @if (modoRegistro) {
+
+        <div class="campo">
+
+          <label for="confirmarPassword">
+
+            Repite la contraseña
+
+          </label>
+
+
+          <input
+            id="confirmarPassword"
+            type="password"
+            placeholder="Repite tu contraseña"
+            [(ngModel)]="confirmarPassword"
+            name="confirmarPassword"
+            [disabled]="cargando"
+          >
+
+        </div>
+
+      }
+
+
       <!-- ERROR -->
 
-      <div
-        class="login-error"
-        *ngIf="error"
-      >
+      @if (error) {
 
-        {{ error }}
+        <div class="login-error">
 
-      </div>
+          {{ error }}
+
+        </div>
+
+      }
 
 
-      <!-- BOTÓN -->
+      <!-- BOTÓN PRINCIPAL -->
 
       <button
         class="btn-login"
@@ -101,23 +170,81 @@
         [disabled]="cargando"
       >
 
-        <span *ngIf="!cargando">
+        @if (cargando) {
 
-          Iniciar sesión
+          @if (modoRegistro) {
 
-        </span>
+            Creando cuenta...
 
+          } @else {
 
-        <span *ngIf="cargando">
+            Iniciando sesión...
 
-          Iniciando sesión...
+          }
 
-        </span>
+        } @else {
+
+          @if (modoRegistro) {
+
+            Crear cuenta
+
+          } @else {
+
+            Iniciar sesión
+
+          }
+
+        }
 
       </button>
 
 
     </form>
+
+
+    <!-- CAMBIAR ENTRE LOGIN Y REGISTRO -->
+
+    <div class="cambiar-modo">
+
+
+      @if (modoRegistro) {
+
+        <span>
+          ¿Ya tienes una cuenta?
+        </span>
+
+
+        <button
+          type="button"
+          (click)="cambiarModo()"
+          [disabled]="cargando"
+        >
+
+          Inicia sesión
+
+        </button>
+
+      } @else {
+
+        <span>
+          ¿No tienes cuenta?
+        </span>
+
+
+        <button
+          type="button"
+          (click)="cambiarModo()"
+          [disabled]="cargando"
+        >
+
+          Crear una cuenta
+
+        </button>
+
+      }
+
+
+    </div>
 
 
   </div>

@@ -21,6 +21,10 @@ export class Grupos {
   'http://localhost:8080/api/grupos';
 
 
+  private readonly usuariosApiUrl =
+  'http://localhost:8080/api/usuarios';
+
+
   constructor(
 
     private http: HttpClient
@@ -87,6 +91,60 @@ export class Grupos {
 
     return this.http.get<any[]>(
       `${this.apiUrl}/${grupoId}/miembros`
+    );
+
+  }
+
+
+  /*
+   * Buscar un usuario
+   * por su email.
+   */
+  buscarUsuarioPorEmail(
+    email: string
+  ): Observable<any> {
+
+
+    return this.http.get<any>(
+      `${this.usuariosApiUrl}/email/${encodeURIComponent(email)}`
+    );
+
+  }
+
+
+  /*
+   * Añadir un miembro
+   * a un grupo.
+   */
+  anadirMiembro(
+    grupoId: number,
+    usuarioId: number
+  ): Observable<any> {
+
+
+    return this.http.post<any>(
+      `${this.apiUrl}/${grupoId}/miembros/${usuarioId}`,
+      {}
+    );
+
+  }
+
+
+  /*
+   * Eliminar un miembro
+   * de un grupo.
+   *
+   * Esto NO elimina
+   * al usuario de la BBDD.
+   */
+  eliminarMiembro(
+    grupoId: number,
+    usuarioId: number
+  ): Observable<any> {
+
+
+    return this.http.delete<any>(
+      `${this.apiUrl}/${grupoId}/miembros/${usuarioId}`
     );
 
   }

@@ -40,6 +40,9 @@ export class Auth {
   ) {}
 
 
+  /*
+   * Iniciar sesión.
+   */
   login(
     email: string,
     password: string
@@ -59,12 +62,21 @@ export class Auth {
         (usuario) => {
 
 
+          /*
+           * Guardamos el usuario
+           * en el navegador.
+           */
           localStorage.setItem(
             'usuario',
             JSON.stringify(usuario)
           );
 
 
+          /*
+           * Avisamos a la aplicación
+           * de que hay un usuario
+           * conectado.
+           */
           this.usuarioSubject.next(
             usuario
           );
@@ -77,6 +89,63 @@ export class Auth {
   }
 
 
+  /*
+   * Registrar un nuevo usuario.
+   *
+   * Después del registro,
+   * iniciamos sesión automáticamente.
+   */
+  register(
+    nombre: string,
+    email: string,
+    password: string
+  ): Observable<any> {
+
+
+    return this.http.post<any>(
+      `${this.apiUrl}/register`,
+      {
+        nombre,
+        email,
+        password
+      }
+    )
+    .pipe(
+
+      tap(
+        (usuario) => {
+
+
+          /*
+           * Guardamos el usuario
+           * en el navegador.
+           */
+          localStorage.setItem(
+            'usuario',
+            JSON.stringify(usuario)
+          );
+
+
+          /*
+           * Actualizamos el usuario
+           * conectado.
+           */
+          this.usuarioSubject.next(
+            usuario
+          );
+
+        }
+      )
+
+    );
+
+  }
+
+
+  /*
+   * Obtener el usuario
+   * actualmente conectado.
+   */
   obtenerUsuario(): any {
 
 
@@ -85,6 +154,9 @@ export class Auth {
   }
 
 
+  /*
+   * Cerrar sesión.
+   */
   cerrarSesion(): void {
 
 
@@ -100,6 +172,11 @@ export class Auth {
   }
 
 
+  /*
+   * Recuperar el usuario
+   * guardado al iniciar
+   * la aplicación.
+   */
   private obtenerUsuarioGuardado(): any {
 
 
