@@ -1,46 +1,164 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
-import { Grupos as GruposService } from '../../services/grupos';
+import {
+  CommonModule
+} from '@angular/common';
+
+import {
+  Router
+} from '@angular/router';
+
+import {
+  Auth
+} from '../../services/auth';
+
+import {
+  Grupos as GruposService
+} from '../../services/grupos';
+
 
 @Component({
   selector: 'app-grupos',
-  imports: [],
+
+  imports: [
+    CommonModule
+  ],
+
   templateUrl: './grupos.html',
-  styleUrl: './grupos.scss',
+
+  styleUrl: './grupos.scss'
 })
-export class Grupos implements OnInit {
+export class Grupos
+implements OnInit {
+
 
   grupos: any[] = [];
 
+
+  cargando: boolean = false;
+
+
+  error: string = '';
+
+
   constructor(
-    private gruposService: GruposService,
-      private router: Router
+
+    private router: Router,
+
+      private authService: Auth,
+
+        private gruposService: GruposService
+
   ) {}
+
 
   ngOnInit(): void {
 
+
+    this.cargarGrupos();
+
+  }
+
+
+  /*
+   * Cargar los grupos
+   * del usuario conectado.
+   */
+  cargarGrupos(): void {
+
+
+    const usuario =
+    this.authService.obtenerUsuario();
+
+
+    /*
+     * Comprobamos que haya
+     * un usuario conectado.
+     */
+    if (!usuario) {
+
+
+      console.error(
+        'No hay ningún usuario conectado.'
+      );
+
+
+      this.error =
+      'No hay ningún usuario conectado.';
+
+
+  return;
+
+    }
+
+
+    console.log(
+      'Usuario conectado:',
+      usuario
+    );
+
+
+    console.log(
+      'ID del usuario:',
+      usuario.id
+    );
+
+
+    this.cargando =
+    true;
+
+
+    this.error =
+    '';
+
+
     this.gruposService
-    .obtenerGrupos()
+    .obtenerGruposPorUsuario(
+      usuario.id
+    )
     .subscribe({
 
-      next: (respuesta) => {
+      next: (
+        grupos: any[]
+      ) => {
+
 
         console.log(
           'Grupos recibidos:',
-          respuesta
+          grupos
         );
 
-        this.grupos = respuesta;
+
+        this.grupos =
+        grupos;
+
+
+        this.cargando =
+        false;
 
       },
 
-      error: (error) => {
+
+      error: (
+        error: any
+      ) => {
+
 
         console.error(
-          'Error obteniendo grupos:',
+          'Error cargando grupos:',
           error
         );
+
+
+        this.error =
+        'No se han podido cargar los grupos.';
+
+
+          this.cargando =
+          false;
 
       }
 
@@ -49,11 +167,32 @@ export class Grupos implements OnInit {
   }
 
 
-  abrirGrupo(id: number): void {
+  /*
+   * Ir a la página para
+   * crear un nuevo grupo.
+   */
+  nuevoGrupo(): void {
+
+
+    this.router.navigate([
+      '/grupos/nuevo'
+    ]);
+
+  }
+
+
+  /*
+   * Abrir el detalle
+   * de un grupo.
+   */
+  abrirGrupo(
+    grupoId: number
+  ): void {
+
 
     this.router.navigate([
       '/grupos',
-      id
+      grupoId
     ]);
 
   }

@@ -1,0 +1,249 @@
+<div class="editar-grupo-container">
+
+  <div class="editar-grupo-card">
+
+
+    <div class="editar-grupo-cabecera">
+
+      <h1>
+        ✏️ Editar grupo
+      </h1>
+
+      <p>
+        Modifica la información del grupo.
+      </p>
+
+    </div>
+
+
+    <div class="formulario">
+
+
+      <!-- FOTO DEL GRUPO -->
+
+      <div class="campo">
+
+        <label>
+          Foto del grupo
+        </label>
+
+
+        <!-- FOTO ACTUAL -->
+
+        @if (foto) {
+
+          <div class="foto-actual">
+
+            <img
+              [src]="'http://localhost:8080' + foto"
+              alt="Foto del grupo"
+            >
+
+          </div>
+
+        } @else {
+
+          <div class="sin-foto">
+
+            📷
+
+          </div>
+
+        }
+
+
+        <!-- SELECTOR DE FOTO -->
+
+        <input
+          type="file"
+          accept="image/*"
+          (change)="seleccionarFoto($event)"
+        >
+
+
+        <!-- BOTÓN SUBIR FOTO -->
+
+        @if (fotoSeleccionada) {
+
+          <div class="acciones-foto">
+
+            <p>
+              📁 {{ fotoSeleccionada.name }}
+            </p>
+
+
+            <button
+              type="button"
+              class="btn-subir-foto"
+              (click)="subirFoto()"
+              [disabled]="subiendoFoto"
+            >
+
+              @if (subiendoFoto) {
+
+                ⏳ Subiendo...
+
+              } @else {
+
+                📷 Subir foto
+
+              }
+
+            </button>
+
+          </div>
+
+        }
+
+
+      </div>
+
+
+      <!-- NOMBRE -->
+
+      <div class="campo">
+
+        <label for="nombre">
+
+          Nombre del grupo
+
+        </label>
+
+
+        <input
+          id="nombre"
+          type="text"
+          [(ngModel)]="nombre"
+          name="nombre"
+          placeholder="Nombre del grupo"
+        >
+
+      </div>
+
+
+      <!-- DESCRIPCIÓN -->
+
+      <div class="campo">
+
+        <label for="descripcion">
+
+          Descripción
+
+        </label>
+
+
+        <textarea
+          id="descripcion"
+          [(ngModel)]="descripcion"
+          name="descripcion"
+          placeholder="Describe el grupo"
+          rows="4"
+        ></textarea>
+
+      </div>
+
+
+      <!-- ERROR -->
+
+      @if (error) {
+
+        <div class="error">
+
+          {{ error }}
+
+        </div>
+
+      }
+
+
+      <!-- BOTONES PRINCIPALES -->
+
+      <div class="acciones">
+
+
+        <button
+          type="button"
+          class="btn-cancelar"
+          (click)="cancelar()"
+          [disabled]="cargando || eliminando"
+        >
+
+          Cancelar
+
+        </button>
+
+
+        <button
+          type="button"
+          class="btn-guardar"
+          (click)="guardar()"
+          [disabled]="cargando || eliminando"
+        >
+
+          @if (cargando) {
+
+            ⏳ Guardando...
+
+          } @else {
+
+            💾 Guardar cambios
+
+          }
+
+        </button>
+
+
+      </div>
+
+
+      <!-- ZONA DE PELIGRO -->
+
+      <div class="zona-peligro">
+
+
+        <h2>
+          ⚠️ Zona de peligro
+        </h2>
+
+
+        <p>
+          Al eliminar este grupo se eliminarán
+          también todos sus gastos, pagos y miembros.
+        </p>
+
+
+        <p>
+          Los usuarios no se eliminarán.
+        </p>
+
+
+        <button
+          type="button"
+          class="btn-eliminar"
+          (click)="eliminarGrupo()"
+          [disabled]="cargando || eliminando"
+        >
+
+          @if (eliminando) {
+
+            ⏳ Eliminando grupo...
+
+          } @else {
+
+            🗑️ Eliminar grupo
+
+          }
+
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>

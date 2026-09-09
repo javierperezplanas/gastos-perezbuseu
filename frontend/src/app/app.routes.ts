@@ -1,4 +1,6 @@
-import { Routes } from '@angular/router';
+import {
+  Routes
+} from '@angular/router';
 
 import {
   Login
@@ -13,12 +15,20 @@ import {
 } from './pages/grupo-detalle/grupo-detalle';
 
 import {
+  NuevoGrupo
+} from './pages/nuevo-grupo/nuevo-grupo';
+
+import {
   NuevoGasto
 } from './pages/nuevo-gasto/nuevo-gasto';
 
 import {
   EditarGasto
 } from './pages/editar-gasto/editar-gasto';
+
+import {
+  EditarGrupo
+} from './pages/editar-grupo/editar-grupo';
 
 import {
   Balances
@@ -84,6 +94,20 @@ export const routes: Routes = [
 
 
 /*
+ * NUEVO GRUPO
+ */
+{
+  path: 'grupos/nuevo',
+
+  component: NuevoGrupo,
+
+  canActivate: [
+    authGuard
+  ]
+},
+
+
+/*
  * NUEVO GASTO
  */
 {
@@ -104,6 +128,20 @@ export const routes: Routes = [
   path: 'grupos/:id/editar-gasto/:gastoId',
 
   component: EditarGasto,
+
+  canActivate: [
+    authGuard
+  ]
+},
+
+
+/*
+ * EDITAR GRUPO
+ */
+{
+  path: 'grupos/:id/editar',
+
+  component: EditarGrupo,
 
   canActivate: [
     authGuard
@@ -154,5 +192,6 @@ export const routes: Routes = [
     authGuard
   ]
 }
+
 
 ];

@@ -1,118 +1,37 @@
-<div class="grupo-detalle-container">
+<div
+  class="grupo-detalle-container"
+  *ngIf="grupo"
+>
 
-  <!-- CABECERA -->
+
+  <!-- =====================
+       CABECERA
+  ====================== -->
 
   <div class="grupo-cabecera">
 
+
     <div class="grupo-titulo">
 
-      <div class="grupo-icono">
-        👨‍👩‍👧‍👦
-      </div>
 
-      <div>
+      <!-- FOTO DEL GRUPO -->
 
-        <h1>PerezBuseu</h1>
-
-        <p>
-          Gastos compartidos de PerezBuseu
-        </p>
-
-      </div>
-
-    </div>
+      <div class="grupo-foto">
 
 
-    <a
-      class="btn-anadir"
-      routerLink="/grupos/1/nuevo-gasto"
-    >
-      + Añadir gasto
-    </a>
-
-  </div>
+        <img
+          *ngIf="grupo.foto"
+          [src]="'http://localhost:8080' + grupo.foto"
+          [alt]="grupo.nombre"
+        >
 
 
-  <!-- RESUMEN -->
+        <div
+          class="grupo-icono"
+          *ngIf="!grupo.foto"
+        >
 
-  <div class="resumen">
-
-    <div class="resumen-card">
-
-      <span>Total gastado</span>
-
-      <strong>
-        {{ totalGastado | number:'1.2-2' }} €
-      </strong>
-
-    </div>
-
-
-    <div class="resumen-card">
-
-      <span>Tu saldo</span>
-
-      <strong class="saldo-neutro">
-        0,00 €
-      </strong>
-
-    </div>
-
-
-    <div class="resumen-card">
-
-      <span>Gastos</span>
-
-      <strong>
-        {{ gastos.length }}
-      </strong>
-
-    </div>
-
-  </div>
-
-
-  <!-- CONTENIDO -->
-
-  <div class="contenido">
-
-
-    <!-- GASTOS -->
-
-    <div class="seccion gastos-seccion">
-
-
-      <div class="seccion-cabecera">
-
-        <h2>Gastos</h2>
-
-
-        <div class="acciones-seccion">
-
-
-          <a
-            class="btn-secundario"
-            [routerLink]="[
-              '/grupos',
-              1,
-              'actividad'
-            ]"
-          >
-            📋 Actividad
-          </a>
-
-
-          <a
-            class="btn-secundario"
-            [routerLink]="[
-              '/grupos',
-              1,
-              'balances'
-            ]"
-          >
-            Ver balances
-          </a>
-
+          👨‍👩‍👧
 
         </div>
 
@@ -120,7 +39,182 @@
       </div>
 
 
-      <!-- LISTA DE GASTOS -->
+      <!-- INFORMACIÓN -->
+
+      <div>
+
+
+        <h1>
+
+          {{ grupo.nombre }}
+
+        </h1>
+
+
+        <p>
+
+          {{ grupo.descripcion }}
+
+        </p>
+
+
+      </div>
+
+
+    </div>
+
+
+    <!-- ACCIONES -->
+
+    <div class="grupo-acciones">
+
+
+      <a
+        class="btn-editar-grupo"
+        [routerLink]="[
+          '/grupos',
+          grupoId,
+          'editar'
+        ]"
+      >
+
+        ✏️ Editar
+
+      </a>
+
+
+      <a
+        class="btn-anadir"
+        [routerLink]="[
+          '/grupos',
+          grupoId,
+          'nuevo-gasto'
+        ]"
+      >
+
+        ➕ Añadir gasto
+
+      </a>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================
+       RESUMEN
+  ====================== -->
+
+  <div class="resumen">
+
+
+    <div class="resumen-card">
+
+
+      <span>
+
+        💰 Total gastado
+
+      </span>
+
+
+      <strong>
+
+        {{ totalGastado | number:'1.2-2' }} €
+
+      </strong>
+
+
+    </div>
+
+
+    <div class="resumen-card">
+
+
+      <span>
+
+        🧾 Gastos
+
+      </span>
+
+
+      <strong>
+
+        {{ gastos.length }}
+
+      </strong>
+
+
+    </div>
+
+
+    <div class="resumen-card">
+
+
+      <span>
+
+        👥 Miembros
+
+      </span>
+
+
+      <strong>
+
+        {{ miembros.length }}
+
+      </strong>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================
+       CONTENIDO
+  ====================== -->
+
+  <div class="contenido">
+
+
+    <!-- =====================
+         GASTOS
+    ====================== -->
+
+    <div class="seccion">
+
+
+      <div class="seccion-cabecera">
+
+
+        <h2>
+
+          📋 Últimos gastos
+
+        </h2>
+
+
+        <a
+          class="btn-secundario"
+          [routerLink]="[
+            '/grupos',
+            grupoId,
+            'actividad'
+          ]"
+        >
+
+          Ver actividad
+
+        </a>
+
+
+      </div>
+
+
+      <!-- LISTA -->
 
       <div
         class="lista-gastos"
@@ -130,13 +224,20 @@
 
         <div
           class="gasto"
-          *ngFor="let gasto of gastos"
+          *ngFor="
+            let gasto
+            of obtenerUltimosGastos()
+          "
         >
 
 
           <div class="gasto-icono">
 
-            {{ obtenerIconoCategoria(gasto.categoria) }}
+            {{
+              obtenerIconoCategoria(
+                gasto.categoria
+              )
+            }}
 
           </div>
 
@@ -153,11 +254,7 @@
 
             <div class="gasto-detalles">
 
-              {{ gasto.categoria }}
-
-              ·
-
-              {{ gasto.fechaHora | date:'dd/MM/yyyy' }}
+              {{ gasto.nombrePagador }}
 
             </div>
 
@@ -170,7 +267,7 @@
 
             <div class="gasto-importe">
 
-              {{ gasto.importe | number:'1.2-2' }} €
+              {{ gasto.importe }} €
 
             </div>
 
@@ -183,7 +280,7 @@
                 (click)="editarGasto(gasto.id)"
               >
 
-                ✏️ Editar
+                ✏️
 
               </button>
 
@@ -193,7 +290,7 @@
                 (click)="eliminarGasto(gasto.id)"
               >
 
-                🗑️ Eliminar
+                🗑️
 
               </button>
 
@@ -245,66 +342,89 @@
     </div>
 
 
-    <!-- MIEMBROS -->
+    <!-- =====================
+         MIEMBROS
+    ====================== -->
 
-    <div class="seccion miembros">
+    <div class="seccion">
 
 
       <div class="seccion-cabecera">
 
-        <h2>Miembros</h2>
 
+        <h2>
 
-        <button class="btn-secundario">
+          👥 Miembros
 
-          + Añadir
-
-        </button>
-
-
-      </div>
-
-
-      <div class="miembro">
-
-
-        <div class="avatar">
-
-          J
-
-        </div>
-
-
-        <div>
-
-          <strong>Javi</strong>
-
-          <span>javi@example.com</span>
-
-        </div>
+        </h2>
 
 
       </div>
 
 
-      <div class="miembro">
+      <div
+        class="lista-miembros"
+        *ngIf="miembros.length > 0"
+      >
 
 
-        <div class="avatar">
+        <div
+          class="miembro"
+          *ngFor="
+            let miembro
+            of miembros
+          "
+        >
 
-          M
+
+          <div class="avatar">
+
+
+            {{
+              obtenerIniciales(
+                miembro
+              )
+            }}
+
+          </div>
+
+
+          <div>
+
+
+            <strong>
+
+              {{ miembro.usuario?.nombre }}
+
+            </strong>
+
+
+            <span>
+
+              Miembro del grupo
+
+            </span>
+
+
+          </div>
+
 
         </div>
 
 
-        <div>
+      </div>
 
-          <strong>Miriam</strong>
 
-          <span>miriam@example.com</span>
+      <div
+        class="sin-gastos"
+        *ngIf="miembros.length === 0"
+      >
 
-        </div>
+        <p>
 
+          No hay miembros.
+
+        </p>
 
       </div>
 
@@ -314,5 +434,70 @@
 
   </div>
 
+
+  <!-- =====================
+       BALANCE
+  ====================== -->
+
+  <div class="balance-resumen">
+
+
+    <div class="balance-cabecera">
+
+
+      <div>
+
+
+        <h2>
+
+          ⚖️ Balance
+
+        </h2>
+
+
+        <p>
+
+          Consulta quién debe dinero
+          y quién tiene que recibir.
+
+        </p>
+
+
+      </div>
+
+
+      <a
+        class="btn-balance"
+        [routerLink]="[
+          '/grupos',
+          grupoId,
+          'balances'
+        ]"
+      >
+
+        Ver balances →
+
+      </a>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+<!-- =====================
+     CARGANDO
+====================== -->
+
+<div
+  class="cargando"
+  *ngIf="!grupo && cargando"
+>
+
+  Cargando grupo...
 
 </div>

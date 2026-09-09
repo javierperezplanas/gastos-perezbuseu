@@ -1,15 +1,19 @@
+/* =========================
+ * CONTENEDOR PRINCIPAL
+ * ========================= */
+
 .grupo-detalle-container {
-  max-width: 900px;
+  max-width: 1100px;
 
   margin: 0 auto;
 
-  padding: 45px 20px;
+  padding: 40px 20px 60px;
 }
 
 
 /* =========================
- *  CABECERA DEL GRUPO
- = *======================== */
+ * CABECERA
+ * ========================= */
 
 .grupo-cabecera {
   display: flex;
@@ -18,13 +22,9 @@
 
   align-items: center;
 
-  gap: 20px;
+  gap: 30px;
 
-  padding-bottom: 30px;
-
-  margin-bottom: 30px;
-
-  border-bottom: 1px solid #dddddd;
+  margin-bottom: 35px;
 }
 
 
@@ -39,141 +39,261 @@
 }
 
 
-.grupo-icono {
-  font-size: 38px;
+/* =========================
+ * FOTO DEL GRUPO
+ * ========================= */
+
+.grupo-foto {
+  width: 82px;
+
+  height: 82px;
 
   flex-shrink: 0;
 }
 
 
-.grupo-titulo h1 {
-  margin: 0;
+.grupo-foto img {
+  width: 100%;
 
-  font-size: 30px;
+  height: 100%;
 
-  font-weight: 600;
+  object-fit: cover;
+
+  border-radius: 18px;
+
+  box-shadow:
+  0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 
-.grupo-titulo p {
-  margin: 6px 0 0;
+.grupo-icono {
+  width: 100%;
 
-  color: #666666;
+  height: 100%;
 
-  font-size: 16px;
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #e8f5f3,
+    #d6eeeb
+  );
+
+  font-size: 38px;
 }
 
 
 /* =========================
- *  BOTÓN AÑADIR GASTO
- = *======================== */
+ * INFORMACIÓN DEL GRUPO
+ * ========================= */
 
-.btn-anadir {
-  display: inline-block;
+.grupo-titulo h1 {
+  margin: 0;
+
+  color: #263238;
+
+  font-size: 30px;
+
+  font-weight: 700;
+}
+
+
+.grupo-titulo p {
+  margin: 7px 0 0;
+
+  color: #718096;
+
+  font-size: 15px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+ * ACCIONES
+ * ========================= */
+
+.grupo-acciones {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
 
   flex-shrink: 0;
+}
 
+
+.btn-editar-grupo,
+.btn-anadir {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 11px 16px;
+
+  border-radius: 9px;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition:
+  transform 0.15s,
+  box-shadow 0.15s,
+  background-color 0.15s;
+}
+
+
+.btn-editar-grupo {
+  background: white;
+
+  color: #52616b;
+
+  border: 1px solid #d9e0e3;
+}
+
+
+.btn-editar-grupo:hover {
+  background: #f7f9f9;
+
+  transform: translateY(-1px);
+}
+
+
+.btn-anadir {
   background: #2f9e94;
 
   color: white;
 
-  border: none;
-
-  border-radius: 6px;
-
-  padding: 12px 20px;
-
-  font-size: 15px;
-
-  cursor: pointer;
-
-  text-decoration: none;
-
-  transition: background-color 0.2s;
+  box-shadow:
+  0 4px 12px rgba(47, 158, 148, 0.25);
 }
 
 
 .btn-anadir:hover {
   background: #27877e;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+  0 6px 16px rgba(47, 158, 148, 0.3);
 }
 
 
 /* =========================
- *  RESUMEN
- = *======================== */
+ * RESUMEN
+ * ========================= */
 
 .resumen {
   display: grid;
 
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns:
+  repeat(3, 1fr);
 
-  gap: 20px;
+  gap: 18px;
 
-  margin-bottom: 35px;
+  margin-bottom: 30px;
 }
 
 
 .resumen-card {
+  position: relative;
+
   background: white;
 
-  border: 1px solid #dddddd;
+  border: 1px solid #e7ecee;
 
-  border-radius: 8px;
+  border-radius: 14px;
 
-  padding: 20px;
+  padding: 22px;
 
   display: flex;
 
   flex-direction: column;
 
-  gap: 8px;
+  gap: 10px;
+
+  box-shadow:
+  0 3px 10px rgba(0, 0, 0, 0.035);
+
+  transition:
+  transform 0.15s,
+  box-shadow 0.15s;
+}
+
+
+.resumen-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+  0 8px 20px rgba(0, 0, 0, 0.07);
 }
 
 
 .resumen-card span {
-  color: #777777;
+  color: #718096;
 
   font-size: 14px;
+
+  font-weight: 500;
 }
 
 
 .resumen-card strong {
-  font-size: 22px;
+  color: #263238;
 
-  color: #333333;
-}
+  font-size: 26px;
 
-
-.saldo-neutro {
-  color: #555555;
+  font-weight: 700;
 }
 
 
 /* =========================
- *  CONTENIDO
- = *======================== */
+ * CONTENIDO PRINCIPAL
+ * ========================= */
 
 .contenido {
   display: grid;
 
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns:
+  minmax(0, 2fr)
+  minmax(280px, 1fr);
 
-  gap: 30px;
+  gap: 25px;
+
+  margin-bottom: 25px;
 }
 
 
 /* =========================
- *  SECCIONES
- = *======================== */
+ * SECCIONES
+ * ========================= */
 
 .seccion {
   background: white;
 
-  border: 1px solid #dddddd;
+  border: 1px solid #e7ecee;
 
-  border-radius: 8px;
+  border-radius: 14px;
 
   overflow: hidden;
+
+  box-shadow:
+  0 3px 10px rgba(0, 0, 0, 0.035);
 }
 
 
@@ -186,48 +306,67 @@
 
   gap: 15px;
 
-  padding: 18px 20px;
+  padding: 20px 22px;
 
-  border-bottom: 1px solid #eeeeee;
+  border-bottom:
+  1px solid #edf0f1;
 }
 
 
 .seccion-cabecera h2 {
   margin: 0;
 
-  font-size: 20px;
-}
+  color: #2d3748;
 
+  font-size: 18px;
 
-.btn-secundario {
-  flex-shrink: 0;
-
-  background: white;
-
-  border: 1px solid #cccccc;
-
-  border-radius: 5px;
-
-  padding: 8px 12px;
-
-  cursor: pointer;
-
-  color: #555555;
-
-  font-size: 14px;
-
-  transition: background-color 0.2s;
-}
-
-
-.btn-secundario:hover {
-  background: #f5f5f5;
+  font-weight: 700;
 }
 
 
 /* =========================
- *  LISTA DE GASTOS
- = *======================== */
+ * BOTÓN SECUNDARIO
+ * ========================= */
+
+.btn-secundario {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 8px 12px;
+
+  border-radius: 7px;
+
+  border: 1px solid #dce3e5;
+
+  background: white;
+
+  color: #5c6b73;
+
+  text-decoration: none;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  transition:
+  background-color 0.15s,
+  border-color 0.15s;
+}
+
+
+.btn-secundario:hover {
+  background: #f6f8f8;
+
+  border-color: #cdd6d9;
+}
+
+
+/* =========================
+ * LISTA DE GASTOS
+ * ========================= */
 
 .lista-gastos {
   display: flex;
@@ -237,8 +376,8 @@
 
 
 /* =========================
- *  GASTO
- = *======================== */
+ * GASTO
+ * ========================= */
 
 .gasto {
   display: flex;
@@ -247,9 +386,13 @@
 
   gap: 14px;
 
-  padding: 18px 20px;
+  padding: 17px 22px;
 
-  border-bottom: 1px solid #eeeeee;
+  border-bottom:
+  1px solid #edf0f1;
+
+  transition:
+  background-color 0.15s;
 }
 
 
@@ -259,13 +402,13 @@
 
 
 .gasto:hover {
-  background: #fafafa;
+  background: #fafcfc;
 }
 
 
 /* =========================
- *  ICONO DEL GASTO
- = *======================== */
+ * ICONO DEL GASTO
+ * ========================= */
 
 .gasto-icono {
   width: 42px;
@@ -280,17 +423,17 @@
 
   justify-content: center;
 
-  background: #f1f7f6;
+  border-radius: 12px;
 
-  border-radius: 50%;
+  background: #edf7f6;
 
   font-size: 20px;
 }
 
 
 /* =========================
- *  INFORMACIÓN DEL GASTO
- = *======================== */
+ * INFORMACIÓN DEL GASTO
+ * ========================= */
 
 .gasto-info {
   flex: 1;
@@ -300,143 +443,162 @@
 
 
 .gasto-descripcion {
-  font-size: 16px;
+  color: #2d3748;
+
+  font-size: 15px;
 
   font-weight: 600;
-
-  color: #333333;
 
   margin-bottom: 5px;
 }
 
 
 .gasto-detalles {
-  color: #777777;
+  color: #8a979e;
 
   font-size: 13px;
 }
 
 
 /* =========================
- *  PARTE DERECHA
- = *======================== */
+ * IMPORTE Y ACCIONES
+ * ========================= */
 
 .gasto-derecha {
   display: flex;
 
-  flex-direction: column;
+  align-items: center;
 
-  align-items: flex-end;
-
-  gap: 8px;
+  gap: 14px;
 
   flex-shrink: 0;
 }
 
 
 .gasto-importe {
-  font-size: 17px;
+  color: #263238;
 
-  font-weight: 600;
+  font-size: 16px;
 
-  color: #333333;
+  font-weight: 700;
+
+  white-space: nowrap;
 }
 
-
-/* =========================
- *  ACCIONES
- = *======================== */
 
 .gasto-acciones {
   display: flex;
 
-  gap: 8px;
+  gap: 5px;
 }
 
 
+/* =========================
+ * BOTONES GASTO
+ * ========================= */
+
 .btn-editar,
 .btn-eliminar {
+  width: 32px;
+
+  height: 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
   border: none;
 
-  border-radius: 5px;
-
-  padding: 6px 9px;
-
-  font-size: 13px;
+  border-radius: 8px;
 
   cursor: pointer;
 
+  font-size: 14px;
+
   transition:
-  background-color 0.2s,
-  transform 0.1s;
+  transform 0.1s,
+  background-color 0.15s;
 }
 
 
 .btn-editar {
-  background: #edf6f5;
+  background: #edf7f6;
 
-  color: #287d75;
+  color: #27877e;
 }
 
 
 .btn-editar:hover {
-  background: #dcefeb;
+  background: #dff0ee;
 }
 
 
 .btn-eliminar {
-  background: #fff0f0;
+  background: #fff1f1;
 
-  color: #b34a4a;
+  color: #c05656;
 }
 
 
 .btn-eliminar:hover {
-  background: #ffe0e0;
+  background: #ffe4e4;
 }
 
 
 .btn-editar:active,
 .btn-eliminar:active {
-  transform: scale(0.97);
+  transform: scale(0.94);
 }
 
 
 /* =========================
- *  SIN GASTOS
- = *======================== */
+ * SIN GASTOS
+ * ========================= */
 
 .sin-gastos {
   text-align: center;
 
-  padding: 50px 20px;
+  padding: 45px 20px;
+
+  color: #718096;
 }
 
 
 .sin-gastos-icono {
   font-size: 38px;
 
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 
 .sin-gastos h3 {
   margin: 0 0 8px;
 
-  font-size: 18px;
+  color: #374151;
+
+  font-size: 17px;
 }
 
 
 .sin-gastos p {
   margin: 0;
 
-  color: #777777;
+  font-size: 14px;
 }
 
 
 /* =========================
- *  MIEMBROS
- = *======================== */
+ * MIEMBROS
+ * ========================= */
+
+.lista-miembros {
+  display: flex;
+
+  flex-direction: column;
+}
+
 
 .miembro {
   display: flex;
@@ -445,9 +607,13 @@
 
   gap: 12px;
 
-  padding: 15px 20px;
+  padding: 16px 20px;
 
-  border-bottom: 1px solid #eeeeee;
+  border-bottom:
+  1px solid #edf0f1;
+
+  transition:
+  background-color 0.15s;
 }
 
 
@@ -456,16 +622,30 @@
 }
 
 
-.avatar {
-  width: 38px;
+.miembro:hover {
+  background: #fafcfc;
+}
 
-  height: 38px;
+
+/* =========================
+ * AVATAR
+ * ========================= */
+
+.avatar {
+  width: 42px;
+
+  height: 42px;
 
   flex-shrink: 0;
 
   border-radius: 50%;
 
-  background: #2f9e94;
+  background:
+  linear-gradient(
+    135deg,
+    #2f9e94,
+    #57b8ae
+  );
 
   color: white;
 
@@ -475,49 +655,161 @@
 
   justify-content: center;
 
-  font-weight: bold;
+  font-size: 15px;
+
+  font-weight: 700;
 }
 
 
 .miembro strong {
   display: block;
 
-  font-size: 15px;
+  color: #374151;
+
+  font-size: 14px;
+
+  font-weight: 600;
 }
 
 
 .miembro span {
   display: block;
 
-  margin-top: 3px;
+  margin-top: 4px;
 
-  color: #777777;
+  color: #9aa5aa;
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
 
 /* =========================
- *  TABLET
- = *======================== */
+ * BALANCE
+ * ========================= */
 
-@media (max-width: 800px) {
+.balance-resumen {
+  background:
+  linear-gradient(
+    135deg,
+    #f0f8f7,
+    #f8fbfb
+  );
+
+  border: 1px solid #dcebea;
+
+  border-radius: 14px;
+
+  padding: 24px 26px;
+}
+
+
+.balance-cabecera {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+
+.balance-cabecera h2 {
+  margin: 0 0 6px;
+
+  color: #2d3748;
+
+  font-size: 20px;
+}
+
+
+.balance-cabecera p {
+  margin: 0;
+
+  color: #718096;
+
+  font-size: 14px;
+}
+
+
+.btn-balance {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 11px 16px;
+
+  border-radius: 8px;
+
+  background: #2f9e94;
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  transition:
+  background-color 0.15s,
+  transform 0.15s;
+}
+
+
+.btn-balance:hover {
+  background: #27877e;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+ * CARGANDO
+ * ========================= */
+
+.cargando {
+  text-align: center;
+
+  padding: 80px 20px;
+
+  color: #718096;
+
+  font-size: 16px;
+}
+
+
+/* =========================
+ * TABLET
+ * ========================= */
+
+@media (max-width: 850px) {
+
 
   .contenido {
     grid-template-columns: 1fr;
   }
 
+
 }
 
 
 /* =========================
- *  MÓVIL
- = *======================== */
+ * MÓVIL
+ *
+ * De momento sólo dejamos
+ * una adaptación básica.
+ * ========================= */
 
 @media (max-width: 600px) {
 
+
   .grupo-detalle-container {
-    padding: 20px 15px;
+    padding: 25px 15px 40px;
   }
 
 
@@ -525,159 +817,35 @@
     flex-direction: column;
 
     align-items: stretch;
-
-    gap: 18px;
-
-    padding-bottom: 20px;
-
-    margin-bottom: 20px;
   }
 
 
-  .grupo-titulo {
-    gap: 12px;
-  }
-
-
-  .grupo-icono {
-    font-size: 32px;
-  }
-
-
-  .grupo-titulo h1 {
-    font-size: 24px;
-  }
-
-
-  .grupo-titulo p {
-    font-size: 14px;
-  }
-
-
-  .btn-anadir {
+  .grupo-acciones {
     width: 100%;
-
-    box-sizing: border-box;
-
-    text-align: center;
-
-    padding: 13px;
-
-    font-size: 16px;
   }
 
 
-  /* RESUMEN */
+  .btn-editar-grupo,
+  .btn-anadir {
+    flex: 1;
+  }
+
 
   .resumen {
     grid-template-columns: 1fr;
-
-    gap: 10px;
-
-    margin-bottom: 25px;
   }
 
 
-  .resumen-card {
-    padding: 16px;
+  .balance-cabecera {
+    flex-direction: column;
 
-    flex-direction: row;
-
-    justify-content: space-between;
-
-    align-items: center;
+    align-items: stretch;
   }
 
 
-  .resumen-card strong {
-    font-size: 20px;
-  }
-
-
-  /* SECCIONES */
-
-  .contenido {
-    gap: 20px;
-  }
-
-
-  .seccion-cabecera {
-    padding: 15px;
-  }
-
-
-  .seccion-cabecera h2 {
-    font-size: 18px;
-  }
-
-
-  .btn-secundario {
-    padding: 8px 10px;
-  }
-
-
-  /* GASTOS */
-
-  .gasto {
-    flex-wrap: wrap;
-
-    padding: 16px 15px;
-
-    gap: 12px;
-  }
-
-
-  .gasto-info {
-    min-width: calc(100% - 60px);
-  }
-
-
-  .gasto-derecha {
+  .btn-balance {
     width: 100%;
-
-    flex-direction: row;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-left: 54px;
   }
 
-
-  .gasto-acciones {
-    gap: 6px;
-  }
-
-
-  .btn-editar,
-  .btn-eliminar {
-    padding: 7px 9px;
-  }
-
-
-  /* SIN GASTOS */
-
-  .sin-gastos {
-    padding: 40px 15px;
-  }
-
-
-  /* MIEMBROS */
-
-  .miembro {
-    padding: 15px;
-  }
-
-
-  .avatar {
-    width: 40px;
-
-    height: 40px;
-  }
-  .acciones-seccion {
-    display: flex;
-    gap: 10px;
-  }
 
 }

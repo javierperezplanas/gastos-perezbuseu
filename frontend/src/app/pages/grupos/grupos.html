@@ -3,12 +3,25 @@
   <div class="cabecera">
 
     <div>
-      <h1>Tus grupos</h1>
-      <p>Gestiona tus gastos compartidos</p>
+
+      <h1>
+        Tus grupos
+      </h1>
+
+      <p>
+        Gestiona tus gastos compartidos
+      </p>
+
     </div>
 
-    <button class="btn-nuevo">
-      + Nuevo grupo
+
+    <button
+      class="btn-nuevo"
+      (click)="nuevoGrupo()"
+    >
+
+      ➕ Nuevo grupo
+
     </button>
 
   </div>
@@ -16,45 +29,69 @@
 
   <div class="lista-grupos">
 
-    @for (grupo of grupos; track grupo.id) {
+
+    @for (
+      grupo of grupos;
+      track grupo.id
+    ) {
+
 
       <div
         class="grupo-card"
         (click)="abrirGrupo(grupo.id)"
       >
 
+
         <div class="grupo-icono">
+
           👨‍👩‍👧‍👦
+
         </div>
 
 
         <div class="grupo-info">
 
+
           <h2>
+
             {{ grupo.nombre }}
+
           </h2>
 
+
           <p>
+
             {{ grupo.descripcion }}
+
           </p>
+
 
         </div>
 
 
         <div class="grupo-saldo">
 
-          <span>Tu saldo</span>
+
+          <span>
+            Tu saldo
+          </span>
+
 
           <strong>
             0,00 €
           </strong>
 
+
         </div>
+
 
       </div>
 
+
     }
 
+
   </div>
+
 
 </div>

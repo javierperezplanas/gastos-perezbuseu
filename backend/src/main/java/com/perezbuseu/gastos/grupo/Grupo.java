@@ -15,4 +15,11 @@ public class Grupo {
     public String nombre;
 
     public String descripcion;
+
+    /*
+     * Ruta de la imagen
+     * del grupo.
+     */
+    public String foto;
+
 }
