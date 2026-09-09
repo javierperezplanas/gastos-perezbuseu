@@ -1,0 +1,169 @@
+<div class="nuevo-gasto-container">
+
+  <div class="pagina-cabecera">
+
+    <button
+      class="btn-volver"
+      (click)="volver()"
+    >
+      ← Volver
+    </button>
+
+    <h1>Añadir gasto</h1>
+
+    <p>
+      Añade un nuevo gasto al grupo
+    </p>
+
+  </div>
+
+
+  <div class="formulario">
+
+    <!-- DESCRIPCIÓN -->
+
+    <div class="campo">
+
+      <label for="descripcion">
+        Descripción
+      </label>
+
+      <input
+        id="descripcion"
+        type="text"
+        placeholder="Ej. Cena en el restaurante"
+        [(ngModel)]="descripcion"
+        name="descripcion"
+      >
+
+    </div>
+
+
+    <!-- CATEGORÍA -->
+
+    <div class="campo">
+
+      <label for="categoria">
+        Categoría
+      </label>
+
+      <select
+        id="categoria"
+        [(ngModel)]="categoria"
+        name="categoria"
+      >
+
+        <option value="">
+          Selecciona una categoría
+        </option>
+
+        <option value="GENERAL">
+          🌐 General
+        </option>
+
+        <option value="ALIMENTOS">
+          🛒 Alimentos
+        </option>
+
+        <option value="RESTAURANTES">
+          🍽️ Restaurantes
+        </option>
+
+        <option value="OTROS">
+          📦 Otros
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- IMPORTE -->
+
+    <div class="campo">
+
+      <label for="importe">
+        Importe
+      </label>
+
+      <div class="importe-input">
+
+        <input
+          id="importe"
+          type="number"
+          step="0.01"
+          min="0"
+          placeholder="0,00"
+          [(ngModel)]="importe"
+          name="importe"
+        >
+
+        <span>€</span>
+
+      </div>
+
+    </div>
+
+
+    <!-- QUIÉN HA PAGADO -->
+
+    <div class="campo">
+
+      <label for="pagador">
+        Ha pagado
+      </label>
+
+      <select
+        id="pagador"
+        [(ngModel)]="pagador"
+        name="pagador"
+      >
+
+        <option value="">
+          Selecciona quién ha pagado
+        </option>
+
+        <option value="1">
+          Javi
+        </option>
+
+        <option value="2">
+          Miriam
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- FECHA -->
+
+    <div class="campo">
+
+      <label for="fecha">
+        Fecha
+      </label>
+
+      <input
+        id="fecha"
+        type="date"
+        [(ngModel)]="fecha"
+        name="fecha"
+      >
+
+    </div>
+
+
+    <!-- GUARDAR -->
+
+    <button
+      class="btn-guardar"
+      type="button"
+      (click)="guardarGasto()"
+    >
+      Guardar gasto
+    </button>
+
+  </div>
+
+</div>

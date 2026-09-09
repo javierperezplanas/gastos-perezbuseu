@@ -1,0 +1,238 @@
+.nuevo-gasto-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 35px 20px 50px;
+}
+
+
+/* =========================
+ *  CABECERA
+ = *======================== */
+
+.pagina-cabecera {
+  margin-bottom: 30px;
+}
+
+
+.btn-volver {
+  background: none;
+
+  border: none;
+
+  padding: 0;
+
+  margin-bottom: 20px;
+
+  color: #2f9e94;
+
+  font-size: 15px;
+
+  cursor: pointer;
+}
+
+
+.btn-volver:hover {
+  text-decoration: underline;
+}
+
+
+.pagina-cabecera h1 {
+  margin: 0;
+
+  font-size: 30px;
+
+  font-weight: 600;
+}
+
+
+.pagina-cabecera p {
+  margin: 7px 0 0;
+
+  color: #777777;
+
+  font-size: 16px;
+}
+
+
+/* =========================
+ *  FORMULARIO
+ = *======================== */
+
+.formulario {
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 8px;
+
+  padding: 25px;
+}
+
+
+.campo {
+  display: flex;
+
+  flex-direction: column;
+
+  margin-bottom: 22px;
+}
+
+
+.campo label {
+  margin-bottom: 8px;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  color: #444444;
+}
+
+
+.campo input,
+.campo select {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  min-height: 46px;
+
+  padding: 10px 12px;
+
+  border: 1px solid #cccccc;
+
+  border-radius: 5px;
+
+  background: white;
+
+  font-size: 16px;
+
+  font-family: inherit;
+
+  outline: none;
+}
+
+
+.campo input:focus,
+.campo select:focus {
+  border-color: #2f9e94;
+
+  box-shadow: 0 0 0 2px rgba(47, 158, 148, 0.15);
+}
+
+
+/* =========================
+ *  IMPORTE
+ = *======================== */
+
+.importe-input {
+  display: flex;
+
+  align-items: center;
+
+  position: relative;
+}
+
+
+.importe-input input {
+  padding-right: 40px;
+
+  font-size: 18px;
+
+  font-weight: 500;
+}
+
+
+.importe-input span {
+  position: absolute;
+
+  right: 14px;
+
+  color: #777777;
+
+  font-size: 18px;
+
+  pointer-events: none;
+}
+
+
+/* =========================
+ *  BOTÓN GUARDAR
+ = *======================== */
+
+.btn-guardar {
+  width: 100%;
+
+  min-height: 48px;
+
+  margin-top: 5px;
+
+  background: #2f9e94;
+
+  color: white;
+
+  border: none;
+
+  border-radius: 5px;
+
+  font-size: 16px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s;
+}
+
+
+.btn-guardar:hover {
+  background: #27877e;
+}
+
+
+/* =========================
+ *  MÓVIL
+ = *======================== */
+
+@media (max-width: 600px) {
+
+  .nuevo-gasto-container {
+    padding: 20px 15px 40px;
+  }
+
+
+  .pagina-cabecera {
+    margin-bottom: 25px;
+  }
+
+
+  .pagina-cabecera h1 {
+    font-size: 26px;
+  }
+
+
+  .pagina-cabecera p {
+    font-size: 15px;
+  }
+
+
+  .formulario {
+    padding: 20px 15px;
+
+    border-radius: 6px;
+  }
+
+
+  .campo {
+    margin-bottom: 20px;
+  }
+
+
+  .campo input,
+  .campo select {
+    min-height: 48px;
+
+    font-size: 16px;
+  }
+
+}

@@ -8,10 +8,14 @@ import com.perezbuseu.gastos.gasto.dto.BalanceUsuarioResponse;
 import com.perezbuseu.gastos.gasto.dto.LiquidacionResponse;
 import com.perezbuseu.gastos.miembro.MiembroGrupo;
 import com.perezbuseu.gastos.miembro.MiembroGrupoRepository;
+import com.perezbuseu.gastos.usuario.Usuario;
+import com.perezbuseu.gastos.usuario.UsuarioRepository;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
@@ -21,6 +25,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,12 +41,18 @@ public class GrupoResource {
     MiembroGrupoRepository miembroGrupoRepository;
 
     @Inject
+    UsuarioRepository usuarioRepository;
+
+    @Inject
     GastoRepository gastoRepository;
 
     @Inject
     RepartoGastoRepository repartoGastoRepository;
 
 
+    /*
+     * Listar todos los grupos.
+     */
     @GET
     public List<Grupo> listar() {
 
@@ -49,6 +60,9 @@ public class GrupoResource {
     }
 
 
+    /*
+     * Crear un grupo.
+     */
     @POST
     @Transactional
     public Grupo crear(Grupo grupo) {
@@ -56,6 +70,139 @@ public class GrupoResource {
         grupoRepository.persist(grupo);
 
         return grupo;
+    }
+
+
+    /*
+     * Obtener los miembros
+     * de un grupo.
+     */
+    @GET
+    @Path("/{id}/miembros")
+    public List<MiembroGrupo> obtenerMiembros(
+            @PathParam("id") Long id) {
+
+        Grupo grupo = grupoRepository.findById(id);
+
+        if (grupo == null) {
+
+            throw new NotFoundException(
+                    "Grupo no encontrado"
+            );
+        }
+
+        return miembroGrupoRepository.list(
+                "grupo.id",
+                id
+        );
+    }
+
+
+    /*
+     * Añadir un usuario
+     * a un grupo.
+     */
+    @POST
+    @Path("/{id}/miembros/{usuarioId}")
+    @Transactional
+    public MiembroGrupo añadirMiembro(
+            @PathParam("id") Long id,
+            @PathParam("usuarioId") Long usuarioId) {
+
+        Grupo grupo = grupoRepository.findById(id);
+
+        if (grupo == null) {
+
+            throw new NotFoundException(
+                    "Grupo no encontrado"
+            );
+        }
+
+
+        Usuario usuario =
+                usuarioRepository.findById(usuarioId);
+
+
+        if (usuario == null) {
+
+            throw new NotFoundException(
+                    "Usuario no encontrado"
+            );
+        }
+
+
+        /*
+         * Comprobamos si el usuario
+         * ya pertenece al grupo.
+         */
+        MiembroGrupo miembroExistente =
+                miembroGrupoRepository.find(
+                        "grupo.id = ?1 and usuario.id = ?2",
+                        id,
+                        usuarioId
+                ).firstResult();
+
+
+        if (miembroExistente != null) {
+
+            throw new BadRequestException(
+                    "El usuario ya pertenece al grupo"
+            );
+        }
+
+
+        MiembroGrupo miembro = new MiembroGrupo();
+
+        miembro.grupo = grupo;
+        miembro.usuario = usuario;
+        miembro.fechaAlta = LocalDateTime.now();
+
+
+        miembroGrupoRepository.persist(miembro);
+
+
+        return miembro;
+    }
+
+
+    /*
+     * Eliminar un usuario
+     * de un grupo.
+     */
+    @DELETE
+    @Path("/{id}/miembros/{usuarioId}")
+    @Transactional
+    public void eliminarMiembro(
+            @PathParam("id") Long id,
+            @PathParam("usuarioId") Long usuarioId) {
+
+        Grupo grupo = grupoRepository.findById(id);
+
+        if (grupo == null) {
+
+            throw new NotFoundException(
+                    "Grupo no encontrado"
+            );
+        }
+
+
+        MiembroGrupo miembro =
+                miembroGrupoRepository.find(
+                        "grupo.id = ?1 and usuario.id = ?2",
+                        id,
+                        usuarioId
+                ).firstResult();
+
+
+        if (miembro == null) {
+
+            throw new NotFoundException(
+                    "El usuario no pertenece al grupo"
+            );
+        }
+
+
+        miembroGrupoRepository.delete(miembro);
     }
 
 
@@ -120,7 +267,6 @@ public class GrupoResource {
 
             for (Gasto gasto : gastos) {
 
-
                 /*
                  * Si fue el pagador,
                  * sumamos el importe completo.
@@ -164,8 +310,6 @@ public class GrupoResource {
 
 
             /*
-             * Saldo:
-             *
              * Positivo -> le deben dinero.
              * Negativo -> debe dinero.
              */
@@ -191,10 +335,6 @@ public class GrupoResource {
     public List<LiquidacionResponse> obtenerLiquidacion(
             @PathParam("id") Long id) {
 
-
-        /*
-         * Comprobamos que existe el grupo.
-         */
         Grupo grupo = grupoRepository.findById(id);
 
         if (grupo == null) {
@@ -205,16 +345,10 @@ public class GrupoResource {
         }
 
 
-        /*
-         * Obtenemos los balances.
-         */
         List<BalanceUsuarioResponse> balances =
                 obtenerBalance(id);
 
 
-        /*
-         * Listas de deudores y acreedores.
-         */
         List<BalanceUsuarioResponse> deudores =
                 new ArrayList<>();
 
@@ -261,22 +395,13 @@ public class GrupoResource {
                     acreedores.get(indiceAcreedor);
 
 
-            /*
-             * El saldo del deudor es negativo.
-             * Necesitamos su valor absoluto.
-             */
             BigDecimal deuda =
                     deudor.saldo.abs();
-
 
             BigDecimal credito =
                     acreedor.saldo;
 
 
-            /*
-             * La cantidad a pagar será
-             * la menor de las dos.
-             */
             BigDecimal importe;
 
 
@@ -290,9 +415,6 @@ public class GrupoResource {
             }
 
 
-            /*
-             * Creamos la liquidación.
-             */
             LiquidacionResponse liquidacion =
                     new LiquidacionResponse();
 
@@ -331,11 +453,6 @@ public class GrupoResource {
                     );
 
 
-            /*
-             * Si el deudor ya ha pagado
-             * toda su deuda, pasamos
-             * al siguiente.
-             */
             if (deudor.saldo.compareTo(
                     BigDecimal.ZERO
             ) == 0) {
@@ -344,11 +461,6 @@ public class GrupoResource {
             }
 
 
-            /*
-             * Si el acreedor ya ha recibido
-             * todo su dinero, pasamos
-             * al siguiente.
-             */
             if (acreedor.saldo.compareTo(
                     BigDecimal.ZERO
             ) == 0) {

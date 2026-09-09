@@ -1,0 +1,445 @@
+.grupo-detalle-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 45px 20px;
+}
+
+
+/* =========================
+ *  CABECERA DEL GRUPO
+ = *======================== */
+
+.grupo-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+
+  border-bottom: 1px solid #dddddd;
+}
+
+
+.grupo-titulo {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  min-width: 0;
+}
+
+
+.grupo-icono {
+  font-size: 38px;
+
+  flex-shrink: 0;
+}
+
+
+.grupo-titulo h1 {
+  margin: 0;
+
+  font-size: 30px;
+  font-weight: 600;
+}
+
+
+.grupo-titulo p {
+  margin: 6px 0 0;
+
+  color: #666666;
+  font-size: 16px;
+}
+
+
+/* =========================
+ *  BOTÓN AÑADIR GASTO
+ = *======================== */
+
+.btn-anadir {
+  flex-shrink: 0;
+
+  background: #2f9e94;
+
+  color: white;
+
+  border: none;
+
+  border-radius: 5px;
+
+  padding: 12px 20px;
+
+  font-size: 15px;
+
+  cursor: pointer;
+
+  transition: background-color 0.2s;
+}
+
+
+.btn-anadir:hover {
+  background: #27877e;
+}
+
+
+/* =========================
+ *  RESUMEN
+ = *======================== */
+
+.resumen {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+
+  margin-bottom: 35px;
+}
+
+
+.resumen-card {
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 6px;
+
+  padding: 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+.resumen-card span {
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+.resumen-card strong {
+  font-size: 22px;
+
+  color: #333333;
+}
+
+
+.saldo-neutro {
+  color: #555555;
+}
+
+
+/* =========================
+ *  CONTENIDO
+ = *======================== */
+
+.contenido {
+  display: grid;
+
+  grid-template-columns: 2fr 1fr;
+
+  gap: 30px;
+}
+
+
+/* =========================
+ *  SECCIONES
+ = *======================== */
+
+.seccion {
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 6px;
+
+  overflow: hidden;
+}
+
+
+.seccion-cabecera {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+
+.seccion-cabecera h2 {
+  margin: 0;
+
+  font-size: 20px;
+}
+
+
+.btn-secundario {
+  flex-shrink: 0;
+
+  background: white;
+
+  border: 1px solid #cccccc;
+
+  border-radius: 4px;
+
+  padding: 8px 12px;
+
+  cursor: pointer;
+
+  color: #555555;
+
+  font-size: 14px;
+}
+
+
+.btn-secundario:hover {
+  background: #f5f5f5;
+}
+
+
+/* =========================
+ *  SIN GASTOS
+ = *======================== */
+
+.sin-gastos {
+  text-align: center;
+
+  padding: 50px 20px;
+}
+
+
+.sin-gastos-icono {
+  font-size: 38px;
+
+  margin-bottom: 10px;
+}
+
+
+.sin-gastos h3 {
+  margin: 0 0 8px;
+
+  font-size: 18px;
+}
+
+
+.sin-gastos p {
+  margin: 0;
+
+  color: #777777;
+}
+
+
+/* =========================
+ *  MIEMBROS
+ = *======================== */
+
+.miembro {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 15px 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+
+.miembro:last-child {
+  border-bottom: none;
+}
+
+
+.avatar {
+  width: 38px;
+
+  height: 38px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #2f9e94;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-weight: bold;
+}
+
+
+.miembro strong {
+  display: block;
+
+  font-size: 15px;
+}
+
+
+.miembro span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #777777;
+
+  font-size: 13px;
+}
+
+
+/* =========================
+ *  TABLET
+ = *======================== */
+
+@media (max-width: 800px) {
+
+  .contenido {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =========================
+ *  MOVIL
+ = *======================== */
+
+@media (max-width: 600px) {
+
+  .grupo-detalle-container {
+    padding: 20px 15px;
+  }
+
+
+  .grupo-cabecera {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 18px;
+
+    padding-bottom: 20px;
+
+    margin-bottom: 20px;
+  }
+
+
+  .grupo-titulo {
+    gap: 12px;
+  }
+
+
+  .grupo-icono {
+    font-size: 32px;
+  }
+
+
+  .grupo-titulo h1 {
+    font-size: 24px;
+  }
+
+
+  .grupo-titulo p {
+    font-size: 14px;
+  }
+
+
+  .btn-anadir {
+    width: 100%;
+
+    padding: 13px;
+
+    font-size: 16px;
+  }
+
+
+  /* Resumen en una columna */
+
+  .resumen {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+
+    margin-bottom: 25px;
+  }
+
+
+  .resumen-card {
+    padding: 16px;
+
+    flex-direction: row;
+
+    justify-content: space-between;
+
+    align-items: center;
+  }
+
+
+  .resumen-card strong {
+    font-size: 20px;
+  }
+
+
+  /* Secciones */
+
+  .contenido {
+    gap: 20px;
+  }
+
+
+  .seccion-cabecera {
+    padding: 15px;
+  }
+
+
+  .seccion-cabecera h2 {
+    font-size: 18px;
+  }
+
+
+  .btn-secundario {
+    padding: 8px 10px;
+  }
+
+
+  .sin-gastos {
+    padding: 40px 15px;
+  }
+
+
+  .sin-gastos-icono {
+    font-size: 34px;
+  }
+
+
+  .miembro {
+    padding: 15px;
+  }
+
+
+  .avatar {
+    width: 40px;
+
+    height: 40px;
+  }
+
+}

@@ -1,0 +1,294 @@
+<div class="grupo-detalle-container">
+
+  <!-- CABECERA -->
+
+  <div class="grupo-cabecera">
+
+    <div class="grupo-titulo">
+
+      <div class="grupo-icono">
+        👨‍👩‍👧‍👦
+      </div>
+
+      <div>
+
+        <h1>PerezBuseu</h1>
+
+        <p>
+          Gastos compartidos de PerezBuseu
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <a
+      class="btn-anadir"
+      routerLink="/grupos/1/nuevo-gasto"
+    >
+      + Añadir gasto
+    </a>
+
+  </div>
+
+
+  <!-- RESUMEN -->
+
+  <div class="resumen">
+
+    <div class="resumen-card">
+
+      <span>Total gastado</span>
+
+      <strong>
+        {{ totalGastado | number:'1.2-2' }} €
+      </strong>
+
+    </div>
+
+
+    <div class="resumen-card">
+
+      <span>Tu saldo</span>
+
+      <strong class="saldo-neutro">
+        0,00 €
+      </strong>
+
+    </div>
+
+
+    <div class="resumen-card">
+
+      <span>Gastos</span>
+
+      <strong>
+        {{ gastos.length }}
+      </strong>
+
+    </div>
+
+  </div>
+
+
+  <!-- CONTENIDO -->
+
+  <div class="contenido">
+
+
+    <!-- GASTOS -->
+
+    <div class="seccion gastos-seccion">
+
+
+      <div class="seccion-cabecera">
+
+        <h2>Gastos</h2>
+
+
+        <button class="btn-secundario">
+
+          Ver balances
+
+        </button>
+
+      </div>
+
+
+      <!-- LISTA DE GASTOS -->
+
+      <div
+        class="lista-gastos"
+        *ngIf="gastos.length > 0"
+      >
+
+
+        <div
+          class="gasto"
+          *ngFor="let gasto of gastos"
+        >
+
+
+          <div class="gasto-icono">
+
+            {{ obtenerIconoCategoria(gasto.categoria) }}
+
+          </div>
+
+
+          <div class="gasto-info">
+
+
+            <div class="gasto-descripcion">
+
+              {{ gasto.descripcion }}
+
+            </div>
+
+
+            <div class="gasto-detalles">
+
+              {{ gasto.categoria }}
+
+              ·
+
+              {{ gasto.fechaHora | date:'dd/MM/yyyy' }}
+
+            </div>
+
+
+          </div>
+
+
+          <div class="gasto-derecha">
+
+
+            <div class="gasto-importe">
+
+              {{ gasto.importe | number:'1.2-2' }} €
+
+            </div>
+
+
+            <div class="gasto-acciones">
+
+
+              <button
+                class="btn-editar"
+                (click)="editarGasto(gasto.id)"
+              >
+
+                ✏️ Editar
+
+              </button>
+
+
+              <button
+                class="btn-eliminar"
+                (click)="eliminarGasto(gasto.id)"
+              >
+
+                🗑️ Eliminar
+
+              </button>
+
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- SIN GASTOS -->
+
+      <div
+        class="sin-gastos"
+        *ngIf="gastos.length === 0"
+      >
+
+
+        <div class="sin-gastos-icono">
+
+          💸
+
+        </div>
+
+
+        <h3>
+
+          Todavía no hay gastos
+
+        </h3>
+
+
+        <p>
+
+          Añade el primer gasto del grupo.
+
+        </p>
+
+
+      </div>
+
+
+    </div>
+
+
+    <!-- MIEMBROS -->
+
+    <div class="seccion miembros">
+
+
+      <div class="seccion-cabecera">
+
+        <h2>Miembros</h2>
+
+
+        <button class="btn-secundario">
+
+          + Añadir
+
+        </button>
+
+
+      </div>
+
+
+      <div class="miembro">
+
+
+        <div class="avatar">
+
+          J
+
+        </div>
+
+
+        <div>
+
+          <strong>Javi</strong>
+
+          <span>javi@example.com</span>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="miembro">
+
+
+        <div class="avatar">
+
+          M
+
+        </div>
+
+
+        <div>
+
+          <strong>Miriam</strong>
+
+          <span>miriam@example.com</span>
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>

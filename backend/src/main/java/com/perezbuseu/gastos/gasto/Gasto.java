@@ -42,4 +42,5 @@ public class Gasto {
     public Usuario creadoPor;
 
     public LocalDateTime fechaCreacion;
+
 }
