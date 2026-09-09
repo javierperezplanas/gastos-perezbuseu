@@ -1,0 +1,572 @@
+.balances-container {
+  max-width: 800px;
+
+  margin: 0 auto;
+
+  padding: 45px 20px;
+}
+
+
+/* =========================
+ *  CABECERA
+ * ========================= */
+
+.pagina-cabecera {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 20px;
+
+  padding-bottom: 25px;
+
+  margin-bottom: 30px;
+
+  border-bottom: 1px solid #dddddd;
+}
+
+
+.btn-volver {
+  background: white;
+
+  border: 1px solid #cccccc;
+
+  border-radius: 6px;
+
+  padding: 9px 14px;
+
+  cursor: pointer;
+
+  color: #555555;
+
+  font-size: 14px;
+
+  transition: background-color 0.2s;
+}
+
+
+.btn-volver:hover {
+  background: #f5f5f5;
+}
+
+
+.pagina-cabecera h1 {
+  margin: 0;
+
+  font-size: 30px;
+
+  font-weight: 600;
+
+  color: #333333;
+}
+
+
+.pagina-cabecera p {
+  margin: 6px 0 0;
+
+  color: #777777;
+
+  font-size: 15px;
+}
+
+
+/* =========================
+ *  MENSAJES
+ * ========================= */
+
+.mensaje {
+  padding: 20px;
+
+  text-align: center;
+
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 8px;
+
+  color: #666666;
+}
+
+
+.mensaje.error {
+  color: #b34a4a;
+
+  background: #fff5f5;
+
+  border-color: #f0cccc;
+}
+
+
+/* =========================
+ *  LISTA DE BALANCES
+ * ========================= */
+
+.lista-balances {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 20px;
+}
+
+
+/* =========================
+ *  TARJETA
+ * ========================= */
+
+.balance-card {
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+
+/* =========================
+ *  CABECERA PERSONA
+ * ========================= */
+
+.balance-cabecera {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+
+.avatar {
+  width: 45px;
+
+  height: 45px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #2f9e94;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 18px;
+
+  font-weight: bold;
+}
+
+
+.balance-cabecera h2 {
+  margin: 0;
+
+  font-size: 19px;
+
+  color: #333333;
+}
+
+
+.balance-cabecera span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #777777;
+
+  font-size: 13px;
+}
+
+
+/* =========================
+ *  DATOS
+ * ========================= */
+
+.balance-datos {
+  padding: 15px 20px;
+}
+
+
+.balance-linea {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 9px 0;
+}
+
+
+.balance-linea span {
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+.balance-linea strong {
+  color: #333333;
+
+  font-size: 15px;
+}
+
+
+/* =========================
+ *  SALDO
+ * ========================= */
+
+.balance-saldo {
+  padding: 18px 20px;
+
+  border-top: 1px solid #eeeeee;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+
+.balance-saldo span {
+  font-size: 13px;
+
+  color: #777777;
+}
+
+
+.balance-saldo strong {
+  font-size: 25px;
+
+  font-weight: 600;
+}
+
+
+.balance-saldo small {
+  font-size: 13px;
+}
+
+
+/* =========================
+ *  SALDO POSITIVO
+ * ========================= */
+
+.saldo-positivo {
+  background: #f0faf7;
+}
+
+
+.saldo-positivo strong {
+  color: #27877e;
+}
+
+
+.saldo-positivo small {
+  color: #27877e;
+}
+
+
+/* =========================
+ *  SALDO NEGATIVO
+ * ========================= */
+
+.saldo-negativo {
+  background: #fff5f5;
+}
+
+
+.saldo-negativo strong {
+  color: #c65353;
+}
+
+
+.saldo-negativo small {
+  color: #c65353;
+}
+
+
+/* =========================
+ *  SALDO NEUTRO
+ * ========================= */
+
+.saldo-neutro {
+  background: #f7f7f7;
+}
+
+
+.saldo-neutro strong {
+  color: #555555;
+}
+
+
+/* =========================
+ *  PAGAR DEUDAS
+ * ========================= */
+
+.pagar-deudas {
+  margin-top: 30px;
+
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+
+.pagar-deudas-cabecera {
+  padding: 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+
+.pagar-deudas-cabecera h2 {
+  margin: 0;
+
+  font-size: 21px;
+
+  color: #333333;
+}
+
+
+.pagar-deudas-cabecera p {
+  margin: 6px 0 0;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+ *  DEUDA
+ * ========================= */
+
+.deuda {
+  padding: 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+
+.deuda:last-child {
+  border-bottom: none;
+}
+
+
+.deuda-personas {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  font-size: 17px;
+
+  color: #333333;
+}
+
+
+.flecha {
+  color: #2f9e94;
+
+  font-size: 22px;
+
+  font-weight: bold;
+}
+
+
+.deuda-importe {
+  margin-top: 12px;
+
+  font-size: 26px;
+
+  font-weight: 600;
+
+  color: #c65353;
+}
+
+
+.deuda-texto {
+  margin: 8px 0 0;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+ *  SIN DEUDAS
+ * ========================= */
+
+.sin-deudas {
+  margin-top: 30px;
+
+  padding: 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  background: #f0faf7;
+
+  border: 1px solid #bfe3d9;
+
+  border-radius: 10px;
+}
+
+
+.sin-deudas-icono {
+  font-size: 32px;
+
+  flex-shrink: 0;
+}
+
+
+.sin-deudas h2 {
+  margin: 0 0 5px;
+
+  font-size: 19px;
+
+  color: #27877e;
+}
+
+
+.sin-deudas p {
+  margin: 0;
+
+  color: #47877e;
+
+  font-size: 14px;
+}
+
+
+/* =========================
+ *  SIN BALANCES
+ * ========================= */
+
+.sin-balances {
+  text-align: center;
+
+  padding: 60px 20px;
+
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 10px;
+}
+
+
+.sin-balances-icono {
+  font-size: 40px;
+
+  margin-bottom: 12px;
+}
+
+
+.sin-balances h2 {
+  margin: 0 0 8px;
+
+  font-size: 20px;
+}
+
+
+.sin-balances p {
+  margin: 0;
+
+  color: #777777;
+}
+
+
+/* =========================
+ *  MÓVIL
+ * ========================= */
+
+@media (max-width: 600px) {
+
+  .balances-container {
+    padding: 20px 15px;
+  }
+
+
+  .pagina-cabecera {
+    gap: 15px;
+
+    margin-bottom: 25px;
+  }
+
+
+  .pagina-cabecera h1 {
+    font-size: 24px;
+  }
+
+
+  .pagina-cabecera p {
+    font-size: 14px;
+  }
+
+
+  .lista-balances {
+    grid-template-columns: 1fr;
+  }
+
+
+  .balance-saldo strong {
+    font-size: 23px;
+  }
+
+
+  .pagar-deudas {
+    margin-top: 20px;
+  }
+
+
+  .pagar-deudas-cabecera {
+    padding: 18px;
+  }
+
+
+  .deuda {
+    padding: 18px;
+  }
+
+
+  .deuda-personas {
+    font-size: 16px;
+
+    gap: 10px;
+  }
+
+
+  .deuda-importe {
+    font-size: 23px;
+  }
+
+
+  .sin-deudas {
+    margin-top: 20px;
+
+    padding: 20px;
+
+    gap: 14px;
+  }
+
+}

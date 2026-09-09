@@ -1,0 +1,340 @@
+<div class="balances-container">
+
+  <!-- CABECERA -->
+
+  <div class="pagina-cabecera">
+
+    <button
+      class="btn-volver"
+      (click)="volver()"
+    >
+      ← Volver
+    </button>
+
+
+    <div>
+
+      <h1>
+        Balances
+      </h1>
+
+      <p>
+        Resumen de gastos del grupo
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- CARGANDO -->
+
+  <div
+    class="mensaje"
+    *ngIf="cargando"
+  >
+
+    Cargando balances...
+
+  </div>
+
+
+  <!-- ERROR -->
+
+  <div
+    class="mensaje error"
+    *ngIf="error"
+  >
+
+    {{ error }}
+
+  </div>
+
+
+  <!-- BALANCES -->
+
+  <div
+    class="lista-balances"
+    *ngIf="
+      !cargando &&
+      !error &&
+      balances.length > 0
+    "
+  >
+
+    <div
+      class="balance-card"
+      *ngFor="let balance of balances"
+    >
+
+      <!-- CABECERA PERSONA -->
+
+      <div class="balance-cabecera">
+
+        <div class="avatar">
+
+          {{ balance.nombreUsuario.charAt(0) }}
+
+        </div>
+
+
+        <div>
+
+          <h2>
+
+            {{ balance.nombreUsuario }}
+
+          </h2>
+
+
+          <span>
+
+            Resumen personal
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- DATOS -->
+
+      <div class="balance-datos">
+
+        <div class="balance-linea">
+
+          <span>
+            Ha pagado
+          </span>
+
+
+          <strong>
+
+            {{ balance.totalPagado | number:'1.2-2' }} €
+
+          </strong>
+
+        </div>
+
+
+        <div class="balance-linea">
+
+          <span>
+            Le corresponde
+          </span>
+
+
+          <strong>
+
+            {{ balance.totalDebe | number:'1.2-2' }} €
+
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- SALDO -->
+
+      <div
+        class="balance-saldo"
+        [class.saldo-positivo]="balance.saldo > 0"
+        [class.saldo-negativo]="balance.saldo < 0"
+        [class.saldo-neutro]="balance.saldo === 0"
+      >
+
+        <span>
+          Saldo
+        </span>
+
+
+        <strong>
+
+          {{ balance.saldo | number:'1.2-2' }} €
+
+        </strong>
+
+
+        <small
+          *ngIf="balance.saldo > 0"
+        >
+
+          Tiene dinero a favor
+
+        </small>
+
+
+        <small
+          *ngIf="balance.saldo < 0"
+        >
+
+          Debe dinero
+
+        </small>
+
+
+        <small
+          *ngIf="balance.saldo === 0"
+        >
+
+          Está al día
+
+        </small>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- PAGAR DEUDAS -->
+
+  <div
+    class="pagar-deudas"
+    *ngIf="
+      !cargando &&
+      !error &&
+      liquidaciones.length > 0
+    "
+  >
+
+    <div class="pagar-deudas-cabecera">
+
+      <div>
+
+        <h2>
+          💸 Pagar deudas
+        </h2>
+
+        <p>
+          Estos son los pagos necesarios
+          para saldar las cuentas.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="deuda"
+      *ngFor="
+        let liquidacion of liquidaciones
+      "
+    >
+
+      <div class="deuda-personas">
+
+        <strong>
+
+          {{ liquidacion.nombreDeudor }}
+
+        </strong>
+
+
+        <span class="flecha">
+
+          →
+
+        </span>
+
+
+        <strong>
+
+          {{ liquidacion.nombreAcreedor }}
+
+        </strong>
+
+      </div>
+
+
+      <div class="deuda-importe">
+
+        {{ liquidacion.importe | number:'1.2-2' }} €
+
+      </div>
+
+
+      <p class="deuda-texto">
+
+        {{ liquidacion.nombreDeudor }}
+        debe pagar
+        {{ liquidacion.importe | number:'1.2-2' }} €
+        a
+        {{ liquidacion.nombreAcreedor }}.
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- SIN DEUDAS -->
+
+  <div
+    class="sin-deudas"
+    *ngIf="
+      !cargando &&
+      !error &&
+      balances.length > 0 &&
+      liquidaciones.length === 0
+    "
+  >
+
+    <div class="sin-deudas-icono">
+
+      ✅
+
+    </div>
+
+
+    <div>
+
+      <h2>
+        No hay deudas pendientes
+      </h2>
+
+      <p>
+        Todos los miembros están al día.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- SIN BALANCES -->
+
+  <div
+    class="sin-balances"
+    *ngIf="
+      !cargando &&
+      !error &&
+      balances.length === 0
+    "
+  >
+
+    <div class="sin-balances-icono">
+
+      📊
+
+    </div>
+
+
+    <h2>
+      No hay balances
+    </h2>
+
+
+    <p>
+      Todavía no hay miembros o gastos en este grupo.
+    </p>
+
+  </div>
+
+
+</div>

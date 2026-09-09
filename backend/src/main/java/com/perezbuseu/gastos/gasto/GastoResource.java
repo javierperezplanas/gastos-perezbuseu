@@ -7,6 +7,10 @@ import com.perezbuseu.gastos.grupo.Grupo;
 import com.perezbuseu.gastos.grupo.GrupoRepository;
 import com.perezbuseu.gastos.usuario.Usuario;
 import com.perezbuseu.gastos.usuario.UsuarioRepository;
+import com.perezbuseu.gastos.miembro.MiembroGrupo;
+import com.perezbuseu.gastos.miembro.MiembroGrupoRepository;
+
+import com.perezbuseu.gastos.gasto.dto.BalanceUsuarioResponse;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -47,6 +51,9 @@ public class GastoResource {
     @Inject
     UsuarioRepository usuarioRepository;
 
+    @Inject
+    MiembroGrupoRepository miembroGrupoRepository;
+
 
     /*
      * Listar todos los gastos.
@@ -74,9 +81,133 @@ public class GastoResource {
 
 
     /*
+ * Obtener los balances
+ * de todos los miembros del grupo.
+ */
+@GET
+@Path("/grupo/{grupoId}/balances")
+public List<BalanceUsuarioResponse> obtenerBalances(
+        @PathParam("grupoId") Long grupoId) {
+
+
+    List<MiembroGrupo> miembros =
+            miembroGrupoRepository.list(
+                    "grupo.id",
+                    grupoId
+            );
+
+
+    List<BalanceUsuarioResponse> balances =
+            new ArrayList<>();
+
+
+    for (MiembroGrupo miembro : miembros) {
+
+
+        Usuario usuario =
+                miembro.usuario;
+
+
+        BalanceUsuarioResponse balance =
+                new BalanceUsuarioResponse();
+
+
+        balance.usuarioId =
+                usuario.id;
+
+
+        balance.nombreUsuario =
+                usuario.nombre;
+
+
+        /*
+         * Total que ha pagado.
+         */
+        BigDecimal totalPagado =
+                BigDecimal.ZERO;
+
+
+        List<Gasto> gastosPagados =
+                gastoRepository.list(
+                        "grupo.id = ?1 and pagador.id = ?2",
+                        grupoId,
+                        usuario.id
+                );
+
+
+        for (Gasto gasto : gastosPagados) {
+
+            totalPagado =
+                    totalPagado.add(
+                            gasto.importe
+                    );
+
+        }
+
+
+        balance.totalPagado =
+                totalPagado;
+
+
+        /*
+         * Total que le corresponde pagar
+         * según los repartos.
+         */
+        BigDecimal totalDebe =
+                BigDecimal.ZERO;
+
+
+        List<RepartoGasto> repartos =
+                repartoGastoRepository.list(
+                        "gasto.grupo.id = ?1 and usuario.id = ?2",
+                        grupoId,
+                        usuario.id
+                );
+
+
+        for (RepartoGasto reparto : repartos) {
+
+            totalDebe =
+                    totalDebe.add(
+                            reparto.importe
+                    );
+
+        }
+
+
+        balance.totalDebe =
+                totalDebe;
+
+
+        /*
+         * Saldo:
+         *
+         * Positivo → ha pagado de más.
+         * Negativo → debe dinero.
+         */
+        balance.saldo =
+                totalPagado.subtract(
+                        totalDebe
+                );
+
+
+        balances.add(
+                balance
+        );
+
+    }
+
+
+    return balances;
+
+}
+
+    /*
      * Obtener un gasto concreto
      * junto con todos sus repartos.
      */
+
+
     @GET
     @Path("/{id}")
     public GastoDetalleResponse obtenerPorId(

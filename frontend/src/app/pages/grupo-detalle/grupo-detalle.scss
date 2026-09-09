@@ -1,6 +1,8 @@
 .grupo-detalle-container {
   max-width: 900px;
+
   margin: 0 auto;
+
   padding: 45px 20px;
 }
 
@@ -11,12 +13,15 @@
 
 .grupo-cabecera {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
 
   gap: 20px;
 
   padding-bottom: 30px;
+
   margin-bottom: 30px;
 
   border-bottom: 1px solid #dddddd;
@@ -25,6 +30,7 @@
 
 .grupo-titulo {
   display: flex;
+
   align-items: center;
 
   gap: 18px;
@@ -44,6 +50,7 @@
   margin: 0;
 
   font-size: 30px;
+
   font-weight: 600;
 }
 
@@ -52,6 +59,7 @@
   margin: 6px 0 0;
 
   color: #666666;
+
   font-size: 16px;
 }
 
@@ -61,6 +69,8 @@
  = *======================== */
 
 .btn-anadir {
+  display: inline-block;
+
   flex-shrink: 0;
 
   background: #2f9e94;
@@ -69,13 +79,15 @@
 
   border: none;
 
-  border-radius: 5px;
+  border-radius: 6px;
 
   padding: 12px 20px;
 
   font-size: 15px;
 
   cursor: pointer;
+
+  text-decoration: none;
 
   transition: background-color 0.2s;
 }
@@ -106,7 +118,7 @@
 
   border: 1px solid #dddddd;
 
-  border-radius: 6px;
+  border-radius: 8px;
 
   padding: 20px;
 
@@ -159,7 +171,7 @@
 
   border: 1px solid #dddddd;
 
-  border-radius: 6px;
+  border-radius: 8px;
 
   overflow: hidden;
 }
@@ -194,7 +206,7 @@
 
   border: 1px solid #cccccc;
 
-  border-radius: 4px;
+  border-radius: 5px;
 
   padding: 8px 12px;
 
@@ -203,11 +215,190 @@
   color: #555555;
 
   font-size: 14px;
+
+  transition: background-color 0.2s;
 }
 
 
 .btn-secundario:hover {
   background: #f5f5f5;
+}
+
+
+/* =========================
+ *  LISTA DE GASTOS
+ = *======================== */
+
+.lista-gastos {
+  display: flex;
+
+  flex-direction: column;
+}
+
+
+/* =========================
+ *  GASTO
+ = *======================== */
+
+.gasto {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 18px 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+
+.gasto:last-child {
+  border-bottom: none;
+}
+
+
+.gasto:hover {
+  background: #fafafa;
+}
+
+
+/* =========================
+ *  ICONO DEL GASTO
+ = *======================== */
+
+.gasto-icono {
+  width: 42px;
+
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #f1f7f6;
+
+  border-radius: 50%;
+
+  font-size: 20px;
+}
+
+
+/* =========================
+ *  INFORMACIÓN DEL GASTO
+ = *======================== */
+
+.gasto-info {
+  flex: 1;
+
+  min-width: 0;
+}
+
+
+.gasto-descripcion {
+  font-size: 16px;
+
+  font-weight: 600;
+
+  color: #333333;
+
+  margin-bottom: 5px;
+}
+
+
+.gasto-detalles {
+  color: #777777;
+
+  font-size: 13px;
+}
+
+
+/* =========================
+ *  PARTE DERECHA
+ = *======================== */
+
+.gasto-derecha {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-end;
+
+  gap: 8px;
+
+  flex-shrink: 0;
+}
+
+
+.gasto-importe {
+  font-size: 17px;
+
+  font-weight: 600;
+
+  color: #333333;
+}
+
+
+/* =========================
+ *  ACCIONES
+ = *======================== */
+
+.gasto-acciones {
+  display: flex;
+
+  gap: 8px;
+}
+
+
+.btn-editar,
+.btn-eliminar {
+  border: none;
+
+  border-radius: 5px;
+
+  padding: 6px 9px;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition:
+  background-color 0.2s,
+  transform 0.1s;
+}
+
+
+.btn-editar {
+  background: #edf6f5;
+
+  color: #287d75;
+}
+
+
+.btn-editar:hover {
+  background: #dcefeb;
+}
+
+
+.btn-eliminar {
+  background: #fff0f0;
+
+  color: #b34a4a;
+}
+
+
+.btn-eliminar:hover {
+  background: #ffe0e0;
+}
+
+
+.btn-editar:active,
+.btn-eliminar:active {
+  transform: scale(0.97);
 }
 
 
@@ -320,7 +511,7 @@
 
 
 /* =========================
- *  MOVIL
+ *  MÓVIL
  = *======================== */
 
 @media (max-width: 600px) {
@@ -366,13 +557,17 @@
   .btn-anadir {
     width: 100%;
 
+    box-sizing: border-box;
+
+    text-align: center;
+
     padding: 13px;
 
     font-size: 16px;
   }
 
 
-  /* Resumen en una columna */
+  /* RESUMEN */
 
   .resumen {
     grid-template-columns: 1fr;
@@ -399,7 +594,7 @@
   }
 
 
-  /* Secciones */
+  /* SECCIONES */
 
   .contenido {
     gap: 20px;
@@ -421,15 +616,54 @@
   }
 
 
+  /* GASTOS */
+
+  .gasto {
+    flex-wrap: wrap;
+
+    padding: 16px 15px;
+
+    gap: 12px;
+  }
+
+
+  .gasto-info {
+    min-width: calc(100% - 60px);
+  }
+
+
+  .gasto-derecha {
+    width: 100%;
+
+    flex-direction: row;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-left: 54px;
+  }
+
+
+  .gasto-acciones {
+    gap: 6px;
+  }
+
+
+  .btn-editar,
+  .btn-eliminar {
+    padding: 7px 9px;
+  }
+
+
+  /* SIN GASTOS */
+
   .sin-gastos {
     padding: 40px 15px;
   }
 
 
-  .sin-gastos-icono {
-    font-size: 34px;
-  }
-
+  /* MIEMBROS */
 
   .miembro {
     padding: 15px;

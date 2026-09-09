@@ -118,10 +118,12 @@ export class GrupoDetalle implements OnInit {
     gastoId: number
   ): void {
 
-    console.log(
-      'Editar gasto:',
+    this.router.navigate([
+      '/grupos',
+      1,
+      'editar-gasto',
       gastoId
-    );
+    ]);
 
   }
 
@@ -149,16 +151,11 @@ export class GrupoDetalle implements OnInit {
 
       next: () => {
 
-
         console.log(
           'Gasto eliminado correctamente'
         );
 
 
-        /*
-         * Recargamos los gastos
-         * después de eliminar.
-         */
         this.cargarGastos();
 
       },

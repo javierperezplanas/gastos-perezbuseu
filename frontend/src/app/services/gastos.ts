@@ -12,14 +12,20 @@ export class Gastos {
   'http://localhost:8080/api/gastos';
 
 
+  private gruposApiUrl =
+  'http://localhost:8080/api/grupos';
+
+
   constructor(
     private http: HttpClient
   ) {}
 
 
-  crearGasto(gasto: any) {
+  crearGasto(
+    gasto: any
+  ) {
 
-    return this.http.post(
+    return this.http.post<any>(
       this.apiUrl,
       gasto
     );
@@ -38,12 +44,58 @@ export class Gastos {
   }
 
 
+  obtenerGasto(
+    gastoId: number
+  ) {
+
+    return this.http.get<any>(
+      `${this.apiUrl}/${gastoId}`
+    );
+
+  }
+
+
+  actualizarGasto(
+    gastoId: number,
+    gasto: any
+  ) {
+
+    return this.http.put<any>(
+      `${this.apiUrl}/${gastoId}`,
+      gasto
+    );
+
+  }
+
+
   eliminarGasto(
     gastoId: number
   ) {
 
     return this.http.delete(
       `${this.apiUrl}/${gastoId}`
+    );
+
+  }
+
+
+  obtenerBalances(
+    grupoId: number
+  ) {
+
+    return this.http.get<any[]>(
+      `${this.apiUrl}/grupo/${grupoId}/balances`
+    );
+
+  }
+
+
+  obtenerLiquidaciones(
+    grupoId: number
+  ) {
+
+    return this.http.get<any[]>(
+      `${this.gruposApiUrl}/${grupoId}/liquidacion`
     );
 
   }
