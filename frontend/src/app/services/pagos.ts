@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+
+import {
+  HttpClient
+} from '@angular/common/http';
 
 
 @Injectable({
@@ -17,6 +20,9 @@ export class Pagos {
   ) {}
 
 
+  /*
+   * Registrar un pago de deuda.
+   */
   registrarPago(
     pago: any
   ) {
@@ -29,12 +35,30 @@ export class Pagos {
   }
 
 
+  /*
+   * Obtener los pagos
+   * de un grupo.
+   */
   obtenerPagosPorGrupo(
     grupoId: number
   ) {
 
     return this.http.get<any[]>(
       `${this.apiUrl}/grupo/${grupoId}`
+    );
+
+  }
+
+
+  /*
+   * Eliminar un pago de deuda.
+   */
+  eliminarPago(
+    pagoId: number
+  ) {
+
+    return this.http.delete(
+      `${this.apiUrl}/${pagoId}`
     );
 
   }

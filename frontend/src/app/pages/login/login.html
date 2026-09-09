@@ -1,0 +1,126 @@
+<div class="login-container">
+
+
+  <div class="login-card">
+
+
+    <!-- LOGO / TÍTULO -->
+
+    <div class="login-cabecera">
+
+      <div class="login-icono">
+
+        💰
+
+      </div>
+
+
+      <h1>
+        Gastos PerezBuseu
+      </h1>
+
+
+      <p>
+        Inicia sesión para continuar
+      </p>
+
+    </div>
+
+
+    <!-- FORMULARIO -->
+
+    <form
+      class="login-formulario"
+      (ngSubmit)="iniciarSesion()"
+    >
+
+
+      <!-- EMAIL -->
+
+      <div class="campo">
+
+        <label for="email">
+
+          Email
+
+        </label>
+
+
+        <input
+          id="email"
+          type="email"
+          placeholder="tu@email.com"
+          [(ngModel)]="email"
+          name="email"
+          [disabled]="cargando"
+        >
+
+      </div>
+
+
+      <!-- CONTRASEÑA -->
+
+      <div class="campo">
+
+        <label for="password">
+
+          Contraseña
+
+        </label>
+
+
+        <input
+          id="password"
+          type="password"
+          placeholder="Introduce tu contraseña"
+          [(ngModel)]="password"
+          name="password"
+          [disabled]="cargando"
+        >
+
+      </div>
+
+
+      <!-- ERROR -->
+
+      <div
+        class="login-error"
+        *ngIf="error"
+      >
+
+        {{ error }}
+
+      </div>
+
+
+      <!-- BOTÓN -->
+
+      <button
+        class="btn-login"
+        type="submit"
+        [disabled]="cargando"
+      >
+
+        <span *ngIf="!cargando">
+
+          Iniciar sesión
+
+        </span>
+
+
+        <span *ngIf="cargando">
+
+          Iniciando sesión...
+
+        </span>
+
+      </button>
+
+
+    </form>
+
+
+  </div>
+
+
+</div>

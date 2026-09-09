@@ -274,12 +274,31 @@ export class Balances implements OnInit {
 
 
     if (
-      !this.importePago ||
+      !this.importePago
+      ||
       this.importePago <= 0
     ) {
 
       alert(
         'El importe debe ser mayor que cero.'
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * No permitir pagar más
+     * de lo que se debe.
+     */
+    if (
+      this.importePago >
+      this.deudaSeleccionada.importe
+    ) {
+
+      alert(
+        'No puedes pagar un importe superior a la deuda pendiente.'
       );
 
       return;
@@ -329,11 +348,7 @@ export class Balances implements OnInit {
         /*
          * Recargamos toda la información.
          */
-        this.cargarBalances();
-
-        this.cargarLiquidaciones();
-
-        this.cargarPagos();
+        this.recargarDatos();
 
       },
 
@@ -354,6 +369,86 @@ export class Balances implements OnInit {
       }
 
     });
+
+  }
+
+
+  /*
+   * Eliminar un pago de deuda.
+   */
+  eliminarPago(
+    pago: any
+  ): void {
+
+
+    const confirmar =
+    confirm(
+      `¿Seguro que quieres eliminar el pago de ${pago.importe} € de ${pago.nombreDeudor} a ${pago.nombreAcreedor}?`
+    );
+
+
+    if (!confirmar) {
+
+      return;
+
+    }
+
+
+    this.pagosService
+    .eliminarPago(
+      pago.id
+    )
+    .subscribe({
+
+      next: () => {
+
+
+        console.log(
+          'Pago eliminado correctamente.'
+        );
+
+
+        /*
+         * Recargamos balances,
+         * deudas e historial.
+         */
+        this.recargarDatos();
+
+      },
+
+
+      error: (error: any) => {
+
+
+        console.error(
+          'Error eliminando pago:',
+          error
+        );
+
+
+        alert(
+          'No se ha podido eliminar el pago.'
+        );
+
+      }
+
+    });
+
+  }
+
+
+  /*
+   * Recargar todos los datos
+   * de la página.
+   */
+  recargarDatos(): void {
+
+
+    this.cargarBalances();
+
+    this.cargarLiquidaciones();
+
+    this.cargarPagos();
 
   }
 

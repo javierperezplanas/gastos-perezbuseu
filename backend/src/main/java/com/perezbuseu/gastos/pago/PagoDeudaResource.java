@@ -2,6 +2,7 @@ package com.perezbuseu.gastos.pago;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -20,6 +21,9 @@ public class PagoDeudaResource {
     PagoDeudaService pagoDeudaService;
 
 
+    /*
+     * Registrar un pago de deuda.
+     */
     @POST
     public PagoDeudaResponse registrarPago(
             RegistrarPagoRequest request) {
@@ -35,6 +39,10 @@ public class PagoDeudaResource {
     }
 
 
+    /*
+     * Obtener todos los pagos
+     * de un grupo.
+     */
     @GET
     @Path("/grupo/{grupoId}")
     public List<PagoDeudaResponse> obtenerPagosPorGrupo(
@@ -43,6 +51,22 @@ public class PagoDeudaResource {
 
         return pagoDeudaService.obtenerPagosPorGrupo(
                 grupoId
+        );
+
+    }
+
+
+    /*
+     * Eliminar un pago de deuda.
+     */
+    @DELETE
+    @Path("/{id}")
+    public void eliminarPago(
+            @PathParam("id") Long id) {
+
+
+        pagoDeudaService.eliminarPago(
+                id
         );
 
     }

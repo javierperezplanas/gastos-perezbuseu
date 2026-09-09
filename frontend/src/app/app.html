@@ -1,26 +1,78 @@
-<header class="topbar">
+<!-- BARRA SUPERIOR -->
+
+<header
+  class="topbar"
+  *ngIf="mostrarMenu"
+>
 
   <div class="topbar-contenido">
 
+
+    <!-- LOGO -->
+
     <div class="logo">
+
       gastos
-      <span>PerezBuseu</span>
+
+      <span>
+        PerezBuseu
+      </span>
+
     </div>
+
+
+    <!-- MENÚ -->
 
     <nav class="menu">
-      <a href="#">Grupos</a>
-      <a href="#">Actividad</a>
+
+      <a routerLink="/grupos">
+
+        Grupos
+
+      </a>
+
+
+      <a routerLink="/grupos/1/actividad">
+
+        Actividad
+
+      </a>
+
     </nav>
 
+
+    <!-- USUARIO -->
+
     <div class="usuario">
-      Javi
+
+      <span *ngIf="usuario">
+
+        {{ usuario.nombre }}
+
+      </span>
+
+
+      <button
+        class="btn-logout"
+        (click)="cerrarSesion()"
+      >
+
+        Cerrar sesión
+
+      </button>
+
     </div>
+
 
   </div>
 
 </header>
 
 
+<!-- CONTENIDO -->
+
 <main class="contenido">
+
   <router-outlet></router-outlet>
+
 </main>

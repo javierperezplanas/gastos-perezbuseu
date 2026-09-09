@@ -1,0 +1,162 @@
+<div class="actividad-container">
+
+
+  <!-- CABECERA -->
+
+  <div class="pagina-cabecera">
+
+
+    <button
+      class="btn-volver"
+      (click)="volver()"
+    >
+      ← Volver
+    </button>
+
+
+    <div>
+
+      <h1>
+        Actividad
+      </h1>
+
+
+      <p>
+        Historial de actividad del grupo
+      </p>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- CARGANDO -->
+
+  <div
+    class="estado"
+    *ngIf="cargando"
+  >
+
+    Cargando actividad...
+
+  </div>
+
+
+  <!-- ERROR -->
+
+  <div
+    class="estado error"
+    *ngIf="error"
+  >
+
+    {{ error }}
+
+  </div>
+
+
+  <!-- SIN ACTIVIDAD -->
+
+  <div
+    class="sin-actividad"
+    *ngIf="
+      !cargando
+      &&
+      !error
+      &&
+      actividades.length === 0
+    "
+  >
+
+
+    <div class="sin-actividad-icono">
+
+      📋
+
+    </div>
+
+
+    <h2>
+      Todavía no hay actividad
+    </h2>
+
+
+    <p>
+      Las acciones realizadas en el grupo aparecerán aquí.
+    </p>
+
+
+  </div>
+
+
+  <!-- LISTA DE ACTIVIDADES -->
+
+  <div
+    class="lista-actividades"
+    *ngIf="
+      !cargando
+      &&
+      !error
+      &&
+      actividades.length > 0
+    "
+  >
+
+
+    <div
+      class="actividad"
+      [ngClass]="actividad.tipo"
+      *ngFor="
+        let actividad of actividades
+      "
+    >
+
+
+      <!-- ICONO -->
+
+      <div class="actividad-icono">
+
+        {{
+          obtenerIcono(
+            actividad.tipo
+          )
+        }}
+
+      </div>
+
+
+      <!-- INFORMACIÓN -->
+
+      <div class="actividad-info">
+
+
+        <div class="actividad-descripcion">
+
+          {{
+            actividad.descripcion
+          }}
+
+        </div>
+
+
+        <div class="actividad-fecha">
+
+          {{
+            actividad.fechaHora
+            |
+            date:'dd/MM/yyyy HH:mm'
+          }}
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>

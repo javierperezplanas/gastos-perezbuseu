@@ -1,0 +1,335 @@
+.editar-gasto-container {
+  max-width: 650px;
+
+  margin: 0 auto;
+
+  padding: 45px 20px;
+}
+
+
+/* =========================
+ *  CABECERA
+ * ========================= */
+
+.pagina-cabecera {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 20px;
+
+  padding-bottom: 25px;
+
+  margin-bottom: 30px;
+
+  border-bottom: 1px solid #dddddd;
+}
+
+
+.btn-volver {
+  background: white;
+
+  border: 1px solid #cccccc;
+
+  border-radius: 6px;
+
+  padding: 9px 14px;
+
+  cursor: pointer;
+
+  color: #555555;
+
+  font-size: 14px;
+
+  transition: background-color 0.2s;
+}
+
+
+.btn-volver:hover {
+  background: #f5f5f5;
+}
+
+
+.pagina-cabecera h1 {
+  margin: 0;
+
+  font-size: 30px;
+
+  font-weight: 600;
+
+  color: #333333;
+}
+
+
+.pagina-cabecera p {
+  margin: 6px 0 0;
+
+  color: #777777;
+
+  font-size: 15px;
+}
+
+
+/* =========================
+ *  MENSAJES
+ * ========================= */
+
+.mensaje {
+  padding: 20px;
+
+  text-align: center;
+
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 10px;
+
+  color: #666666;
+}
+
+
+.mensaje.error {
+  color: #b34a4a;
+
+  background: #fff5f5;
+
+  border-color: #f0cccc;
+}
+
+
+/* =========================
+ *  FORMULARIO
+ * ========================= */
+
+.formulario {
+  background: white;
+
+  border: 1px solid #dddddd;
+
+  border-radius: 10px;
+
+  padding: 30px;
+}
+
+
+/* =========================
+ *  CAMPOS
+ * ========================= */
+
+.campo {
+  margin-bottom: 22px;
+}
+
+
+.campo label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #444444;
+
+  font-size: 14px;
+
+  font-weight: 500;
+}
+
+
+.campo input,
+.campo select {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 11px 12px;
+
+  border: 1px solid #cccccc;
+
+  border-radius: 6px;
+
+  background: white;
+
+  color: #333333;
+
+  font-size: 15px;
+
+  outline: none;
+
+  transition:
+  border-color 0.2s,
+  box-shadow 0.2s;
+}
+
+
+.campo input:focus,
+.campo select:focus {
+  border-color: #2f9e94;
+
+  box-shadow:
+  0 0 0 3px
+  rgba(47, 158, 148, 0.12);
+}
+
+
+/* =========================
+ *  IMPORTE
+ * ========================= */
+
+.importe-input {
+  position: relative;
+}
+
+
+.importe-input input {
+  padding-right: 40px;
+}
+
+
+.importe-input span {
+  position: absolute;
+
+  right: 14px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #777777;
+
+  font-size: 16px;
+
+  pointer-events: none;
+}
+
+
+/* =========================
+ *  BOTONES
+ * ========================= */
+
+.formulario-botones {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 30px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid #eeeeee;
+}
+
+
+.btn-cancelar {
+  background: white;
+
+  border: 1px solid #cccccc;
+
+  border-radius: 6px;
+
+  padding: 10px 18px;
+
+  cursor: pointer;
+
+  color: #555555;
+
+  font-size: 14px;
+
+  transition: background-color 0.2s;
+}
+
+
+.btn-cancelar:hover:not(:disabled) {
+  background: #f5f5f5;
+}
+
+
+.btn-guardar {
+  background: #2f9e94;
+
+  border: none;
+
+  border-radius: 6px;
+
+  padding: 10px 18px;
+
+  cursor: pointer;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  transition:
+  background-color 0.2s,
+  transform 0.1s;
+}
+
+
+.btn-guardar:hover:not(:disabled) {
+  background: #27877e;
+}
+
+
+.btn-guardar:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+
+/* =========================
+ *  BOTONES DESACTIVADOS
+ * ========================= */
+
+button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================
+ *  MÓVIL
+ * ========================= */
+
+@media (max-width: 600px) {
+
+  .editar-gasto-container {
+    padding: 20px 15px;
+  }
+
+
+  .pagina-cabecera {
+    gap: 15px;
+
+    margin-bottom: 25px;
+  }
+
+
+  .pagina-cabecera h1 {
+    font-size: 24px;
+  }
+
+
+  .pagina-cabecera p {
+    font-size: 14px;
+  }
+
+
+  .formulario {
+    padding: 20px;
+  }
+
+
+  .formulario-botones {
+    flex-direction: column-reverse;
+  }
+
+
+  .btn-cancelar,
+  .btn-guardar {
+    width: 100%;
+  }
+
+}

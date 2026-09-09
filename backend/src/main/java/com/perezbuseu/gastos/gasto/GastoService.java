@@ -1,5 +1,6 @@
 package com.perezbuseu.gastos.gasto;
 
+import com.perezbuseu.gastos.actividad.ActividadService;
 import com.perezbuseu.gastos.gasto.dto.CrearGastoRequest;
 import com.perezbuseu.gastos.grupo.Grupo;
 import com.perezbuseu.gastos.grupo.GrupoRepository;
@@ -18,17 +19,29 @@ import java.util.List;
 @ApplicationScoped
 public class GastoService {
 
+
     @Inject
     GastoRepository gastoRepository;
+
 
     @Inject
     GrupoRepository grupoRepository;
 
+
     @Inject
     UsuarioRepository usuarioRepository;
 
+
     @Inject
     RepartoService repartoService;
+
+
+    /*
+     * Servicio encargado
+     * del historial de actividad.
+     */
+    @Inject
+    ActividadService actividadService;
 
 
     public List<Gasto> listar() {
@@ -56,9 +69,11 @@ public class GastoService {
                 gastoRepository.findById(gastoId);
 
         if (gasto == null) {
+
             throw new NotFoundException(
                     "Gasto no encontrado"
             );
+
         }
 
         return gasto;
@@ -66,20 +81,27 @@ public class GastoService {
     }
 
 
+    /*
+     * Crear un gasto.
+     */
     @Transactional
     public Gasto crear(
             CrearGastoRequest request) {
 
         validarParticipantes(request);
 
+
         Grupo grupo =
                 obtenerGrupo(request.grupoId);
+
 
         Usuario pagador =
                 obtenerUsuario(request.pagadorId);
 
+
         Gasto gasto =
                 new Gasto();
+
 
         asignarDatos(
                 gasto,
@@ -88,13 +110,17 @@ public class GastoService {
                 pagador
         );
 
+
         gasto.creadoPor =
                 pagador;
+
 
         gasto.fechaCreacion =
                 LocalDateTime.now();
 
+
         gastoRepository.persist(gasto);
+
 
         repartoService.crearRepartos(
                 gasto,
@@ -102,11 +128,34 @@ public class GastoService {
                 pagador
         );
 
+
+        /*
+         * Registrar la actividad.
+         */
+        actividadService.registrarActividad(
+
+                grupo.id,
+
+                "CREAR_GASTO",
+
+                pagador.nombre
+                        + " añadió el gasto «"
+                        + gasto.descripcion
+                        + "» por "
+                        + gasto.importe
+                        + " €"
+
+        );
+
+
         return gasto;
 
     }
 
 
+    /*
+     * Actualizar un gasto.
+     */
     @Transactional
     public Gasto actualizar(
             Long gastoId,
@@ -114,14 +163,18 @@ public class GastoService {
 
         validarParticipantes(request);
 
+
         Gasto gasto =
                 obtenerPorId(gastoId);
+
 
         Grupo grupo =
                 obtenerGrupo(request.grupoId);
 
+
         Usuario pagador =
                 obtenerUsuario(request.pagadorId);
+
 
         asignarDatos(
                 gasto,
@@ -130,9 +183,11 @@ public class GastoService {
                 pagador
         );
 
+
         repartoService.eliminarRepartosDeGasto(
                 gasto.id
         );
+
 
         repartoService.crearRepartos(
                 gasto,
@@ -140,22 +195,77 @@ public class GastoService {
                 pagador
         );
 
+
+        /*
+         * Registrar la actividad.
+         */
+        actividadService.registrarActividad(
+
+                grupo.id,
+
+                "EDITAR_GASTO",
+
+                pagador.nombre
+                        + " modificó el gasto «"
+                        + gasto.descripcion
+                        + "»"
+
+        );
+
+
         return gasto;
 
     }
 
 
+    /*
+     * Eliminar un gasto.
+     */
     @Transactional
     public void eliminar(
             Long gastoId) {
 
-        obtenerPorId(gastoId);
+
+        Gasto gasto =
+                obtenerPorId(gastoId);
+
+
+        /*
+         * Guardamos los datos antes
+         * de eliminar el gasto.
+         */
+        Long grupoId =
+                gasto.grupo.id;
+
+
+        String descripcion =
+                gasto.descripcion;
+
 
         repartoService.eliminarRepartosDeGasto(
                 gastoId
         );
 
-        gastoRepository.deleteById(gastoId);
+
+        gastoRepository.deleteById(
+                gastoId
+        );
+
+
+        /*
+         * Registrar la actividad.
+         */
+        actividadService.registrarActividad(
+
+                grupoId,
+
+                "ELIMINAR_GASTO",
+
+                "Se eliminó el gasto «"
+                        + descripcion
+                        + "»"
+
+        );
 
     }
 
@@ -169,20 +279,26 @@ public class GastoService {
         gasto.descripcion =
                 request.descripcion;
 
+
         gasto.importe =
                 request.importe;
+
 
         gasto.categoria =
                 request.categoria;
 
+
         gasto.fechaHora =
                 request.fechaHora;
+
 
         gasto.notas =
                 request.notas;
 
+
         gasto.grupo =
                 grupo;
+
 
         gasto.pagador =
                 pagador;
@@ -196,11 +312,15 @@ public class GastoService {
         Grupo grupo =
                 grupoRepository.findById(grupoId);
 
+
         if (grupo == null) {
+
             throw new NotFoundException(
                     "Grupo no encontrado"
             );
+
         }
+
 
         return grupo;
 
@@ -213,11 +333,15 @@ public class GastoService {
         Usuario usuario =
                 usuarioRepository.findById(usuarioId);
 
+
         if (usuario == null) {
+
             throw new NotFoundException(
                     "Usuario no encontrado"
             );
+
         }
+
 
         return usuario;
 
@@ -227,12 +351,16 @@ public class GastoService {
     private void validarParticipantes(
             CrearGastoRequest request) {
 
-        if (request.participantesIds == null
-                || request.participantesIds.isEmpty()) {
+        if (
+                request.participantesIds == null
+                ||
+                request.participantesIds.isEmpty()
+        ) {
 
             throw new IllegalArgumentException(
                     "Debe haber al menos un participante"
             );
+
         }
 
     }

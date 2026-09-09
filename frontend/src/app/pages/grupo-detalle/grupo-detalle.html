@@ -87,18 +87,35 @@
         <h2>Gastos</h2>
 
 
-        <button
-          class="btn-secundario"
-          [routerLink]="[
-            '/grupos',
-            1,
-            'balances'
-          ]"
-        >
+        <div class="acciones-seccion">
 
-          Ver balances
 
-        </button>
+          <a
+            class="btn-secundario"
+            [routerLink]="[
+              '/grupos',
+              1,
+              'actividad'
+            ]"
+          >
+            📋 Actividad
+          </a>
+
+
+          <a
+            class="btn-secundario"
+            [routerLink]="[
+              '/grupos',
+              1,
+              'balances'
+            ]"
+          >
+            Ver balances
+          </a>
+
+
+        </div>
+
 
       </div>
 

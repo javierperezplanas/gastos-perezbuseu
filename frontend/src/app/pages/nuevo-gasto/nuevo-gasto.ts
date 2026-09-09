@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import {
   ActivatedRoute,
   Router
 } from '@angular/router';
 
-import { Gastos } from '../../services/gastos';
+import {
+  FormsModule
+} from '@angular/forms';
+
+import {
+  Gastos
+} from '../../services/gastos';
 
 
 @Component({
@@ -20,19 +25,31 @@ import { Gastos } from '../../services/gastos';
 
   styleUrl: './nuevo-gasto.scss',
 })
-
 export class NuevoGasto implements OnInit {
 
 
   descripcion: string = '';
 
+
   categoria: string = '';
+
 
   importe: number | null = null;
 
+
   pagador: string = '';
 
+
   fecha: string = this.obtenerFechaActual();
+
+
+  /*
+   * Participantes del gasto.
+   */
+  participantesIds: number[] = [
+    1,
+    2
+  ];
 
 
   /*
@@ -56,9 +73,6 @@ export class NuevoGasto implements OnInit {
   /*
    * Devuelve la fecha actual
    * en formato YYYY-MM-DD.
-   *
-   * Es el formato que necesita
-   * un input type="date".
    */
   obtenerFechaActual(): string {
 
@@ -110,7 +124,9 @@ export class NuevoGasto implements OnInit {
 
 
       this.gastoId =
-      Number(gastoIdParam);
+      Number(
+        gastoIdParam
+      );
 
 
       this.cargarGasto();
@@ -131,7 +147,9 @@ export class NuevoGasto implements OnInit {
 
 
     this.gastosService
-    .obtenerGasto(this.gastoId)
+    .obtenerGasto(
+      this.gastoId
+    )
     .subscribe({
 
       next: (gasto: any) => {
@@ -152,13 +170,11 @@ export class NuevoGasto implements OnInit {
 
 
         this.importe =
-        Number(gasto.importe);
+        Number(
+          gasto.importe
+        );
 
 
-        /*
-         * El backend devuelve
-         * pagadorId.
-         */
         this.pagador =
         String(
           gasto.pagadorId
@@ -179,6 +195,28 @@ export class NuevoGasto implements OnInit {
           );
 
         }
+
+
+        /*
+         * Recuperamos los participantes
+         * desde los repartos.
+         */
+        if (gasto.repartos) {
+
+
+          this.participantesIds =
+          gasto.repartos.map(
+            (reparto: any) =>
+            reparto.usuarioId
+          );
+
+        }
+
+
+        console.log(
+          'Participantes:',
+          this.participantesIds
+        );
 
       },
 
@@ -207,16 +245,41 @@ export class NuevoGasto implements OnInit {
 
 
     if (
+
       !this.descripcion ||
+
       !this.categoria ||
+
       !this.importe ||
+
       !this.pagador ||
+
       !this.fecha
+
     ) {
 
 
       alert(
         'Por favor, rellena todos los campos.'
+      );
+
+
+      return;
+
+    }
+
+
+    /*
+     * Comprobamos que haya
+     * participantes.
+     */
+    if (
+      this.participantesIds.length === 0
+    ) {
+
+
+      alert(
+        'Debe haber al menos un participante.'
       );
 
 
@@ -256,10 +319,8 @@ export class NuevoGasto implements OnInit {
       ),
 
 
-      participantesIds: [
-        1,
-        2
-      ]
+      participantesIds:
+      this.participantesIds
 
     };
 
@@ -327,7 +388,9 @@ export class NuevoGasto implements OnInit {
      * CREAR GASTO
      */
     this.gastosService
-    .crearGasto(gasto)
+    .crearGasto(
+      gasto
+    )
     .subscribe({
 
       next: (respuesta: any) => {

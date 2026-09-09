@@ -1,0 +1,210 @@
+/* =========================
+ * CONTENEDOR
+ * ========================= */
+
+.login-container {
+
+  min-height: 100vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  padding: 20px;
+
+}
+
+
+/* =========================
+ * TARJETA
+ * ========================= */
+
+.login-card {
+
+  width: 100%;
+
+  max-width: 420px;
+
+  padding: 40px;
+
+  border-radius: 16px;
+
+  background: white;
+
+  box-shadow:
+  0 10px 30px
+  rgba(0, 0, 0, 0.12);
+
+}
+
+
+/* =========================
+ * CABECERA
+ * ========================= */
+
+.login-cabecera {
+
+  text-align: center;
+
+  margin-bottom: 35px;
+
+}
+
+
+.login-icono {
+
+  font-size: 48px;
+
+  margin-bottom: 10px;
+
+}
+
+
+.login-cabecera h1 {
+
+  margin: 0;
+
+  font-size: 26px;
+
+}
+
+
+.login-cabecera p {
+
+  margin-top: 8px;
+
+  color: #777;
+
+}
+
+
+/* =========================
+ * FORMULARIO
+ * ========================= */
+
+.login-formulario {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+
+}
+
+
+.campo {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+}
+
+
+.campo label {
+
+  font-weight: 600;
+
+}
+
+
+.campo input {
+
+  padding: 13px;
+
+  border:
+
+  1px solid #ddd;
+
+  border-radius: 8px;
+
+  font-size: 16px;
+
+}
+
+
+.campo input:focus {
+
+  outline: none;
+
+  border-color: #4f46e5;
+
+}
+
+
+/* =========================
+ * ERROR
+ * ========================= */
+
+.login-error {
+
+  padding: 12px;
+
+  border-radius: 8px;
+
+  background: #fee2e2;
+
+  color: #b91c1c;
+
+}
+
+
+/* =========================
+ * BOTÓN
+ * ========================= */
+
+.btn-login {
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #4f46e5;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+}
+
+
+.btn-login:hover {
+
+  background: #4338ca;
+
+}
+
+
+.btn-login:active {
+
+  transform:
+  scale(0.98);
+
+}
+
+
+/* =========================
+ * MÓVIL
+ * ========================= */
+
+@media
+(max-width: 500px) {
+
+  .login-card {
+
+    padding: 25px;
+
+  }
+
+}
