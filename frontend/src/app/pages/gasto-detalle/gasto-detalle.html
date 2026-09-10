@@ -1,0 +1,395 @@
+<div class="gasto-detalle-container">
+
+
+  <!-- =====================
+       CARGANDO
+  ====================== -->
+
+  @if (cargando) {
+
+    <div class="cargando">
+
+      ⏳ Cargando gasto...
+
+    </div>
+
+  }
+
+
+  <!-- =====================
+       ERROR
+  ====================== -->
+
+  @if (error) {
+
+    <div class="error">
+
+      {{ error }}
+
+    </div>
+
+  }
+
+
+  <!-- =====================
+       GASTO
+  ====================== -->
+
+  @if (gasto && !cargando) {
+
+
+    <!-- =====================
+         CABECERA
+    ====================== -->
+
+    <div class="cabecera">
+
+
+      <button
+        type="button"
+        class="btn-volver"
+        (click)="volver()"
+      >
+
+        ← Volver al grupo
+
+      </button>
+
+
+      <div class="acciones">
+
+
+        <button
+          type="button"
+          class="btn-editar"
+          (click)="editarGasto()"
+        >
+
+          ✏️ Editar
+
+        </button>
+
+
+        <button
+          type="button"
+          class="btn-eliminar"
+          (click)="eliminarGasto()"
+          [disabled]="eliminando"
+        >
+
+          @if (eliminando) {
+
+            ⏳ Eliminando...
+
+          } @else {
+
+            🗑️ Eliminar
+
+          }
+
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+    <!-- =====================
+         TARJETA PRINCIPAL
+    ====================== -->
+
+    <div class="gasto-card">
+
+
+      <!-- ICONO -->
+
+      <div class="categoria-icono">
+
+        {{
+          obtenerIconoCategoria(
+            gasto.categoria
+          )
+        }}
+
+      </div>
+
+
+      <!-- DESCRIPCIÓN -->
+
+      <h1>
+
+        {{ gasto.descripcion }}
+
+      </h1>
+
+
+      <!-- IMPORTE -->
+
+      <div class="importe">
+
+        {{
+          gasto.importe
+          | number:'1.2-2'
+        }}
+        €
+
+      </div>
+
+
+      <!-- INFORMACIÓN -->
+
+      <div class="informacion">
+
+
+        <!-- CATEGORÍA -->
+
+        <div class="informacion-fila">
+
+          <span class="informacion-icono">
+
+            🏷️
+
+          </span>
+
+
+          <div>
+
+            <span class="informacion-etiqueta">
+
+              Categoría
+
+            </span>
+
+
+            <strong>
+
+              {{
+                obtenerNombreCategoria(
+                  gasto.categoria
+                )
+              }}
+
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- PAGADOR -->
+
+        <div class="informacion-fila">
+
+          <span class="informacion-icono">
+
+            💳
+
+          </span>
+
+
+          <div>
+
+            <span class="informacion-etiqueta">
+
+              Ha pagado
+
+            </span>
+
+
+            <strong>
+
+              {{ gasto.nombrePagador }}
+
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- FECHA -->
+
+        <div class="informacion-fila">
+
+          <span class="informacion-icono">
+
+            📅
+
+          </span>
+
+
+          <div>
+
+            <span class="informacion-etiqueta">
+
+              Fecha
+
+            </span>
+
+
+            <strong>
+
+              {{
+                gasto.fechaHora
+                | date:'dd/MM/yyyy'
+              }}
+
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+    <!-- =====================
+         PARTICIPANTES
+    ====================== -->
+
+    <div class="participantes-card">
+
+
+      <h2>
+
+        👥 Participantes
+
+      </h2>
+
+
+      @if (
+        gasto.repartos
+        &&
+        gasto.repartos.length > 0
+      ) {
+
+
+        <div class="lista-participantes">
+
+
+          @for (
+            reparto
+            of gasto.repartos;
+            track reparto.usuarioId
+          ) {
+
+
+            <div class="participante">
+
+
+              <div class="avatar">
+
+                {{
+                  reparto.nombreUsuario
+                    ? reparto.nombreUsuario
+                      .charAt(0)
+                      .toUpperCase()
+                    : '?'
+                }}
+
+              </div>
+
+
+              <div class="participante-info">
+
+
+                <strong>
+
+                  {{
+                    reparto.nombreUsuario
+                    || 'Usuario'
+                  }}
+
+                </strong>
+
+
+                <span>
+
+                  Participa en este gasto
+
+                </span>
+
+
+              </div>
+
+
+              <div class="participante-importe">
+
+                {{
+                  reparto.importe
+                  | number:'1.2-2'
+                }}
+                €
+
+              </div>
+
+
+            </div>
+
+
+          }
+
+
+        </div>
+
+
+      } @else {
+
+
+        <p class="sin-participantes">
+
+          No hay participantes
+          registrados para este gasto.
+
+        </p>
+
+
+      }
+
+
+    </div>
+
+
+    <!-- =====================
+         NOTAS
+    ====================== -->
+
+    @if (gasto.notas) {
+
+
+      <div class="notas-card">
+
+
+        <h2>
+
+          📝 Notas
+
+        </h2>
+
+
+        <p>
+
+          {{ gasto.notas }}
+
+        </p>
+
+
+      </div>
+
+
+    }
+
+
+  }
+
+
+</div>

@@ -318,9 +318,10 @@ implements OnInit {
 
 
   /*
-   * Editar gasto.
+   * Ver el detalle
+   * de un gasto.
    */
-  editarGasto(
+  verGasto(
     gastoId: number
   ): void {
 
@@ -328,69 +329,9 @@ implements OnInit {
     this.router.navigate([
       '/grupos',
       this.grupoId,
-      'editar-gasto',
+      'gastos',
       gastoId
     ]);
-
-  }
-
-
-  /*
-   * Eliminar gasto.
-   */
-  eliminarGasto(
-    gastoId: number
-  ): void {
-
-
-    const confirmar =
-    confirm(
-      '¿Seguro que quieres eliminar este gasto?'
-    );
-
-
-    if (!confirmar) {
-
-      return;
-
-    }
-
-
-    this.gastosService
-    .eliminarGasto(
-      gastoId
-    )
-    .subscribe({
-
-      next: () => {
-
-
-        console.log(
-          'Gasto eliminado correctamente'
-        );
-
-
-        this.cargarGastos();
-
-      },
-
-
-      error: (error: any) => {
-
-
-        console.error(
-          'Error eliminando gasto:',
-          error
-        );
-
-
-        alert(
-          'No se ha podido eliminar el gasto'
-        );
-
-      }
-
-    });
 
   }
 

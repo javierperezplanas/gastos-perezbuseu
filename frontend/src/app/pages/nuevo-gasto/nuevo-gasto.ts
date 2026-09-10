@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 
 import {
   ActivatedRoute,
@@ -13,6 +16,10 @@ import {
   Gastos
 } from '../../services/gastos';
 
+import {
+  Grupos
+} from '../../services/grupos';
+
 
 @Component({
   selector: 'app-nuevo-gasto',
@@ -25,7 +32,8 @@ import {
 
   styleUrl: './nuevo-gasto.scss',
 })
-export class NuevoGasto implements OnInit {
+export class NuevoGasto
+implements OnInit {
 
 
   descripcion: string = '';
@@ -40,16 +48,26 @@ export class NuevoGasto implements OnInit {
   pagador: string = '';
 
 
-  fecha: string = this.obtenerFechaActual();
+  fecha: string =
+  this.obtenerFechaActual();
+
+
+  /*
+   * ID del grupo actual.
+   */
+  grupoId: number = 0;
+
+
+  /*
+   * Miembros del grupo.
+   */
+  miembros: any[] = [];
 
 
   /*
    * Participantes del gasto.
    */
-  participantesIds: number[] = [
-    1,
-    2
-  ];
+  participantesIds: number[] = [];
 
 
   /*
@@ -65,7 +83,9 @@ export class NuevoGasto implements OnInit {
 
       private route: ActivatedRoute,
 
-        private gastosService: Gastos
+        private gastosService: Gastos,
+
+          private gruposService: Grupos
 
   ) {}
 
@@ -77,7 +97,8 @@ export class NuevoGasto implements OnInit {
   obtenerFechaActual(): string {
 
 
-    const hoy = new Date();
+    const hoy =
+    new Date();
 
 
     const anio =
@@ -110,16 +131,63 @@ export class NuevoGasto implements OnInit {
   ngOnInit(): void {
 
 
+    /*
+     * Obtenemos el ID del grupo
+     * desde la URL.
+     */
+    const grupoIdParam =
+    this.route.snapshot.paramMap.get(
+      'id'
+    );
+
+
+    if (!grupoIdParam) {
+
+
+      alert(
+        'No se ha encontrado el grupo.'
+      );
+
+
+      this.router.navigate([
+        '/grupos'
+      ]);
+
+
+      return;
+
+    }
+
+
+    this.grupoId =
+    Number(
+      grupoIdParam
+    );
+
+
+    console.log(
+      'Grupo actual:',
+      this.grupoId
+    );
+
+
+    /*
+     * Cargamos los miembros
+     * reales del grupo.
+     */
+    this.cargarMiembros();
+
+
+    /*
+     * Comprobamos si estamos
+     * editando un gasto.
+     */
     const gastoIdParam =
     this.route.snapshot.paramMap.get(
       'gastoId'
     );
 
 
-    /*
-     * Si existe gastoId,
-     * estamos editando.
-     */
     if (gastoIdParam) {
 
 
@@ -136,10 +204,96 @@ export class NuevoGasto implements OnInit {
   }
 
 
+  /*
+   * Carga los miembros
+   * del grupo actual.
+   */
+  cargarMiembros(): void {
+
+
+    this.gruposService
+    .obtenerMiembros(
+      this.grupoId
+    )
+    .subscribe({
+
+      next: (
+        miembros: any[]
+      ) => {
+
+
+        console.log(
+          'Miembros del grupo:',
+          miembros
+        );
+
+
+        this.miembros =
+        miembros;
+
+
+        /*
+         * Si estamos creando
+         * un gasto, inicialmente
+         * participan todos
+         * los miembros.
+         */
+        if (
+          this.gastoId === null
+        ) {
+
+
+          this.participantesIds =
+          miembros.map(
+            (miembro: any) =>
+            miembro.usuario.id
+          );
+
+
+          console.log(
+            'Participantes iniciales:',
+            this.participantesIds
+          );
+
+        }
+
+      },
+
+
+      error: (
+        error: any
+      ) => {
+
+
+        console.error(
+          'Error cargando miembros:',
+          error
+        );
+
+
+        alert(
+          'No se han podido cargar '
+          +
+          'los miembros del grupo.'
+        );
+
+      }
+
+    });
+
+  }
+
+
+  /*
+   * Carga un gasto
+   * cuando estamos editándolo.
+   */
   cargarGasto(): void {
 
 
-    if (this.gastoId === null) {
+    if (
+      this.gastoId === null
+    ) {
 
       return;
 
@@ -152,7 +306,9 @@ export class NuevoGasto implements OnInit {
     )
     .subscribe({
 
-      next: (gasto: any) => {
+      next: (
+        gasto: any
+      ) => {
 
 
         console.log(
@@ -185,7 +341,9 @@ export class NuevoGasto implements OnInit {
          * Convertimos la fecha
          * para el input type="date".
          */
-        if (gasto.fechaHora) {
+        if (
+          gasto.fechaHora
+        ) {
 
 
           this.fecha =
@@ -201,7 +359,9 @@ export class NuevoGasto implements OnInit {
          * Recuperamos los participantes
          * desde los repartos.
          */
-        if (gasto.repartos) {
+        if (
+          gasto.repartos
+        ) {
 
 
           this.participantesIds =
@@ -221,7 +381,9 @@ export class NuevoGasto implements OnInit {
       },
 
 
-      error: (error: any) => {
+      error: (
+        error: any
+      ) => {
 
 
         console.error(
@@ -241,6 +403,10 @@ export class NuevoGasto implements OnInit {
   }
 
 
+  /*
+   * Guarda o actualiza
+   * un gasto.
+   */
   guardarGasto(): void {
 
 
@@ -279,7 +445,9 @@ export class NuevoGasto implements OnInit {
 
 
       alert(
-        'Debe haber al menos un participante.'
+        'Debe haber al menos '
+        +
+        'un participante.'
       );
 
 
@@ -310,7 +478,12 @@ export class NuevoGasto implements OnInit {
       notas: '',
 
 
-      grupoId: 1,
+      /*
+       * Usamos el grupo
+       * de la URL.
+       */
+      grupoId:
+      this.grupoId,
 
 
       pagadorId:
@@ -334,7 +507,9 @@ export class NuevoGasto implements OnInit {
     /*
      * EDITAR GASTO
      */
-    if (this.gastoId !== null) {
+    if (
+      this.gastoId !== null
+    ) {
 
 
       this.gastosService
@@ -344,7 +519,9 @@ export class NuevoGasto implements OnInit {
       )
       .subscribe({
 
-        next: (respuesta: any) => {
+        next: (
+          respuesta: any
+        ) => {
 
 
           console.log(
@@ -355,13 +532,15 @@ export class NuevoGasto implements OnInit {
 
           this.router.navigate([
             '/grupos',
-            1
+            this.grupoId
           ]);
 
         },
 
 
-        error: (error: any) => {
+        error: (
+          error: any
+        ) => {
 
 
           console.error(
@@ -371,7 +550,9 @@ export class NuevoGasto implements OnInit {
 
 
           alert(
-            'Ha ocurrido un error al actualizar el gasto.'
+            'Ha ocurrido un error '
+            +
+            'al actualizar el gasto.'
           );
 
         }
@@ -393,7 +574,9 @@ export class NuevoGasto implements OnInit {
     )
     .subscribe({
 
-      next: (respuesta: any) => {
+      next: (
+        respuesta: any
+      ) => {
 
 
         console.log(
@@ -404,13 +587,15 @@ export class NuevoGasto implements OnInit {
 
         this.router.navigate([
           '/grupos',
-          1
+          this.grupoId
         ]);
 
       },
 
 
-      error: (error: any) => {
+      error: (
+        error: any
+      ) => {
 
 
         console.error(
@@ -420,7 +605,9 @@ export class NuevoGasto implements OnInit {
 
 
         alert(
-          'Ha ocurrido un error al guardar el gasto.'
+          'Ha ocurrido un error '
+          +
+          'al guardar el gasto.'
         );
 
       }
@@ -430,12 +617,15 @@ export class NuevoGasto implements OnInit {
   }
 
 
+  /*
+   * Volver al grupo.
+   */
   volver(): void {
 
 
     this.router.navigate([
       '/grupos',
-      1
+      this.grupoId
     ]);
 
   }

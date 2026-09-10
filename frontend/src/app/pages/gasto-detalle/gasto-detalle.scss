@@ -1,0 +1,531 @@
+.gasto-detalle-container {
+
+  width: 100%;
+
+  max-width: 850px;
+
+  margin: 0 auto;
+
+  padding: 30px 20px;
+
+}
+
+
+/*
+ * =====================
+ * CARGANDO
+ * =====================
+ */
+
+.cargando {
+
+  padding: 40px;
+
+  text-align: center;
+
+  font-size: 18px;
+
+}
+
+
+/*
+ * =====================
+ * ERROR
+ * =====================
+ */
+
+.error {
+
+  padding: 15px;
+
+  margin-bottom: 20px;
+
+  border-radius: 10px;
+
+  color: #991b1b;
+
+  background: #fee2e2;
+
+}
+
+
+/*
+ * =====================
+ * CABECERA
+ * =====================
+ */
+
+.cabecera {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 25px;
+
+}
+
+
+.acciones {
+
+  display: flex;
+
+  gap: 10px;
+
+}
+
+
+/*
+ * =====================
+ * BOTONES
+ * =====================
+ */
+
+button {
+
+  padding: 10px 16px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 15px;
+
+}
+
+
+button:hover:not(:disabled) {
+
+  opacity: 0.9;
+
+}
+
+
+button:disabled {
+
+  cursor: not-allowed;
+
+  opacity: 0.6;
+
+}
+
+
+.btn-volver {
+
+  background: #e5e7eb;
+
+  color: #374151;
+
+}
+
+
+.btn-editar {
+
+  background: #2563eb;
+
+  color: white;
+
+}
+
+
+.btn-eliminar {
+
+  background: #dc2626;
+
+  color: white;
+
+}
+
+
+/*
+ * =====================
+ * TARJETA DEL GASTO
+ * =====================
+ */
+
+.gasto-card {
+
+  padding: 35px;
+
+  margin-bottom: 25px;
+
+  border-radius: 15px;
+
+  background: white;
+
+  box-shadow:
+  0 4px 20px
+  rgba(0, 0, 0, 0.10);
+
+  text-align: center;
+
+}
+
+
+.categoria-icono {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 80px;
+
+  height: 80px;
+
+  margin: 0 auto 15px;
+
+  border-radius: 50%;
+
+  background: #f3f4f6;
+
+  font-size: 38px;
+
+}
+
+
+.gasto-card h1 {
+
+  margin: 0 0 15px;
+
+  color: #1f2937;
+
+  font-size: 28px;
+
+}
+
+
+.importe {
+
+  margin-bottom: 35px;
+
+  color: #16a34a;
+
+  font-size: 32px;
+
+  font-weight: 700;
+
+}
+
+
+/*
+ * =====================
+ * INFORMACIÓN
+ * =====================
+ */
+
+.informacion {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid #e5e7eb;
+
+  text-align: left;
+
+}
+
+
+.informacion-fila {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+}
+
+
+.informacion-icono {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 45px;
+
+  height: 45px;
+
+  border-radius: 50%;
+
+  background: #f3f4f6;
+
+  font-size: 20px;
+
+}
+
+
+.informacion-fila div {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+}
+
+
+.informacion-etiqueta {
+
+  color: #6b7280;
+
+  font-size: 14px;
+
+}
+
+
+/*
+ * =====================
+ * PARTICIPANTES
+ * =====================
+ */
+
+.participantes-card {
+
+  padding: 25px;
+
+  margin-bottom: 25px;
+
+  border-radius: 15px;
+
+  background: white;
+
+  box-shadow:
+  0 4px 20px
+  rgba(0, 0, 0, 0.10);
+
+}
+
+
+.participantes-card h2 {
+
+  margin-top: 0;
+
+  margin-bottom: 20px;
+
+}
+
+
+.lista-participantes {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+}
+
+
+.participante {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px;
+
+  border-radius: 10px;
+
+  background: #f9fafb;
+
+}
+
+
+.avatar {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 42px;
+
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #2563eb;
+
+  color: white;
+
+  font-weight: 600;
+
+}
+
+
+.participante-info {
+
+  display: flex;
+
+  flex-direction: column;
+
+  flex: 1;
+
+  gap: 3px;
+
+}
+
+
+.participante-info span {
+
+  color: #6b7280;
+
+  font-size: 13px;
+
+}
+
+
+.participante-importe {
+
+  color: #374151;
+
+  font-weight: 600;
+
+}
+
+
+.sin-participantes {
+
+  margin: 0;
+
+  color: #6b7280;
+
+}
+
+
+/*
+ * =====================
+ * NOTAS
+ * =====================
+ */
+
+.notas-card {
+
+  padding: 25px;
+
+  border-radius: 15px;
+
+  background: white;
+
+  box-shadow:
+  0 4px 20px
+  rgba(0, 0, 0, 0.10);
+
+}
+
+
+.notas-card h2 {
+
+  margin-top: 0;
+
+}
+
+
+.notas-card p {
+
+  margin-bottom: 0;
+
+  color: #4b5563;
+
+  line-height: 1.6;
+
+}
+
+
+/*
+ * =====================
+ * MÓVIL
+ * =====================
+ */
+
+@media (
+  max-width: 600px
+) {
+
+  .gasto-detalle-container {
+
+    padding: 20px 15px;
+
+  }
+
+
+  .cabecera {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+  }
+
+
+  .acciones {
+
+    width: 100%;
+
+  }
+
+
+  .acciones button {
+
+    flex: 1;
+
+  }
+
+
+  .btn-volver {
+
+    width: 100%;
+
+  }
+
+
+  .gasto-card {
+
+    padding: 25px 20px;
+
+  }
+
+
+  .gasto-card h1 {
+
+    font-size: 24px;
+
+  }
+
+
+  .importe {
+
+    font-size: 28px;
+
+  }
+
+
+  .participante {
+
+    padding: 10px;
+
+  }
+
+}

@@ -15,6 +15,10 @@ import {
 } from './pages/grupo-detalle/grupo-detalle';
 
 import {
+  GastoDetalle
+} from './pages/gasto-detalle/gasto-detalle';
+
+import {
   NuevoGrupo
 } from './pages/nuevo-grupo/nuevo-grupo';
 
@@ -114,6 +118,23 @@ export const routes: Routes = [
   path: 'grupos/:id/nuevo-gasto',
 
   component: NuevoGasto,
+
+  canActivate: [
+    authGuard
+  ]
+},
+
+
+/*
+ * DETALLE DEL GASTO
+ *
+ * Se accede al pulsar
+ * sobre un gasto.
+ */
+{
+  path: 'grupos/:id/gastos/:gastoId',
+
+  component: GastoDetalle,
 
   canActivate: [
     authGuard

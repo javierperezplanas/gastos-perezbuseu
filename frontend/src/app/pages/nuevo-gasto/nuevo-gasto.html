@@ -9,7 +9,11 @@
       ← Volver
     </button>
 
-    <h1>Añadir gasto</h1>
+
+    <h1>
+      Añadir gasto
+    </h1>
+
 
     <p>
       Añade un nuevo gasto al grupo
@@ -20,13 +24,17 @@
 
   <div class="formulario">
 
+
     <!-- DESCRIPCIÓN -->
 
     <div class="campo">
 
       <label for="descripcion">
+
         Descripción
+
       </label>
+
 
       <input
         id="descripcion"
@@ -44,8 +52,11 @@
     <div class="campo">
 
       <label for="categoria">
+
         Categoría
+
       </label>
+
 
       <select
         id="categoria"
@@ -54,23 +65,37 @@
       >
 
         <option value="">
+
           Selecciona una categoría
+
         </option>
+
 
         <option value="GENERAL">
+
           🌐 General
+
         </option>
+
 
         <option value="ALIMENTOS">
+
           🛒 Alimentos
+
         </option>
+
 
         <option value="RESTAURANTES">
+
           🍽️ Restaurantes
+
         </option>
 
+
         <option value="OTROS">
+
           📦 Otros
+
         </option>
 
       </select>
@@ -83,8 +108,11 @@
     <div class="campo">
 
       <label for="importe">
+
         Importe
+
       </label>
+
 
       <div class="importe-input">
 
@@ -98,7 +126,10 @@
           name="importe"
         >
 
-        <span>€</span>
+
+        <span>
+          €
+        </span>
 
       </div>
 
@@ -110,8 +141,11 @@
     <div class="campo">
 
       <label for="pagador">
+
         Ha pagado
+
       </label>
+
 
       <select
         id="pagador"
@@ -120,16 +154,31 @@
       >
 
         <option value="">
+
           Selecciona quién ha pagado
+
         </option>
 
-        <option value="1">
-          Javi
-        </option>
 
-        <option value="2">
-          Miriam
-        </option>
+        <!--
+          Mostramos únicamente
+          los miembros del grupo.
+        -->
+
+        @for (
+          miembro of miembros;
+          track miembro.usuario.id
+        ) {
+
+          <option
+            [value]="miembro.usuario.id"
+          >
+
+            {{ miembro.usuario.nombre }}
+
+          </option>
+
+        }
 
       </select>
 
@@ -141,8 +190,11 @@
     <div class="campo">
 
       <label for="fecha">
+
         Fecha
+
       </label>
+
 
       <input
         id="fecha"
@@ -161,8 +213,19 @@
       type="button"
       (click)="guardarGasto()"
     >
-      Guardar gasto
+
+      @if (gastoId !== null) {
+
+        💾 Guardar cambios
+
+      } @else {
+
+        💾 Guardar gasto
+
+      }
+
     </button>
+
 
   </div>
 
