@@ -11,12 +11,32 @@
 
 
     <h1>
-      Añadir gasto
+
+      @if (gastoId !== null) {
+
+        Editar gasto
+
+      } @else {
+
+        Añadir gasto
+
+      }
+
     </h1>
 
 
     <p>
-      Añade un nuevo gasto al grupo
+
+      @if (gastoId !== null) {
+
+        Modifica los datos del gasto
+
+      } @else {
+
+        Añade un nuevo gasto al grupo
+
+      }
+
     </p>
 
   </div>
@@ -25,7 +45,9 @@
   <div class="formulario">
 
 
-    <!-- DESCRIPCIÓN -->
+    <!-- =====================
+         DESCRIPCIÓN
+    ====================== -->
 
     <div class="campo">
 
@@ -47,7 +69,9 @@
     </div>
 
 
-    <!-- CATEGORÍA -->
+    <!-- =====================
+         CATEGORÍA
+    ====================== -->
 
     <div class="campo">
 
@@ -103,7 +127,9 @@
     </div>
 
 
-    <!-- IMPORTE -->
+    <!-- =====================
+         IMPORTE
+    ====================== -->
 
     <div class="campo">
 
@@ -120,7 +146,7 @@
           id="importe"
           type="number"
           step="0.01"
-          min="0"
+          min="0.01"
           placeholder="0,00"
           [(ngModel)]="importe"
           name="importe"
@@ -128,7 +154,9 @@
 
 
         <span>
+
           €
+
         </span>
 
       </div>
@@ -136,7 +164,9 @@
     </div>
 
 
-    <!-- QUIÉN HA PAGADO -->
+    <!-- =====================
+         PAGADOR
+    ====================== -->
 
     <div class="campo">
 
@@ -160,11 +190,6 @@
         </option>
 
 
-        <!--
-          Mostramos únicamente
-          los miembros del grupo.
-        -->
-
         @for (
           miembro of miembros;
           track miembro.usuario.id
@@ -185,20 +210,59 @@
     </div>
 
 
-    <!-- FECHA -->
+    <!-- =====================
+         DIVIDIR GASTO
+    ====================== -->
+
+    <div class="campo">
+
+      <label for="tipoDivision">
+
+        Dividir gasto
+
+      </label>
+
+
+      <select
+        id="tipoDivision"
+        [(ngModel)]="tipoDivision"
+        name="tipoDivision"
+      >
+
+        <option value="IGUAL">
+
+          Dividir por igual
+
+        </option>
+
+
+        <option value="TOTAL_A_PAGADOR">
+
+          Se te debe la cantidad total
+
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- =====================
+         FECHA Y HORA
+    ====================== -->
 
     <div class="campo">
 
       <label for="fecha">
 
-        Fecha
+        Fecha y hora
 
       </label>
 
 
       <input
         id="fecha"
-        type="date"
+        type="datetime-local"
         [(ngModel)]="fecha"
         name="fecha"
       >
@@ -206,7 +270,35 @@
     </div>
 
 
-    <!-- GUARDAR -->
+    <!-- =====================
+         RESUMEN
+    ====================== -->
+
+    @if (importe && importe > 0) {
+
+      <div class="resumen-gasto">
+
+        <span>
+
+          Importe total
+
+        </span>
+
+
+        <strong>
+
+          {{ importe.toFixed(2) }} €
+
+        </strong>
+
+      </div>
+
+    }
+
+
+    <!-- =====================
+         GUARDAR
+    ====================== -->
 
     <button
       class="btn-guardar"
@@ -216,11 +308,11 @@
 
       @if (gastoId !== null) {
 
-        💾 Guardar cambios
+        Guardar cambios
 
       } @else {
 
-        💾 Guardar gasto
+        Guardar gasto
 
       }
 

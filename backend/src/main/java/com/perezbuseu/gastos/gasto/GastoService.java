@@ -1,5 +1,6 @@
 package com.perezbuseu.gastos.gasto;
 
+
 import com.perezbuseu.gastos.actividad.ActividadService;
 import com.perezbuseu.gastos.gasto.dto.CrearGastoRequest;
 import com.perezbuseu.gastos.grupo.Grupo;
@@ -36,14 +37,13 @@ public class GastoService {
     RepartoService repartoService;
 
 
-    /*
-     * Servicio encargado
-     * del historial de actividad.
-     */
     @Inject
     ActividadService actividadService;
 
 
+    /*
+     * Lista todos los gastos.
+     */
     public List<Gasto> listar() {
 
         return gastoRepository.listAll();
@@ -51,8 +51,13 @@ public class GastoService {
     }
 
 
+    /*
+     * Lista los gastos
+     * de un grupo.
+     */
     public List<Gasto> listarPorGrupo(
-            Long grupoId) {
+            Long grupoId
+    ) {
 
         return gastoRepository.list(
                 "grupo.id",
@@ -62,11 +67,19 @@ public class GastoService {
     }
 
 
+    /*
+     * Obtiene un gasto por ID.
+     */
     public Gasto obtenerPorId(
-            Long gastoId) {
+            Long gastoId
+    ) {
+
 
         Gasto gasto =
-                gastoRepository.findById(gastoId);
+                gastoRepository.findById(
+                        gastoId
+                );
+
 
         if (gasto == null) {
 
@@ -76,27 +89,36 @@ public class GastoService {
 
         }
 
+
         return gasto;
 
     }
 
 
     /*
-     * Crear un gasto.
+     * Crea un nuevo gasto.
      */
     @Transactional
     public Gasto crear(
-            CrearGastoRequest request) {
+            CrearGastoRequest request
+    ) {
 
-        validarParticipantes(request);
+
+        validarParticipantes(
+                request
+        );
 
 
         Grupo grupo =
-                obtenerGrupo(request.grupoId);
+                obtenerGrupo(
+                        request.grupoId
+                );
 
 
         Usuario pagador =
-                obtenerUsuario(request.pagadorId);
+                obtenerUsuario(
+                        request.pagadorId
+                );
 
 
         Gasto gasto =
@@ -119,19 +141,19 @@ public class GastoService {
                 LocalDateTime.now();
 
 
-        gastoRepository.persist(gasto);
+        gastoRepository.persist(
+                gasto
+        );
 
 
         repartoService.crearRepartos(
                 gasto,
                 request.participantesIds,
-                pagador
+                pagador,
+                request.tipoDivision
         );
 
 
-        /*
-         * Registrar la actividad.
-         */
         actividadService.registrarActividad(
 
                 grupo.id,
@@ -154,26 +176,36 @@ public class GastoService {
 
 
     /*
-     * Actualizar un gasto.
+     * Actualiza un gasto.
      */
     @Transactional
     public Gasto actualizar(
             Long gastoId,
-            CrearGastoRequest request) {
+            CrearGastoRequest request
+    ) {
 
-        validarParticipantes(request);
+
+        validarParticipantes(
+                request
+        );
 
 
         Gasto gasto =
-                obtenerPorId(gastoId);
+                obtenerPorId(
+                        gastoId
+                );
 
 
         Grupo grupo =
-                obtenerGrupo(request.grupoId);
+                obtenerGrupo(
+                        request.grupoId
+                );
 
 
         Usuario pagador =
-                obtenerUsuario(request.pagadorId);
+                obtenerUsuario(
+                        request.pagadorId
+                );
 
 
         asignarDatos(
@@ -184,21 +216,28 @@ public class GastoService {
         );
 
 
+        /*
+         * Eliminamos los repartos
+         * antiguos.
+         */
         repartoService.eliminarRepartosDeGasto(
                 gasto.id
         );
 
 
+        /*
+         * Creamos los repartos
+         * con el nuevo tipo
+         * de división.
+         */
         repartoService.crearRepartos(
                 gasto,
                 request.participantesIds,
-                pagador
+                pagador,
+                request.tipoDivision
         );
 
 
-        /*
-         * Registrar la actividad.
-         */
         actividadService.registrarActividad(
 
                 grupo.id,
@@ -219,21 +258,20 @@ public class GastoService {
 
 
     /*
-     * Eliminar un gasto.
+     * Elimina un gasto.
      */
     @Transactional
     public void eliminar(
-            Long gastoId) {
+            Long gastoId
+    ) {
 
 
         Gasto gasto =
-                obtenerPorId(gastoId);
+                obtenerPorId(
+                        gastoId
+                );
 
 
-        /*
-         * Guardamos los datos antes
-         * de eliminar el gasto.
-         */
         Long grupoId =
                 gasto.grupo.id;
 
@@ -252,9 +290,6 @@ public class GastoService {
         );
 
 
-        /*
-         * Registrar la actividad.
-         */
         actividadService.registrarActividad(
 
                 grupoId,
@@ -270,11 +305,17 @@ public class GastoService {
     }
 
 
+    /*
+     * Asigna los datos del request
+     * a la entidad Gasto.
+     */
     private void asignarDatos(
             Gasto gasto,
             CrearGastoRequest request,
             Grupo grupo,
-            Usuario pagador) {
+            Usuario pagador
+    ) {
+
 
         gasto.descripcion =
                 request.descripcion;
@@ -284,16 +325,40 @@ public class GastoService {
                 request.importe;
 
 
+        /*
+         * Convertimos el String
+         * recibido en el enum Categoria.
+         */
         gasto.categoria =
-                request.categoria;
+                Categoria.valueOf(
+                        request.categoria
+                );
 
 
+        /*
+         * Fecha y hora del gasto.
+         */
         gasto.fechaHora =
                 request.fechaHora;
 
 
+        /*
+         * Actualmente no recibimos
+         * notas desde el formulario.
+         */
         gasto.notas =
-                request.notas;
+                null;
+
+
+        /*
+         * Forma de reparto.
+         *
+         * IGUAL
+         *
+         * TOTAL_A_PAGADOR
+         */
+        gasto.tipoDivision =
+                request.tipoDivision;
 
 
         gasto.grupo =
@@ -306,11 +371,18 @@ public class GastoService {
     }
 
 
+    /*
+     * Obtiene el grupo.
+     */
     private Grupo obtenerGrupo(
-            Long grupoId) {
+            Long grupoId
+    ) {
+
 
         Grupo grupo =
-                grupoRepository.findById(grupoId);
+                grupoRepository.findById(
+                        grupoId
+                );
 
 
         if (grupo == null) {
@@ -327,11 +399,18 @@ public class GastoService {
     }
 
 
+    /*
+     * Obtiene un usuario.
+     */
     private Usuario obtenerUsuario(
-            Long usuarioId) {
+            Long usuarioId
+    ) {
+
 
         Usuario usuario =
-                usuarioRepository.findById(usuarioId);
+                usuarioRepository.findById(
+                        usuarioId
+                );
 
 
         if (usuario == null) {
@@ -348,8 +427,14 @@ public class GastoService {
     }
 
 
+    /*
+     * Comprueba que existan
+     * participantes.
+     */
     private void validarParticipantes(
-            CrearGastoRequest request) {
+            CrearGastoRequest request
+    ) {
+
 
         if (
                 request.participantesIds == null

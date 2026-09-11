@@ -40,6 +40,64 @@
 
 
 /* =========================
+ * SALDO DEL USUARIO
+ * ========================= */
+
+.grupo-saldo {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 120px;
+
+  padding: 10px 18px;
+
+  border-radius: 10px;
+
+  background: white;
+
+  border: 1px solid #e7ecee;
+}
+
+
+.grupo-saldo span {
+  color: #718096;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  margin-bottom: 4px;
+}
+
+
+.grupo-saldo strong {
+  font-size: 20px;
+
+  font-weight: 700;
+}
+
+
+.saldo-positivo strong {
+  color: #27877e;
+}
+
+
+.saldo-negativo strong {
+  color: #c05656;
+}
+
+
+.saldo-neutro strong {
+  color: #718096;
+}
+
+
+/* =========================
  * FOTO DEL GRUPO
  * ========================= */
 
@@ -393,6 +451,8 @@
 
   transition:
   background-color 0.15s;
+
+  cursor: pointer;
 }
 
 
@@ -800,9 +860,6 @@
 
 /* =========================
  * MÓVIL
- *
- * De momento sólo dejamos
- * una adaptación básica.
  * ========================= */
 
 @media (max-width: 600px) {
@@ -817,6 +874,13 @@
     flex-direction: column;
 
     align-items: stretch;
+  }
+
+
+  .grupo-saldo {
+    width: 100%;
+
+    box-sizing: border-box;
   }
 
 
@@ -846,17 +910,10 @@
   .btn-balance {
     width: 100%;
   }
-  .gasto {
-
-    cursor: pointer;
-
-  }
 
 
   .gasto:hover {
-
     opacity: 0.85;
-
   }
 
 }

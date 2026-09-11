@@ -1,21 +1,35 @@
 <div class="grupos-container">
 
+
+  <!-- =====================
+       CABECERA
+  ====================== -->
+
   <div class="cabecera">
+
 
     <div>
 
+
       <h1>
+
         Tus grupos
+
       </h1>
 
+
       <p>
+
         Gestiona tus gastos compartidos
+
       </p>
+
 
     </div>
 
 
     <button
+      type="button"
       class="btn-nuevo"
       (click)="nuevoGrupo()"
     >
@@ -24,94 +38,245 @@
 
     </button>
 
+
   </div>
 
 
-  <div class="lista-grupos">
+  <!-- =====================
+       CARGANDO
+  ====================== -->
+
+  @if (cargando) {
 
 
-    @for (
-      grupo of grupos;
-      track grupo.id
-    ) {
+    <div class="cargando">
+
+      Cargando grupos...
+
+    </div>
 
 
-      <div
-        class="grupo-card"
-        (click)="abrirGrupo(grupo.id)"
-      >
+  }
 
 
-        <!-- FOTO DEL GRUPO -->
+  <!-- =====================
+       ERROR
+  ====================== -->
 
-        <div class="grupo-icono">
-
-
-          <img
-            *ngIf="grupo.foto"
-            [src]="'http://localhost:8080' + grupo.foto"
-            [alt]="grupo.nombre"
-            class="grupo-foto"
-          >
+  @if (error) {
 
 
-          <!-- ICONO POR DEFECTO -->
+    <div class="error">
 
-          <span
-            *ngIf="!grupo.foto"
-          >
+      {{ error }}
 
-            👨‍👩‍👧‍👦
+    </div>
 
-          </span>
+
+  }
+
+
+  <!-- =====================
+       LISTA DE GRUPOS
+  ====================== -->
+
+  @if (
+
+    !cargando
+    &&
+    !error
+    &&
+    grupos.length > 0
+
+  ) {
+
+
+    <div class="lista-grupos">
+
+
+      @for (
+
+        grupo of grupos;
+        track grupo.id
+
+      ) {
+
+
+        <div
+          class="grupo-card"
+          (click)="abrirGrupo(grupo.id)"
+        >
+
+
+          <!-- =====================
+               MINIATURA DEL GRUPO
+          ====================== -->
+
+          <div class="grupo-icono">
+
+
+            <img
+              class="grupo-foto"
+              [src]="
+                grupo.imagenUrl
+                ||
+                'http://localhost:8080/uploads/grupos/grupo-1-1789067763801.jpg'
+              "
+              [alt]="grupo.nombre"
+            >
+
+
+          </div>
+
+
+          <!-- =====================
+               INFORMACIÓN
+          ====================== -->
+
+          <div class="grupo-info">
+
+
+            <h2>
+
+              {{ grupo.nombre }}
+
+            </h2>
+
+
+            <p>
+
+              {{ grupo.descripcion }}
+
+            </p>
+
+
+          </div>
+
+
+          <!-- =====================
+               BALANCE
+          ====================== -->
+
+          <div class="grupo-saldo">
+
+
+            <span>
+
+              Balance
+
+            </span>
+
+
+            <strong
+              [style.color]="
+                grupo.balance > 0
+                  ? '#278a5b'
+                  : grupo.balance < 0
+                    ? '#c94b4b'
+                    : '#555'
+              "
+            >
+
+
+              @if (grupo.balance > 0) {
+
+                +
+
+              }
+
+
+              @if (grupo.balance < 0) {
+
+                −
+
+              }
+
+
+              {{
+                (
+                  grupo.balance < 0
+                    ? -grupo.balance
+                    : grupo.balance
+                )
+                | number:'1.2-2'
+              }}
+
+              €
+
+
+            </strong>
+
+
+          </div>
 
 
         </div>
 
 
-        <div class="grupo-info">
+      }
 
 
-          <h2>
-
-            {{ grupo.nombre }}
-
-          </h2>
+    </div>
 
 
-          <p>
-
-            {{ grupo.descripcion }}
-
-          </p>
+  }
 
 
-        </div>
+  <!-- =====================
+       SIN GRUPOS
+  ====================== -->
+
+  @if (
+
+    !cargando
+    &&
+    !error
+    &&
+    grupos.length === 0
+
+  ) {
 
 
-        <div class="grupo-saldo">
+    <div class="sin-grupos">
 
 
-          <span>
-            Tu saldo
-          </span>
+      <div class="sin-grupos-icono">
 
-
-          <strong>
-            0,00 €
-          </strong>
-
-
-        </div>
-
+        👥
 
       </div>
 
 
-    }
+      <h2>
+
+        No tienes grupos todavía
+
+      </h2>
 
 
-  </div>
+      <p>
+
+        Crea un grupo para empezar
+        a gestionar gastos compartidos.
+
+      </p>
+
+
+      <button
+        type="button"
+        class="btn-nuevo"
+        (click)="nuevoGrupo()"
+      >
+
+        ➕ Crear mi primer grupo
+
+      </button>
+
+
+    </div>
+
+
+  }
 
 
 </div>

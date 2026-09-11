@@ -21,6 +21,10 @@ import {
   Grupos as GruposService
 } from '../../services/grupos';
 
+import {
+  Auth
+} from '../../services/auth';
+
 
 @Component({
   selector: 'app-grupo-detalle',
@@ -53,6 +57,13 @@ implements OnInit {
   totalGastado: number = 0;
 
 
+  /*
+   * Saldo del usuario
+   * actualmente conectado.
+   */
+  saldoUsuario: number = 0;
+
+
   cargando: boolean = true;
 
 
@@ -64,7 +75,9 @@ implements OnInit {
 
         private gastosService: Gastos,
 
-          private gruposService: GruposService
+          private gruposService: GruposService,
+
+            private authService: Auth
 
   ) {}
 
@@ -91,6 +104,13 @@ implements OnInit {
 
 
     this.cargarMiembros();
+
+
+    /*
+     * Cargamos el saldo
+     * del usuario conectado.
+     */
+    this.cargarSaldoUsuario();
 
   }
 
@@ -236,6 +256,128 @@ implements OnInit {
 
 
   /*
+   * Cargar el saldo del
+   * usuario conectado.
+   */
+  cargarSaldoUsuario(): void {
+
+
+    const usuario =
+    this.authService.obtenerUsuario();
+
+
+    if (!usuario) {
+
+
+      console.error(
+        'No hay usuario conectado.'
+      );
+
+
+      return;
+
+    }
+
+
+    console.log(
+      'Usuario conectado:',
+      usuario
+    );
+
+
+    this.gastosService
+    .obtenerBalances(
+      this.grupoId
+    )
+    .subscribe({
+
+      next: (
+        balances: any[]
+      ) => {
+
+
+        console.log(
+          'Balances recibidos:',
+          balances
+        );
+
+
+        /*
+         * Buscamos el balance
+         * correspondiente al
+         * usuario conectado.
+         */
+        const balanceUsuario =
+        balances.find(
+
+          (balance: any) =>
+
+          balance.usuarioId ===
+          usuario.id
+
+          ||
+
+          balance.idUsuario ===
+          usuario.id
+
+        );
+
+
+        if (balanceUsuario) {
+
+
+          this.saldoUsuario =
+          Number(
+            balanceUsuario.saldo
+          );
+
+
+          console.log(
+            'Saldo del usuario:',
+            this.saldoUsuario
+          );
+
+
+        } else {
+
+
+          console.warn(
+            'No se ha encontrado '
+            +
+            'el balance del usuario.'
+          );
+
+
+          this.saldoUsuario =
+          0;
+
+        }
+
+      },
+
+
+      error: (
+        error: any
+      ) => {
+
+
+        console.error(
+          'Error obteniendo saldo:',
+          error
+        );
+
+
+        this.saldoUsuario =
+        0;
+
+      }
+
+    });
+
+  }
+
+
+  /*
    * Calcular el total
    * gastado.
    */
@@ -348,6 +490,7 @@ implements OnInit {
     if (
       !miembro?.usuario?.nombre
     ) {
+
 
       return '?';
 

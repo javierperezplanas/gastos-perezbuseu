@@ -9,7 +9,7 @@
 
     <div class="cargando">
 
-      ⏳ Cargando gasto...
+      Cargando gasto...
 
     </div>
 
@@ -79,7 +79,7 @@
 
           @if (eliminando) {
 
-            ⏳ Eliminando...
+            Eliminando...
 
           } @else {
 
@@ -236,6 +236,42 @@
               {{
                 gasto.fechaHora
                 | date:'dd/MM/yyyy'
+              }}
+
+            </strong>
+
+          </div>
+
+
+        </div>
+
+
+        <!-- FORMA DE REPARTO -->
+
+        <div class="informacion-fila">
+
+          <span class="informacion-icono">
+
+            ⚖️
+
+          </span>
+
+
+          <div>
+
+            <span class="informacion-etiqueta">
+
+              Forma de reparto
+
+            </span>
+
+
+            <strong>
+
+              {{
+                obtenerNombreTipoDivision(
+                  gasto.tipoDivision
+                )
               }}
 
             </strong>

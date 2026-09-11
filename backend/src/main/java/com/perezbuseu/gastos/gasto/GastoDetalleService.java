@@ -23,7 +23,8 @@ public class GastoDetalleService {
 
 
     public GastoDetalleResponse obtenerDetalle(
-            Long gastoId) {
+            Long gastoId
+    ) {
 
 
         Gasto gasto =
@@ -55,14 +56,17 @@ public class GastoDetalleService {
 
     private void asignarDatosGasto(
             GastoDetalleResponse response,
-            Gasto gasto) {
+            Gasto gasto
+    ) {
 
 
         response.id =
                 gasto.id;
 
+
         response.descripcion =
                 gasto.descripcion;
+
 
         response.importe =
                 gasto.importe;
@@ -79,14 +83,23 @@ public class GastoDetalleService {
         response.fechaHora =
                 gasto.fechaHora;
 
+
         response.notas =
                 gasto.notas;
+
+
+        /*
+         * Forma de reparto.
+         */
+        response.tipoDivision =
+                gasto.tipoDivision;
 
 
         if (gasto.grupo != null) {
 
             response.grupoId =
                     gasto.grupo.id;
+
 
             response.nombreGrupo =
                     gasto.grupo.nombre;
@@ -99,6 +112,7 @@ public class GastoDetalleService {
             response.pagadorId =
                     gasto.pagador.id;
 
+
             response.nombrePagador =
                     gasto.pagador.nombre;
 
@@ -109,7 +123,8 @@ public class GastoDetalleService {
 
     private void asignarRepartos(
             GastoDetalleResponse response,
-            Long gastoId) {
+            Long gastoId
+    ) {
 
 
         List<RepartoGasto> repartos =
@@ -133,8 +148,10 @@ public class GastoDetalleService {
             repartoResponse.usuarioId =
                     reparto.usuario.id;
 
+
             repartoResponse.nombreUsuario =
                     reparto.usuario.nombre;
+
 
             repartoResponse.importe =
                     reparto.importe;

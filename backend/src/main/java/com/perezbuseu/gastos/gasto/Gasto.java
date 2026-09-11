@@ -18,28 +18,50 @@ import java.time.LocalDateTime;
 public class Gasto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(
+            strategy = GenerationType.IDENTITY
+    )
     public Long id;
+
 
     public String descripcion;
 
+
     public BigDecimal importe;
+
 
     @Enumerated(EnumType.STRING)
     public Categoria categoria;
 
+
     public LocalDateTime fechaHora;
 
+
     public String notas;
+
+
+    /*
+     * Forma en la que se
+     * divide el gasto.
+     *
+     * IGUAL
+     *
+     * TOTAL_A_PAGADOR
+     */
+    public String tipoDivision;
+
 
     @ManyToOne
     public Grupo grupo;
 
+
     @ManyToOne
     public Usuario pagador;
 
+
     @ManyToOne
     public Usuario creadoPor;
+
 
     public LocalDateTime fechaCreacion;
 

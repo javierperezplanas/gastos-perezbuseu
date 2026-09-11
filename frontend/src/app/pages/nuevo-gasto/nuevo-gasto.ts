@@ -36,6 +36,10 @@ export class NuevoGasto
 implements OnInit {
 
 
+  /*
+   * Datos del gasto.
+   */
+
   descripcion: string = '';
 
 
@@ -48,528 +52,538 @@ implements OnInit {
   pagador: string = '';
 
 
+  /*
+   * Fecha y hora.
+   *
+   * Formato:
+   * YYYY-MM-DDTHH:mm
+   */
   fecha: string =
-  this.obtenerFechaActual();
+  this.obtenerFechaHoraActual();
 
 
   /*
-   * ID del grupo actual.
+   * Tipo de división.
    */
-  grupoId: number = 0;
+  tipoDivision: string =
+  'IGUAL';
+
+
+/*
+ * ID del grupo actual.
+ */
+grupoId: number = 0;
+
+
+/*
+ * Miembros del grupo.
+ */
+miembros: any[] = [];
+
+
+/*
+ * Todos los miembros
+ * participan automáticamente.
+ *
+ * No se muestran en pantalla.
+ */
+participantesIds: number[] = [];
+
+
+/*
+ * Si tiene valor,
+ * estamos editando un gasto.
+ */
+gastoId: number | null = null;
+
+
+constructor(
+
+  private router: Router,
+
+    private route: ActivatedRoute,
+
+      private gastosService: Gastos,
+
+        private gruposService: Grupos
+
+) {}
+
+
+/*
+ * Devuelve la fecha y hora actual
+ * en formato compatible con:
+ *
+ * input type="datetime-local"
+ */
+obtenerFechaHoraActual(): string {
+
+
+  const ahora =
+  new Date();
+
+
+  const anio =
+  ahora.getFullYear();
+
+
+  const mes =
+  String(
+    ahora.getMonth() + 1
+  ).padStart(
+    2,
+    '0'
+  );
+
+
+  const dia =
+  String(
+    ahora.getDate()
+  ).padStart(
+    2,
+    '0'
+  );
+
+
+  const hora =
+  String(
+    ahora.getHours()
+  ).padStart(
+    2,
+    '0'
+  );
+
+
+  const minutos =
+  String(
+    ahora.getMinutes()
+  ).padStart(
+    2,
+    '0'
+  );
+
+
+  return (
+    `${anio}-${mes}-${dia}`
+    +
+    `T${hora}:${minutos}`
+  );
+
+}
+
+
+ngOnInit(): void {
 
 
   /*
-   * Miembros del grupo.
+   * Obtenemos el ID del grupo
+   * desde la URL.
    */
-  miembros: any[] = [];
+  const grupoIdParam =
+  this.route.snapshot.paramMap.get(
+    'id'
+  );
 
 
-  /*
-   * Participantes del gasto.
-   */
-  participantesIds: number[] = [];
+  if (!grupoIdParam) {
 
 
-  /*
-   * Si tiene valor,
-   * estamos editando un gasto.
-   */
-  gastoId: number | null = null;
-
-
-  constructor(
-
-    private router: Router,
-
-      private route: ActivatedRoute,
-
-        private gastosService: Gastos,
-
-          private gruposService: Grupos
-
-  ) {}
-
-
-  /*
-   * Devuelve la fecha actual
-   * en formato YYYY-MM-DD.
-   */
-  obtenerFechaActual(): string {
-
-
-    const hoy =
-    new Date();
-
-
-    const anio =
-    hoy.getFullYear();
-
-
-    const mes =
-    String(
-      hoy.getMonth() + 1
-    ).padStart(
-      2,
-      '0'
+    alert(
+      'No se ha encontrado el grupo.'
     );
 
 
-    const dia =
-    String(
-      hoy.getDate()
-    ).padStart(
-      2,
-      '0'
-    );
+    this.router.navigate([
+      '/grupos'
+    ]);
 
 
-    return `${anio}-${mes}-${dia}`;
+    return;
 
   }
 
 
-  ngOnInit(): void {
+  this.grupoId =
+  Number(
+    grupoIdParam
+  );
 
 
-    /*
-     * Obtenemos el ID del grupo
-     * desde la URL.
-     */
-    const grupoIdParam =
-    this.route.snapshot.paramMap.get(
-      'id'
-    );
+  console.log(
+    'Grupo actual:',
+    this.grupoId
+  );
 
 
-    if (!grupoIdParam) {
+  /*
+   * Comprobamos si estamos
+   * editando un gasto.
+   */
+  const gastoIdParam =
+  this.route.snapshot.paramMap.get(
+    'gastoId'
+  );
 
 
-      alert(
-        'No se ha encontrado el grupo.'
-      );
+  if (gastoIdParam) {
 
 
-      this.router.navigate([
-        '/grupos'
-      ]);
-
-
-      return;
-
-    }
-
-
-    this.grupoId =
+    this.gastoId =
     Number(
-      grupoIdParam
+      gastoIdParam
     );
 
 
-    console.log(
-      'Grupo actual:',
-      this.grupoId
-    );
-
-
-    /*
-     * Cargamos los miembros
-     * reales del grupo.
-     */
-    this.cargarMiembros();
-
-
-    /*
-     * Comprobamos si estamos
-     * editando un gasto.
-     */
-    const gastoIdParam =
-    this.route.snapshot.paramMap.get(
-      'gastoId'
-    );
-
-
-    if (gastoIdParam) {
-
-
-      this.gastoId =
-      Number(
-        gastoIdParam
-      );
-
-
-      this.cargarGasto();
-
-    }
+    this.cargarGasto();
 
   }
 
 
   /*
-   * Carga los miembros
-   * del grupo actual.
+   * Cargamos los miembros
+   * del grupo.
    */
-  cargarMiembros(): void {
+  this.cargarMiembros();
 
+}
 
-    this.gruposService
-    .obtenerMiembros(
-      this.grupoId
-    )
-    .subscribe({
 
-      next: (
-        miembros: any[]
-      ) => {
+/*
+ * Carga los miembros
+ * del grupo actual.
+ */
+cargarMiembros(): void {
 
 
-        console.log(
-          'Miembros del grupo:',
-          miembros
-        );
+  this.gruposService
+  .obtenerMiembros(
+    this.grupoId
+  )
+  .subscribe({
 
+    next: (
+      miembros: any[]
+    ) => {
 
-        this.miembros =
-        miembros;
 
-
-        /*
-         * Si estamos creando
-         * un gasto, inicialmente
-         * participan todos
-         * los miembros.
-         */
-        if (
-          this.gastoId === null
-        ) {
-
-
-          this.participantesIds =
-          miembros.map(
-            (miembro: any) =>
-            miembro.usuario.id
-          );
-
-
-          console.log(
-            'Participantes iniciales:',
-            this.participantesIds
-          );
-
-        }
-
-      },
-
-
-      error: (
-        error: any
-      ) => {
-
-
-        console.error(
-          'Error cargando miembros:',
-          error
-        );
-
-
-        alert(
-          'No se han podido cargar '
-          +
-          'los miembros del grupo.'
-        );
-
-      }
-
-    });
-
-  }
-
-
-  /*
-   * Carga un gasto
-   * cuando estamos editándolo.
-   */
-  cargarGasto(): void {
-
-
-    if (
-      this.gastoId === null
-    ) {
-
-      return;
-
-    }
-
-
-    this.gastosService
-    .obtenerGasto(
-      this.gastoId
-    )
-    .subscribe({
-
-      next: (
-        gasto: any
-      ) => {
-
-
-        console.log(
-          'Gasto recibido:',
-          gasto
-        );
-
-
-        this.descripcion =
-        gasto.descripcion;
-
-
-        this.categoria =
-        gasto.categoria;
-
-
-        this.importe =
-        Number(
-          gasto.importe
-        );
-
-
-        this.pagador =
-        String(
-          gasto.pagadorId
-        );
-
-
-        /*
-         * Convertimos la fecha
-         * para el input type="date".
-         */
-        if (
-          gasto.fechaHora
-        ) {
-
-
-          this.fecha =
-          gasto.fechaHora.substring(
-            0,
-            10
-          );
-
-        }
-
-
-        /*
-         * Recuperamos los participantes
-         * desde los repartos.
-         */
-        if (
-          gasto.repartos
-        ) {
-
-
-          this.participantesIds =
-          gasto.repartos.map(
-            (reparto: any) =>
-            reparto.usuarioId
-          );
-
-        }
-
-
-        console.log(
-          'Participantes:',
-          this.participantesIds
-        );
-
-      },
-
-
-      error: (
-        error: any
-      ) => {
-
-
-        console.error(
-          'Error cargando gasto:',
-          error
-        );
-
-
-        alert(
-          'No se ha podido cargar el gasto.'
-        );
-
-      }
-
-    });
-
-  }
-
-
-  /*
-   * Guarda o actualiza
-   * un gasto.
-   */
-  guardarGasto(): void {
-
-
-    if (
-
-      !this.descripcion ||
-
-      !this.categoria ||
-
-      !this.importe ||
-
-      !this.pagador ||
-
-      !this.fecha
-
-    ) {
-
-
-      alert(
-        'Por favor, rellena todos los campos.'
+      console.log(
+        'Miembros del grupo:',
+        miembros
       );
 
 
-      return;
-
-    }
-
-
-    /*
-     * Comprobamos que haya
-     * participantes.
-     */
-    if (
-      this.participantesIds.length === 0
-    ) {
-
-
-      alert(
-        'Debe haber al menos '
-        +
-        'un participante.'
-      );
-
-
-      return;
-
-    }
-
-
-    const gasto = {
-
-
-      descripcion:
-      this.descripcion,
-
-
-      importe:
-      this.importe,
-
-
-      categoria:
-      this.categoria,
-
-
-      fechaHora:
-      this.fecha + 'T00:00:00',
-
-
-      notas: '',
+      this.miembros =
+      miembros;
 
 
       /*
-       * Usamos el grupo
-       * de la URL.
+       * Todos los miembros
+       * participan automáticamente.
        */
-      grupoId:
-      this.grupoId,
+      this.participantesIds =
+      miembros.map(
+        (miembro: any) =>
+        miembro.usuario.id
+      );
 
 
-      pagadorId:
-      Number(
-        this.pagador
-      ),
+      console.log(
+        'Participantes:',
+        this.participantesIds
+      );
+
+    },
 
 
-      participantesIds:
-      this.participantesIds
-
-    };
-
-
-    console.log(
-      'Enviando gasto:',
-      gasto
-    );
+    error: (
+      error: any
+    ) => {
 
 
-    /*
-     * EDITAR GASTO
-     */
-    if (
-      this.gastoId !== null
-    ) {
+      console.error(
+        'Error cargando miembros:',
+        error
+      );
 
 
-      this.gastosService
-      .actualizarGasto(
-        this.gastoId,
-        gasto
-      )
-      .subscribe({
-
-        next: (
-          respuesta: any
-        ) => {
-
-
-          console.log(
-            'Gasto actualizado:',
-            respuesta
-          );
-
-
-          this.router.navigate([
-            '/grupos',
-            this.grupoId
-          ]);
-
-        },
-
-
-        error: (
-          error: any
-        ) => {
-
-
-          console.error(
-            'Error actualizando gasto:',
-            error
-          );
-
-
-          alert(
-            'Ha ocurrido un error '
-            +
-            'al actualizar el gasto.'
-          );
-
-        }
-
-      });
-
-
-      return;
+      alert(
+        'No se han podido cargar '
+        +
+        'los miembros del grupo.'
+      );
 
     }
 
+  });
+
+}
+
+
+/*
+ * Carga un gasto
+ * cuando estamos editándolo.
+ */
+cargarGasto(): void {
+
+
+  if (
+    this.gastoId === null
+  ) {
+
+    return;
+
+  }
+
+
+  this.gastosService
+  .obtenerGasto(
+    this.gastoId
+  )
+  .subscribe({
+
+    next: (
+      gasto: any
+    ) => {
+
+
+      console.log(
+        'Gasto recibido:',
+        gasto
+      );
+
+
+      this.descripcion =
+      gasto.descripcion
+      ?? '';
+
+
+      this.categoria =
+      gasto.categoria
+      ?? '';
+
+
+      this.importe =
+      Number(
+        gasto.importe
+      );
+
+
+      this.pagador =
+      String(
+        gasto.pagadorId
+      );
+
+
+      /*
+       * Convertimos la fecha
+       * para datetime-local.
+       */
+      if (
+        gasto.fechaHora
+      ) {
+
+
+        this.fecha =
+        gasto.fechaHora.substring(
+          0,
+          16
+        );
+
+      }
+
+
+      /*
+       * Recuperamos el tipo
+       * de división.
+       */
+      if (
+        gasto.tipoDivision
+      ) {
+
+
+        this.tipoDivision =
+        gasto.tipoDivision;
+
+      } else {
+
+
+        this.tipoDivision =
+        'IGUAL';
+
+      }
+
+
+      console.log(
+        'Gasto cargado:',
+        gasto
+      );
+
+    },
+
+
+    error: (
+      error: any
+    ) => {
+
+
+      console.error(
+        'Error cargando gasto:',
+        error
+      );
+
+
+      alert(
+        'No se ha podido cargar el gasto.'
+      );
+
+    }
+
+  });
+
+}
+
+
+/*
+ * Guarda o actualiza
+ * un gasto.
+ */
+guardarGasto(): void {
+
+
+  /*
+   * Validamos los campos.
+   */
+  if (
+
+    !this.descripcion.trim()
+
+    ||
+
+    !this.categoria
+
+    ||
+
+    this.importe === null
+
+    ||
+
+    this.importe <= 0
+
+    ||
+
+    !this.pagador
+
+    ||
+
+    !this.fecha
+
+  ) {
+
+
+    alert(
+      'Por favor, rellena '
+      +
+      'todos los campos.'
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+   * Comprobamos que haya
+   * participantes.
+   */
+  if (
+    this.participantesIds.length === 0
+  ) {
+
+
+    alert(
+      'El grupo debe tener '
+      +
+      'al menos un miembro.'
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+   * Construimos el gasto
+   * para enviarlo al backend.
+   */
+  const gasto = {
+
+
+    descripcion:
+    this.descripcion.trim(),
+
+
+    importe:
+    this.importe,
+
+
+    categoria:
+    this.categoria,
+
 
     /*
-     * CREAR GASTO
+     * datetime-local devuelve:
+     *
+     * YYYY-MM-DDTHH:mm
+     *
+     * Añadimos los segundos.
      */
+    fechaHora:
+    this.fecha + ':00',
+
+
+    grupoId:
+    this.grupoId,
+
+
+    pagadorId:
+    Number(
+      this.pagador
+    ),
+
+
+    /*
+     * Todos los miembros
+     * del grupo participan.
+     */
+    participantesIds:
+    this.participantesIds,
+
+
+    tipoDivision:
+    this.tipoDivision
+
+  };
+
+
+  console.log(
+    'Enviando gasto:',
+    gasto
+  );
+
+
+  /*
+   * EDITAR GASTO.
+   */
+  if (
+    this.gastoId !== null
+  ) {
+
+
     this.gastosService
-    .crearGasto(
+    .actualizarGasto(
+      this.gastoId,
       gasto
     )
     .subscribe({
@@ -580,7 +594,7 @@ implements OnInit {
 
 
         console.log(
-          'Gasto creado correctamente:',
+          'Gasto actualizado:',
           respuesta
         );
 
@@ -599,7 +613,7 @@ implements OnInit {
 
 
         console.error(
-          'Error creando gasto:',
+          'Error actualizando gasto:',
           error
         );
 
@@ -607,27 +621,82 @@ implements OnInit {
         alert(
           'Ha ocurrido un error '
           +
-          'al guardar el gasto.'
+          'al actualizar el gasto.'
         );
 
       }
 
     });
 
+
+    return;
+
   }
 
 
   /*
-   * Volver al grupo.
+   * CREAR GASTO.
    */
-  volver(): void {
+  this.gastosService
+  .crearGasto(
+    gasto
+  )
+  .subscribe({
+
+    next: (
+      respuesta: any
+    ) => {
 
 
-    this.router.navigate([
-      '/grupos',
-      this.grupoId
-    ]);
+      console.log(
+        'Gasto creado correctamente:',
+        respuesta
+      );
 
-  }
+
+      this.router.navigate([
+        '/grupos',
+        this.grupoId
+      ]);
+
+    },
+
+
+    error: (
+      error: any
+    ) => {
+
+
+      console.error(
+        'Error creando gasto:',
+        error
+      );
+
+
+      alert(
+        'Ha ocurrido un error '
+        +
+        'al guardar el gasto.'
+      );
+
+    }
+
+  });
+
+}
+
+
+/*
+ * Volver al grupo.
+ */
+volver(): void {
+
+
+  this.router.navigate([
+    '/grupos',
+    this.grupoId
+  ]);
+
+}
 
 }

@@ -64,7 +64,61 @@
     </div>
 
 
-    <!-- ACCIONES -->
+    <!-- =====================
+         SALDO DEL USUARIO
+    ====================== -->
+
+    <div
+      class="grupo-saldo"
+      [class.saldo-positivo]="saldoUsuario > 0"
+      [class.saldo-negativo]="saldoUsuario < 0"
+      [class.saldo-neutro]="saldoUsuario === 0"
+    >
+
+
+      <span>
+
+        Saldo
+
+      </span>
+
+
+      <strong>
+
+
+        @if (saldoUsuario > 0) {
+
+          +
+
+        }
+
+
+        @if (saldoUsuario < 0) {
+
+          −
+
+        }
+
+
+        {{
+          (saldoUsuario < 0
+            ? -saldoUsuario
+            : saldoUsuario)
+          | number:'1.2-2'
+        }}
+
+        €
+
+
+      </strong>
+
+
+    </div>
+
+
+    <!-- =====================
+         ACCIONES
+    ====================== -->
 
     <div class="grupo-acciones">
 
@@ -282,6 +336,7 @@
                 gasto.importe
                 | number:'1.2-2'
               }}
+
               €
 
             </div>

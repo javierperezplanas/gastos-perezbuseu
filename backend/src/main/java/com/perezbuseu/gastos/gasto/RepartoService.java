@@ -28,12 +28,18 @@ public class RepartoService {
     /*
      * Crea los repartos de un gasto
      * entre los participantes.
+     *
+     * tipoDivision:
+     *
+     * IGUAL
+     * TOTAL_A_PAGADOR
      */
     @Transactional
     public void crearRepartos(
             Gasto gasto,
             List<Long> participantesIds,
-            Usuario pagador) {
+            Usuario pagador,
+            String tipoDivision) {
 
 
         if (participantesIds == null
@@ -52,61 +58,67 @@ public class RepartoService {
                 );
 
 
-        int numeroParticipantes =
-                participantes.size();
-
-
         /*
-         * Trabajamos en céntimos para
-         * evitar problemas de decimales.
+         * Si no se recibe ningún tipo,
+         * usamos IGUAL por defecto.
          */
-        int totalCentimos =
-                gasto.importe
-                        .movePointRight(2)
-                        .intValueExact();
+        if (tipoDivision == null
+                || tipoDivision.isBlank()) {
 
-
-        /*
-         * Caso de un único participante.
-         */
-        if (numeroParticipantes == 1) {
-
-            guardarReparto(
-                    gasto,
-                    participantes.get(0),
-                    totalCentimos
-            );
-
-            return;
+            tipoDivision = "IGUAL";
 
         }
 
 
-        int centimosBase =
-                totalCentimos
-                        / numeroParticipantes;
-
-
-        int restoCentimos =
-                totalCentimos
-                        % numeroParticipantes;
-
-
         /*
-         * Si la división es exacta,
-         * todos pagan lo mismo.
+         * TOTAL_A_PAGADOR
+         *
+         * El pagador adelanta el dinero,
+         * pero NO participa en el reparto.
+         *
+         * El importe se divide entre
+         * el resto de participantes.
          */
-        if (restoCentimos == 0) {
+        if (tipoDivision.equals("TOTAL_A_PAGADOR")) {
+
+
+            List<Usuario> deudores =
+                    new ArrayList<>();
+
 
             for (Usuario usuario : participantes) {
 
-                guardarReparto(
-                        gasto,
-                        usuario,
-                        centimosBase
-                );
+                if (!usuario.id.equals(pagador.id)) {
+
+                    deudores.add(usuario);
+
+                }
 
             }
+
+
+            /*
+             * Si no hay otros participantes,
+             * el pagador asume el gasto.
+             */
+            if (deudores.isEmpty()) {
+
+                guardarReparto(
+                        gasto,
+                        pagador,
+                        gasto.importe
+                );
+
+                return;
+
+            }
+
+
+            dividirEntreUsuarios(
+                    gasto,
+                    deudores
+            );
+
 
             return;
 
@@ -114,66 +126,15 @@ public class RepartoService {
 
 
         /*
-         * Si hay resto:
+         * IGUAL
          *
-         * Los participantes que no son
-         * el pagador reciben el redondeo
-         * hacia arriba.
-         *
-         * El pagador recibe el resto.
+         * Se divide entre todos
+         * los participantes.
          */
-        int centimosOtros =
-
-                BigDecimal.valueOf(
-                        totalCentimos
-                )
-                .divide(
-                        BigDecimal.valueOf(
-                                numeroParticipantes
-                        ),
-                        0,
-                        RoundingMode.CEILING
-                )
-                .intValue();
-
-
-        int numeroOtros =
-                numeroParticipantes - 1;
-
-
-        int centimosPagador =
-
-                totalCentimos
-                        - (
-                                centimosOtros
-                                        * numeroOtros
-                        );
-
-
-        for (Usuario usuario : participantes) {
-
-
-            if (usuario.id.equals(
-                    pagador.id
-            )) {
-
-                guardarReparto(
-                        gasto,
-                        usuario,
-                        centimosPagador
-                );
-
-            } else {
-
-                guardarReparto(
-                        gasto,
-                        usuario,
-                        centimosOtros
-                );
-
-            }
-
-        }
+        dividirEntreUsuarios(
+                gasto,
+                participantes
+        );
 
     }
 
@@ -191,6 +152,82 @@ public class RepartoService {
                 "gasto.id",
                 gastoId
         );
+
+    }
+
+
+    /*
+     * Divide un gasto entre
+     * una lista de usuarios.
+     *
+     * Se trabaja en céntimos para
+     * evitar problemas de decimales.
+     */
+    private void dividirEntreUsuarios(
+            Gasto gasto,
+            List<Usuario> usuarios) {
+
+
+        int numeroUsuarios =
+                usuarios.size();
+
+
+        if (numeroUsuarios == 0) {
+
+            throw new IllegalArgumentException(
+                    "No hay usuarios para repartir el gasto"
+            );
+
+        }
+
+
+        int totalCentimos =
+                gasto.importe
+                        .movePointRight(2)
+                        .intValueExact();
+
+
+        int centimosBase =
+                totalCentimos
+                        / numeroUsuarios;
+
+
+        int restoCentimos =
+                totalCentimos
+                        % numeroUsuarios;
+
+
+        /*
+         * Repartimos los céntimos
+         * restantes entre los primeros
+         * usuarios de la lista.
+         *
+         * Así garantizamos que la suma
+         * sea exactamente igual al importe.
+         */
+        for (int i = 0;
+             i < numeroUsuarios;
+             i++) {
+
+
+            int centimos =
+                    centimosBase;
+
+
+            if (i < restoCentimos) {
+
+                centimos++;
+
+            }
+
+
+            guardarReparto(
+                    gasto,
+                    usuarios.get(i),
+                    centimos
+            );
+
+        }
 
     }
 
@@ -239,7 +276,45 @@ public class RepartoService {
 
 
     /*
-     * Guarda un reparto.
+     * Guarda un reparto usando
+     * un importe directamente.
+     */
+    private void guardarReparto(
+            Gasto gasto,
+            Usuario usuario,
+            BigDecimal importe) {
+
+
+        RepartoGasto reparto =
+                new RepartoGasto();
+
+
+        reparto.gasto =
+                gasto;
+
+
+        reparto.usuario =
+                usuario;
+
+
+        reparto.importe =
+                importe
+                        .setScale(
+                                2,
+                                RoundingMode.HALF_UP
+                        );
+
+
+        repartoGastoRepository.persist(
+                reparto
+        );
+
+    }
+
+
+    /*
+     * Guarda un reparto
+     * a partir de céntimos.
      */
     private void guardarReparto(
             Gasto gasto,
@@ -253,25 +328,16 @@ public class RepartoService {
                         centimos
                 )
                 .movePointLeft(2)
-                .setScale(2);
+                .setScale(
+                        2,
+                        RoundingMode.HALF_UP
+                );
 
 
-        RepartoGasto reparto =
-                new RepartoGasto();
-
-
-        reparto.gasto =
-                gasto;
-
-        reparto.usuario =
-                usuario;
-
-        reparto.importe =
-                importe;
-
-
-        repartoGastoRepository.persist(
-                reparto
+        guardarReparto(
+                gasto,
+                usuario,
+                importe
         );
 
     }

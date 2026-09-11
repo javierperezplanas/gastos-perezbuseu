@@ -12,12 +12,20 @@ import {
 } from '@angular/router';
 
 import {
+  forkJoin
+} from 'rxjs';
+
+import {
   Auth
 } from '../../services/auth';
 
 import {
   Grupos as GruposService
 } from '../../services/grupos';
+
+import {
+  Gastos
+} from '../../services/gastos';
 
 
 @Component({
@@ -50,7 +58,9 @@ implements OnInit {
 
       private authService: Auth,
 
-        private gruposService: GruposService
+        private gruposService: GruposService,
+
+          private gastosService: Gastos
 
   ) {}
 
@@ -132,12 +142,152 @@ implements OnInit {
         );
 
 
-        this.grupos =
-        grupos;
+        /*
+         * Si no hay grupos,
+         * terminamos.
+         */
+        if (
+          grupos.length === 0
+        ) {
 
 
-        this.cargando =
-        false;
+          this.grupos =
+          [];
+
+
+          this.cargando =
+          false;
+
+
+          return;
+
+        }
+
+
+        /*
+         * Cargamos los balances
+         * de todos los grupos.
+         */
+        const peticiones =
+        grupos.map(
+          (grupo: any) =>
+          this.gastosService
+          .obtenerBalances(
+            grupo.id
+          )
+        );
+
+
+        forkJoin(
+          peticiones
+        )
+          .subscribe({
+
+            next: (
+              balancesPorGrupo: any[]
+            ) => {
+
+
+              this.grupos =
+              grupos.map(
+                (
+                  grupo: any,
+                 indice: number
+                ) => {
+
+
+                  const balances =
+                  balancesPorGrupo[
+                    indice
+                  ];
+
+
+                  /*
+                   * Buscamos el balance
+                   * del usuario conectado.
+                   */
+                  const balanceUsuario =
+                  balances.find(
+                    (balance: any) =>
+                    Number(
+                      balance.usuarioId
+                    ) ===
+                    Number(
+                      usuario.id
+                    )
+                  );
+
+
+                  return {
+
+
+                    ...grupo,
+
+
+                    /*
+                     * Guardamos el saldo
+                     * del usuario como
+                     * balance del grupo.
+                     */
+                    balance:
+                    balanceUsuario
+                    ? Number(
+                      balanceUsuario.saldo
+                    )
+                    : 0
+
+
+                  };
+
+                }
+              );
+
+
+              console.log(
+                'Grupos con balances:',
+                this.grupos
+              );
+
+
+              this.cargando =
+              false;
+
+            },
+
+
+            error: (
+              error: any
+            ) => {
+
+
+              console.error(
+                'Error cargando balances:',
+                error
+              );
+
+
+              /*
+               * Mostramos los grupos
+               * aunque falle el balance.
+               */
+              this.grupos =
+              grupos.map(
+                (grupo: any) => ({
+
+                  ...grupo,
+
+                  balance: 0
+
+                })
+              );
+
+
+              this.cargando =
+              false;
+
+            }
+
+          });
 
       },
 

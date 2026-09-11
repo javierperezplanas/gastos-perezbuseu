@@ -143,6 +143,12 @@ implements OnInit {
         );
 
 
+        console.log(
+          'Tipo de división:',
+          gasto.tipoDivision
+        );
+
+
         this.gasto =
         gasto;
 
@@ -357,6 +363,37 @@ implements OnInit {
       default:
 
         return categoria || 'Sin categoría';
+
+    }
+
+  }
+
+
+  /*
+   * Obtener el nombre de
+   * la forma de reparto.
+   */
+  obtenerNombreTipoDivision(
+    tipoDivision: string
+  ): string {
+
+
+    switch (tipoDivision) {
+
+
+      case 'IGUAL':
+
+        return 'Dividido por igual';
+
+
+      case 'TOTAL_A_PAGADOR':
+
+        return 'Se te debe la cantidad total';
+
+
+      default:
+
+        return 'Dividido por igual';
 
     }
 
