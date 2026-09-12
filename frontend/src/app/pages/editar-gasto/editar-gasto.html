@@ -196,6 +196,35 @@
     </div>
 
 
+    <!-- DIVIDIR GASTO -->
+
+    <div class="campo">
+
+      <label for="tipoDivision">
+        Dividir gasto
+      </label>
+
+
+      <select
+        id="tipoDivision"
+        [(ngModel)]="tipoDivision"
+        name="tipoDivision"
+      >
+
+        <option value="IGUAL">
+          Dividir por igual
+        </option>
+
+
+        <option value="TOTAL_A_PAGADOR">
+          Se te debe la cantidad total
+        </option>
+
+      </select>
+
+    </div>
+
+
     <!-- FECHA -->
 
     <div class="campo">

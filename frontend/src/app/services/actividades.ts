@@ -12,7 +12,7 @@ export class Actividades {
 
 
   private apiUrl =
-  'http://localhost:8080/api/actividades';
+  '/api/actividades';
 
 
   constructor(

@@ -1,5 +1,5 @@
 * {
-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :host {
@@ -9,14 +9,20 @@ box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
 
+
+/* =========================================
+   BARRA SUPERIOR
+========================================= */
+
 .topbar {
   background: #ffffff;
   border-bottom: 1px solid #dddddd;
 }
 
+
 .topbar-contenido {
   max-width: 1000px;
-  height: 56px;
+  min-height: 56px;
 
   margin: 0 auto;
 
@@ -26,41 +32,109 @@ box-sizing: border-box;
   padding: 0 20px;
 }
 
+
+/* =========================================
+   LOGO
+========================================= */
+
 .logo {
   font-size: 22px;
   font-weight: bold;
 
   color: #555555;
+
+  white-space: nowrap;
 }
+
 
 .logo span {
   color: #1cc29f;
 }
 
+
+/* =========================================
+   MENÚ
+========================================= */
+
 .menu {
   display: flex;
+
   gap: 25px;
 
   margin-left: 50px;
 }
 
+
 .menu a {
   color: #666666;
+
   text-decoration: none;
 
   font-size: 15px;
+
+  white-space: nowrap;
 }
+
 
 .menu a:hover {
   color: #1cc29f;
 }
 
+
+/* =========================================
+   USUARIO
+========================================= */
+
 .usuario {
   margin-left: auto;
 
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
   color: #666666;
+
   font-size: 15px;
+
+  white-space: nowrap;
 }
+
+
+.btn-logout {
+  border: none;
+
+  background: #f2f2f2;
+
+  color: #666666;
+
+  border-radius: 5px;
+
+  padding: 5px 8px;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+
+.btn-logout:hover {
+  background: #e7e7e7;
+
+  color: #333333;
+}
+
+
+/* =========================================
+   CONTENIDO
+========================================= */
 
 .contenido {
   max-width: 1000px;
@@ -68,4 +142,114 @@ box-sizing: border-box;
   margin: 0 auto;
 
   padding: 30px 20px;
+}
+
+
+/* =========================================
+   VERSIÓN MÓVIL
+========================================= */
+
+@media (max-width: 600px) {
+
+  .topbar-contenido {
+
+    display: grid;
+
+    grid-template-columns: 1fr auto;
+
+    grid-template-areas:
+      "logo usuario"
+      "menu menu";
+
+    align-items: center;
+
+    gap: 8px 12px;
+
+    min-height: auto;
+
+    padding: 10px 15px 0;
+  }
+
+
+  /* LOGO */
+
+  .logo {
+
+    grid-area: logo;
+
+    font-size: 19px;
+
+    line-height: 1.1;
+  }
+
+
+  /* USUARIO */
+
+  .usuario {
+
+    grid-area: usuario;
+
+    margin-left: 0;
+
+    justify-self: end;
+
+    gap: 14px;
+
+    font-size: 13px;
+  }
+
+
+  .btn-logout {
+
+    padding: 5px 7px;
+
+    font-size: 11px;
+
+    border-radius: 5px;
+  }
+
+
+  /* MENÚ */
+
+  .menu {
+
+    grid-area: menu;
+
+    width: 100%;
+
+    margin-left: 0;
+
+    margin-top: 2px;
+
+    padding: 8px 0 9px;
+
+    border-top: 1px solid #eeeeee;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 0;
+  }
+
+
+  .menu a {
+
+    flex: 1;
+
+    text-align: center;
+
+    padding: 5px 8px;
+
+    font-size: 14px;
+  }
+
+
+  /* CONTENIDO */
+
+  .contenido {
+
+    padding: 20px 12px;
+  }
+
 }

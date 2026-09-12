@@ -18,7 +18,7 @@ export class Usuarios {
 
 
   private readonly apiUrl =
-  'http://localhost:8080/api/usuarios';
+  '/api/usuarios';
 
 
   constructor(

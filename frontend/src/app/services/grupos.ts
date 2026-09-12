@@ -18,11 +18,11 @@ export class Grupos {
 
 
   private readonly apiUrl =
-  'http://localhost:8080/api/grupos';
+  '/api/grupos';
 
 
   private readonly usuariosApiUrl =
-  'http://localhost:8080/api/usuarios';
+  '/api/usuarios';
 
 
   constructor(

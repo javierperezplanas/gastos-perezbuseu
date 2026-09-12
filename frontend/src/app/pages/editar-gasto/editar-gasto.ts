@@ -55,6 +55,12 @@ export class EditarGasto implements OnInit {
 
 
   /*
+   * Tipo de división del gasto.
+   */
+  tipoDivision: string = 'IGUAL';
+
+
+  /*
    * Participantes originales
    * del gasto.
    */
@@ -158,6 +164,14 @@ export class EditarGasto implements OnInit {
 
         this.grupoId =
         gasto.grupoId;
+
+
+        /*
+         * Recuperamos el tipo de división actual.
+         */
+        this.tipoDivision =
+        gasto.tipoDivision
+        ?? 'IGUAL';
 
 
         /*
@@ -352,7 +366,14 @@ export class EditarGasto implements OnInit {
        * obtenidos desde repartos.
        */
       participantesIds:
-      this.participantesIds
+      this.participantesIds,
+
+
+      /*
+       * Tipo de división seleccionado.
+       */
+      tipoDivision:
+      this.tipoDivision
 
     };
 

@@ -1,6 +1,11 @@
 services:
 
+  # =========================
+  # POSTGRESQL
+  # =========================
+
   postgres:
+
     image: postgres:17
 
     container_name: gastos-perezbuseu-postgres
@@ -8,14 +13,89 @@ services:
     restart: unless-stopped
 
     environment:
-      POSTGRES_DB: gastos_db
-      POSTGRES_USER: gastos_user
+
+      POSTGRES_DB: ${POSTGRES_DB}
+
+      POSTGRES_USER: ${POSTGRES_USER}
+
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
     ports:
+
       - "5432:5432"
 
     volumes:
+
       - postgres_data:/var/lib/postgresql/data
+
+
+  # =========================
+  # BACKEND QUARKUS
+  # =========================
+
+  backend:
+
+    build:
+
+      context: ./backend
+
+      dockerfile: Dockerfile
+
+    container_name: gastos-perezbuseu-backend
+
+    restart: unless-stopped
+
+    depends_on:
+
+      - postgres
+
+    environment:
+
+      POSTGRES_USER: ${POSTGRES_USER}
+
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      JDBC_DATABASE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+
+      CORS_ORIGINS: http://localhost:4200,http://gastos-perezbuseu.duckdns.org,https://gastos-perezbuseu.duckdns.org
+
+    ports:
+
+      - "8080:8080"
+
+    volumes:
+
+      - ./backend/uploads:/app/uploads
+
+
+  # =========================
+  # FRONTEND ANGULAR + NGINX
+  # =========================
+
+  frontend:
+
+    build:
+
+      context: ./frontend
+
+      dockerfile: Dockerfile
+
+    container_name: gastos-perezbuseu-frontend
+
+    restart: unless-stopped
+
+    depends_on:
+
+      - backend
+
+    ports:
+
+      - "4200:80"
+
+
+# =========================
+# VOLÚMENES
+# =========================
 
 volumes:
 

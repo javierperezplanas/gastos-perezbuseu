@@ -1,919 +1,637 @@
-/* =========================
- * CONTENEDOR PRINCIPAL
- * ========================= */
-
 .grupo-detalle-container {
   max-width: 1100px;
-
   margin: 0 auto;
-
   padding: 40px 20px 60px;
 }
 
-
-/* =========================
- * CABECERA
- * ========================= */
+/* CABECERA */
 
 .grupo-cabecera {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   gap: 30px;
-
   margin-bottom: 35px;
 }
 
-
 .grupo-titulo {
   display: flex;
-
   align-items: center;
-
   gap: 18px;
-
   min-width: 0;
 }
 
+.grupo-foto {
+  width: 82px;
+  height: 82px;
+  flex-shrink: 0;
+}
 
-/* =========================
- * SALDO DEL USUARIO
- * ========================= */
+.grupo-foto img,
+.grupo-icono {
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+}
 
-.grupo-saldo {
+.grupo-foto img {
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
+}
+
+.grupo-icono {
   display: flex;
-
-  flex-direction: column;
-
   align-items: center;
-
   justify-content: center;
-
-  min-width: 120px;
-
-  padding: 10px 18px;
-
-  border-radius: 10px;
-
-  background: white;
-
-  border: 1px solid #e7ecee;
+  background: linear-gradient(135deg, #e8f5f3, #d6eeeb);
+  font-size: 38px;
 }
 
-
-.grupo-saldo span {
-  color: #718096;
-
-  font-size: 13px;
-
-  font-weight: 500;
-
-  margin-bottom: 4px;
-}
-
-
-.grupo-saldo strong {
-  font-size: 20px;
-
+.grupo-titulo h1 {
+  margin: 0;
+  color: #263238;
+  font-size: 30px;
   font-weight: 700;
 }
 
+.grupo-titulo p {
+  margin: 7px 0 0;
+  color: #718096;
+  font-size: 15px;
+}
+
+.grupo-saldo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  padding: 10px 18px;
+  border: 1px solid #e7ecee;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.grupo-saldo span {
+  margin-bottom: 4px;
+  color: #718096;
+  font-size: 13px;
+}
+
+.grupo-saldo strong {
+  font-size: 20px;
+}
 
 .saldo-positivo strong {
   color: #27877e;
 }
 
-
 .saldo-negativo strong {
   color: #c05656;
 }
-
 
 .saldo-neutro strong {
   color: #718096;
 }
 
-
-/* =========================
- * FOTO DEL GRUPO
- * ========================= */
-
-.grupo-foto {
-  width: 82px;
-
-  height: 82px;
-
-  flex-shrink: 0;
-}
-
-
-.grupo-foto img {
-  width: 100%;
-
-  height: 100%;
-
-  object-fit: cover;
-
-  border-radius: 18px;
-
-  box-shadow:
-  0 8px 20px rgba(0, 0, 0, 0.12);
-}
-
-
-.grupo-icono {
-  width: 100%;
-
-  height: 100%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  border-radius: 18px;
-
-  background:
-  linear-gradient(
-    135deg,
-    #e8f5f3,
-    #d6eeeb
-  );
-
-  font-size: 38px;
-}
-
-
-/* =========================
- * INFORMACIÓN DEL GRUPO
- * ========================= */
-
-.grupo-titulo h1 {
-  margin: 0;
-
-  color: #263238;
-
-  font-size: 30px;
-
-  font-weight: 700;
-}
-
-
-.grupo-titulo p {
-  margin: 7px 0 0;
-
-  color: #718096;
-
-  font-size: 15px;
-
-  line-height: 1.5;
-}
-
-
-/* =========================
- * ACCIONES
- * ========================= */
+/* ACCIONES */
 
 .grupo-acciones {
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
   flex-shrink: 0;
 }
-
 
 .btn-editar-grupo,
 .btn-anadir {
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 7px;
-
   padding: 11px 16px;
-
   border-radius: 9px;
-
   text-decoration: none;
-
   font-size: 14px;
-
   font-weight: 600;
-
-  transition:
-  transform 0.15s,
-  box-shadow 0.15s,
-  background-color 0.15s;
 }
 
-
 .btn-editar-grupo {
-  background: white;
-
   color: #52616b;
-
+  background: #fff;
   border: 1px solid #d9e0e3;
 }
 
-
-.btn-editar-grupo:hover {
-  background: #f7f9f9;
-
-  transform: translateY(-1px);
-}
-
-
 .btn-anadir {
+  color: #fff;
   background: #2f9e94;
-
-  color: white;
-
-  box-shadow:
-  0 4px 12px rgba(47, 158, 148, 0.25);
 }
 
-
-.btn-anadir:hover {
-  background: #27877e;
-
-  transform: translateY(-1px);
-
-  box-shadow:
-  0 6px 16px rgba(47, 158, 148, 0.3);
-}
-
-
-/* =========================
- * RESUMEN
- * ========================= */
+/* RESUMEN */
 
 .resumen {
   display: grid;
-
-  grid-template-columns:
-  repeat(3, 1fr);
-
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
-
   margin-bottom: 30px;
 }
 
-
 .resumen-card {
-  position: relative;
-
-  background: white;
-
-  border: 1px solid #e7ecee;
-
-  border-radius: 14px;
-
   padding: 22px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 10px;
-
-  box-shadow:
-  0 3px 10px rgba(0, 0, 0, 0.035);
-
-  transition:
-  transform 0.15s,
-  box-shadow 0.15s;
+  border: 1px solid #e7ecee;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .035);
 }
-
-
-.resumen-card:hover {
-  transform: translateY(-2px);
-
-  box-shadow:
-  0 8px 20px rgba(0, 0, 0, 0.07);
-}
-
 
 .resumen-card span {
   color: #718096;
-
   font-size: 14px;
-
   font-weight: 500;
 }
 
-
 .resumen-card strong {
+  display: block;
+  margin-top: 10px;
   color: #263238;
-
   font-size: 26px;
-
-  font-weight: 700;
 }
 
-
-/* =========================
- * CONTENIDO PRINCIPAL
- * ========================= */
+/* CONTENIDO */
 
 .contenido {
   display: grid;
-
-  grid-template-columns:
-  minmax(0, 2fr)
-  minmax(280px, 1fr);
-
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
   gap: 25px;
-
   margin-bottom: 25px;
 }
 
-
-/* =========================
- * SECCIONES
- * ========================= */
-
 .seccion {
-  background: white;
-
-  border: 1px solid #e7ecee;
-
-  border-radius: 14px;
-
   overflow: hidden;
-
-  box-shadow:
-  0 3px 10px rgba(0, 0, 0, 0.035);
+  border: 1px solid #e7ecee;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .035);
 }
-
 
 .seccion-cabecera {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   gap: 15px;
-
   padding: 20px 22px;
-
-  border-bottom:
-  1px solid #edf0f1;
+  border-bottom: 1px solid #edf0f1;
 }
-
 
 .seccion-cabecera h2 {
   margin: 0;
-
   color: #2d3748;
-
   font-size: 18px;
-
-  font-weight: 700;
 }
-
-
-/* =========================
- * BOTÓN SECUNDARIO
- * ========================= */
 
 .btn-secundario {
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   padding: 8px 12px;
-
-  border-radius: 7px;
-
   border: 1px solid #dce3e5;
-
-  background: white;
-
+  border-radius: 7px;
+  background: #fff;
   color: #5c6b73;
-
   text-decoration: none;
-
   font-size: 13px;
-
-  font-weight: 500;
-
-  transition:
-  background-color 0.15s,
-  border-color 0.15s;
 }
 
+/* GASTOS */
 
-.btn-secundario:hover {
-  background: #f6f8f8;
-
-  border-color: #cdd6d9;
-}
-
-
-/* =========================
- * LISTA DE GASTOS
- * ========================= */
-
-.lista-gastos {
+.lista-gastos,
+.lista-miembros {
   display: flex;
-
   flex-direction: column;
 }
 
-
-/* =========================
- * GASTO
- * ========================= */
-
 .gasto {
   display: flex;
-
   align-items: center;
-
   gap: 14px;
-
   padding: 17px 22px;
-
-  border-bottom:
-  1px solid #edf0f1;
-
-  transition:
-  background-color 0.15s;
-
-  cursor: pointer;
+  border-bottom: 1px solid #edf0f1;
 }
 
-
-.gasto:last-child {
-  border-bottom: none;
+.gasto:last-child,
+.miembro:last-child {
+  border-bottom: 0;
 }
-
-
-.gasto:hover {
-  background: #fafcfc;
-}
-
-
-/* =========================
- * ICONO DEL GASTO
- * ========================= */
 
 .gasto-icono {
   width: 42px;
-
   height: 42px;
-
-  flex-shrink: 0;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
+  flex-shrink: 0;
   border-radius: 12px;
-
   background: #edf7f6;
-
   font-size: 20px;
 }
 
-
-/* =========================
- * INFORMACIÓN DEL GASTO
- * ========================= */
-
 .gasto-info {
   flex: 1;
-
   min-width: 0;
 }
 
-
 .gasto-descripcion {
-  color: #2d3748;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
   margin-bottom: 5px;
+  color: #2d3748;
+  font-size: 15px;
+  font-weight: 600;
 }
-
 
 .gasto-detalles {
   color: #8a979e;
-
   font-size: 13px;
 }
 
-
-/* =========================
- * IMPORTE Y ACCIONES
- * ========================= */
-
 .gasto-derecha {
   display: flex;
-
   align-items: center;
-
   gap: 14px;
-
   flex-shrink: 0;
 }
 
-
 .gasto-importe {
   color: #263238;
-
   font-size: 16px;
-
   font-weight: 700;
-
   white-space: nowrap;
 }
 
-
 .gasto-acciones {
   display: flex;
-
   gap: 5px;
 }
-
-
-/* =========================
- * BOTONES GASTO
- * ========================= */
 
 .btn-editar,
 .btn-eliminar {
   width: 32px;
-
   height: 32px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  border: none;
-
+  border: 0;
   border-radius: 8px;
-
   cursor: pointer;
-
-  font-size: 14px;
-
-  transition:
-  transform 0.1s,
-  background-color 0.15s;
 }
-
 
 .btn-editar {
   background: #edf7f6;
-
   color: #27877e;
 }
 
-
-.btn-editar:hover {
-  background: #dff0ee;
-}
-
-
 .btn-eliminar {
   background: #fff1f1;
-
   color: #c05656;
 }
 
-
-.btn-eliminar:hover {
-  background: #ffe4e4;
-}
-
-
-.btn-editar:active,
-.btn-eliminar:active {
-  transform: scale(0.94);
-}
-
-
-/* =========================
- * SIN GASTOS
- * ========================= */
-
-.sin-gastos {
-  text-align: center;
-
-  padding: 45px 20px;
-
-  color: #718096;
-}
-
-
-.sin-gastos-icono {
-  font-size: 38px;
-
-  margin-bottom: 12px;
-}
-
-
-.sin-gastos h3 {
-  margin: 0 0 8px;
-
-  color: #374151;
-
-  font-size: 17px;
-}
-
-
-.sin-gastos p {
-  margin: 0;
-
-  font-size: 14px;
-}
-
-
-/* =========================
- * MIEMBROS
- * ========================= */
-
-.lista-miembros {
-  display: flex;
-
-  flex-direction: column;
-}
-
+/* MIEMBROS */
 
 .miembro {
   display: flex;
-
   align-items: center;
-
   gap: 12px;
-
   padding: 16px 20px;
-
-  border-bottom:
-  1px solid #edf0f1;
-
-  transition:
-  background-color 0.15s;
+  border-bottom: 1px solid #edf0f1;
 }
-
-
-.miembro:last-child {
-  border-bottom: none;
-}
-
-
-.miembro:hover {
-  background: #fafcfc;
-}
-
-
-/* =========================
- * AVATAR
- * ========================= */
 
 .avatar {
   width: 42px;
-
   height: 42px;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background:
-  linear-gradient(
-    135deg,
-    #2f9e94,
-    #57b8ae
-  );
-
-  color: white;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2f9e94, #57b8ae);
+  color: #fff;
   font-size: 15px;
-
   font-weight: 700;
 }
 
-
 .miembro strong {
   display: block;
-
   color: #374151;
-
   font-size: 14px;
-
-  font-weight: 600;
 }
-
 
 .miembro span {
   display: block;
-
   margin-top: 4px;
-
   color: #9aa5aa;
-
   font-size: 12px;
 }
 
-
-/* =========================
- * BALANCE
- * ========================= */
+/* BALANCE */
 
 .balance-resumen {
-  background:
-  linear-gradient(
-    135deg,
-    #f0f8f7,
-    #f8fbfb
-  );
-
-  border: 1px solid #dcebea;
-
-  border-radius: 14px;
-
   padding: 24px 26px;
+  border: 1px solid #dcebea;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f0f8f7, #f8fbfb);
 }
-
 
 .balance-cabecera {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 20px;
 }
 
-
 .balance-cabecera h2 {
   margin: 0 0 6px;
-
   color: #2d3748;
-
   font-size: 20px;
 }
 
-
 .balance-cabecera p {
   margin: 0;
-
   color: #718096;
-
   font-size: 14px;
 }
-
 
 .btn-balance {
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   padding: 11px 16px;
-
   border-radius: 8px;
-
   background: #2f9e94;
-
-  color: white;
-
+  color: #fff;
   text-decoration: none;
-
   font-size: 14px;
-
   font-weight: 600;
-
   white-space: nowrap;
-
-  transition:
-  background-color 0.15s,
-  transform 0.15s;
 }
 
+/* SIN GASTOS */
 
-.btn-balance:hover {
-  background: #27877e;
-
-  transform: translateY(-1px);
+.sin-gastos {
+  padding: 45px 20px;
+  text-align: center;
+  color: #718096;
 }
 
+.sin-gastos-icono {
+  margin-bottom: 12px;
+  font-size: 38px;
+}
 
-/* =========================
- * CARGANDO
- * ========================= */
+.sin-gastos h3 {
+  margin: 0 0 8px;
+  color: #374151;
+  font-size: 17px;
+}
+
+.sin-gastos p {
+  margin: 0;
+  font-size: 14px;
+}
 
 .cargando {
-  text-align: center;
-
   padding: 80px 20px;
-
+  text-align: center;
   color: #718096;
-
   font-size: 16px;
 }
 
-
-/* =========================
- * TABLET
- * ========================= */
+/* TABLET */
 
 @media (max-width: 850px) {
-
-
   .contenido {
     grid-template-columns: 1fr;
   }
-
-
 }
 
-
-/* =========================
- * MÓVIL
- * ========================= */
+/* MÓVIL */
 
 @media (max-width: 600px) {
 
-
   .grupo-detalle-container {
-    padding: 25px 15px 40px;
+    padding: 16px 10px 25px;
   }
-
 
   .grupo-cabecera {
-    flex-direction: column;
-
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "titulo saldo"
+      "acciones acciones";
+    gap: 12px;
+    margin-bottom: 15px;
   }
 
+  .grupo-titulo {
+    grid-area: titulo;
+    gap: 11px;
+  }
+
+  .grupo-foto {
+    width: 56px;
+    height: 56px;
+  }
+
+  .grupo-foto img,
+  .grupo-icono {
+    border-radius: 14px;
+  }
+
+  .grupo-icono {
+    font-size: 27px;
+  }
+
+  .grupo-titulo h1 {
+    font-size: 22px;
+    line-height: 1.1;
+  }
+
+  .grupo-titulo p {
+    margin-top: 3px;
+    font-size: 12px;
+  }
 
   .grupo-saldo {
-    width: 100%;
-
-    box-sizing: border-box;
+    grid-area: saldo;
+    min-width: 82px;
+    padding: 7px 10px;
   }
 
+  .grupo-saldo span {
+    margin-bottom: 1px;
+    font-size: 11px;
+  }
+
+  .grupo-saldo strong {
+    font-size: 16px;
+  }
 
   .grupo-acciones {
+    grid-area: acciones;
     width: 100%;
+    gap: 8px;
   }
-
 
   .btn-editar-grupo,
   .btn-anadir {
     flex: 1;
+    min-height: 40px;
+    padding: 8px;
+    font-size: 13px;
   }
-
 
   .resumen {
-    grid-template-columns: 1fr;
+    gap: 6px;
+    margin-bottom: 15px;
   }
 
+  .resumen-card {
+    min-width: 0;
+    padding: 11px 5px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .resumen-card span {
+    display: block;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .resumen-card strong {
+    margin-top: 4px;
+    font-size: 18px;
+  }
+
+  .contenido {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .seccion {
+    border-radius: 11px;
+  }
+
+  .seccion-cabecera {
+    padding: 11px 13px;
+  }
+
+  .seccion-cabecera h2 {
+    font-size: 15px;
+  }
+
+  .btn-secundario {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  .gasto {
+    gap: 9px;
+    padding: 10px 12px;
+  }
+
+  .gasto-icono {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    font-size: 17px;
+  }
+
+  .gasto-descripcion {
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+
+  .gasto-detalles {
+    font-size: 11px;
+  }
+
+  .gasto-derecha {
+    gap: 7px;
+  }
+
+  .gasto-importe {
+    font-size: 13px;
+  }
+
+  .btn-editar,
+  .btn-eliminar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .miembro {
+    gap: 9px;
+    padding: 10px 12px;
+  }
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+  }
+
+  .miembro strong {
+    font-size: 13px;
+  }
+
+  .miembro span {
+    margin-top: 2px;
+    font-size: 10px;
+  }
+
+  .balance-resumen {
+    padding: 13px 14px;
+    border-radius: 11px;
+  }
 
   .balance-cabecera {
-    flex-direction: column;
-
-    align-items: stretch;
+    gap: 10px;
   }
 
+  .balance-cabecera h2 {
+    margin-bottom: 3px;
+    font-size: 16px;
+  }
+
+  .balance-cabecera p {
+    font-size: 11px;
+  }
 
   .btn-balance {
-    width: 100%;
+    padding: 8px 10px;
+    font-size: 11px;
   }
 
-
-  .gasto:hover {
-    opacity: 0.85;
+  .sin-gastos {
+    padding: 25px 15px;
   }
 
+  .sin-gastos-icono {
+    margin-bottom: 8px;
+    font-size: 30px;
+  }
+
+  .sin-gastos h3 {
+    margin-bottom: 5px;
+    font-size: 15px;
+  }
+
+  .sin-gastos p {
+    font-size: 12px;
+  }
+
+  .cargando {
+    padding: 50px 15px;
+    font-size: 14px;
+  }
 }

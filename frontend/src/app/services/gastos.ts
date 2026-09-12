@@ -9,11 +9,11 @@ export class Gastos {
 
 
   private apiUrl =
-  'http://localhost:8080/api/gastos';
+  '/api/gastos';
 
 
   private gruposApiUrl =
-  'http://localhost:8080/api/grupos';
+  '/api/grupos';
 
 
   constructor(
