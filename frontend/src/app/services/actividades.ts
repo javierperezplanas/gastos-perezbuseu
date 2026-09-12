@@ -30,4 +30,15 @@ export class Actividades {
 
   }
 
+
+  vaciarActividadesPorGrupo(
+    grupoId: number
+  ) {
+
+    return this.http.delete(
+      `${this.apiUrl}/grupo/${grupoId}`
+    );
+
+  }
+
 }

@@ -14,16 +14,35 @@
     </button>
 
 
-    <div>
-
-      <h1>
-        Actividad
-      </h1>
+    <div class="cabecera-titulo">
 
 
-      <p>
-        Historial de actividad del grupo
-      </p>
+      <div>
+
+        <h1>
+          Actividad
+        </h1>
+
+
+        <p>
+          Historial de actividad del grupo
+        </p>
+
+      </div>
+
+
+      <button
+        class="btn-vaciar"
+        *ngIf="
+          !cargando
+          &&
+          actividades.length > 0
+        "
+        (click)="vaciarActividad()"
+      >
+        🗑️ Vaciar actividad
+      </button>
+
 
     </div>
 

@@ -47,9 +47,9 @@ export class Actividad implements OnInit {
 
     private route: ActivatedRoute,
 
-      private router: Router,
+    private router: Router,
 
-        private actividadesService: Actividades
+    private actividadesService: Actividades
 
   ) {}
 
@@ -125,8 +125,67 @@ export class Actividad implements OnInit {
         'No se ha podido cargar la actividad.';
 
 
-          this.cargando =
-          false;
+        this.cargando =
+        false;
+
+      }
+
+    });
+
+  }
+
+
+  vaciarActividad(): void {
+
+
+    const confirmar =
+    window.confirm(
+      '¿Seguro que quieres eliminar toda la actividad? Esta acción no se puede deshacer.'
+    );
+
+
+    if (!confirmar) {
+
+      return;
+
+    }
+
+
+    this.error =
+    '';
+
+
+    this.actividadesService
+    .vaciarActividadesPorGrupo(
+      this.grupoId
+    )
+    .subscribe({
+
+      next: () => {
+
+
+        this.actividades =
+        [];
+
+
+        console.log(
+          'Actividad eliminada correctamente.'
+        );
+
+      },
+
+
+      error: (error: any) => {
+
+
+        console.error(
+          'Error vaciando la actividad:',
+          error
+        );
+
+
+        this.error =
+        'No se ha podido vaciar la actividad.';
 
       }
 

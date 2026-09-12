@@ -26,6 +26,21 @@
 }
 
 
+.cabecera-titulo {
+
+  flex: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+}
+
+
 .pagina-cabecera h1 {
 
   margin: 0 0 6px 0;
@@ -91,6 +106,44 @@
 
 
 /* =========================
+ *  BOTÓN VACIAR
+ * ========================= */
+
+.btn-vaciar {
+
+  border: 1px solid #fecaca;
+
+  background: white;
+
+  color: #dc2626;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 500;
+
+  padding: 10px 16px;
+
+  white-space: nowrap;
+
+  border-radius: 8px;
+
+  transition: all 0.2s;
+
+}
+
+
+.btn-vaciar:hover {
+
+  background: #fef2f2;
+
+  border-color: #dc2626;
+
+}
+
+
+/* =========================
  *  ESTADOS
  * ========================= */
 
@@ -105,10 +158,10 @@
   border-radius: 14px;
 
   border:
-  1px solid #e5e7eb;
+    1px solid #e5e7eb;
 
   box-shadow:
-  0 4px 15px rgba(0, 0, 0, 0.06);
+    0 4px 15px rgba(0, 0, 0, 0.06);
 
 }
 
@@ -135,10 +188,10 @@
   border-radius: 16px;
 
   border:
-  1px solid #e5e7eb;
+    1px solid #e5e7eb;
 
   box-shadow:
-  0 4px 15px rgba(0, 0, 0, 0.06);
+    0 4px 15px rgba(0, 0, 0, 0.06);
 
 }
 
@@ -185,10 +238,10 @@
   overflow: hidden;
 
   border:
-  1px solid #e5e7eb;
+    1px solid #e5e7eb;
 
   box-shadow:
-  0 5px 20px rgba(0, 0, 0, 0.07);
+    0 5px 20px rgba(0, 0, 0, 0.07);
 
 }
 
@@ -210,11 +263,11 @@
   padding: 20px 24px;
 
   border-bottom:
-  1px solid #edf0f2;
+    1px solid #edf0f2;
 
   transition:
-  background 0.2s,
-  transform 0.2s;
+    background 0.2s,
+    transform 0.2s;
 
 }
 
@@ -258,10 +311,10 @@
   flex-shrink: 0;
 
   box-shadow:
-  0 2px 5px rgba(0, 0, 0, 0.08);
+    0 2px 5px rgba(0, 0, 0, 0.08);
 
   transition:
-  transform 0.2s;
+    transform 0.2s;
 
 }
 
@@ -271,7 +324,7 @@
 ) {
 
   border-left:
-  3px solid transparent;
+    3px solid transparent;
 
 }
 
@@ -336,6 +389,83 @@
 
 
 /* =========================
+ *  TIPOS DE ACTIVIDAD
+ * ========================= */
+
+
+/* CREAR GASTO */
+
+.actividad.CREAR_GASTO {
+
+  border-left:
+    4px solid #22c55e;
+
+}
+
+
+.actividad.CREAR_GASTO
+.actividad-icono {
+
+  background: #dcfce7;
+
+}
+
+
+/* EDITAR GASTO */
+
+.actividad.EDITAR_GASTO {
+
+  border-left:
+    4px solid #3b82f6;
+
+}
+
+
+.actividad.EDITAR_GASTO
+.actividad-icono {
+
+  background: #dbeafe;
+
+}
+
+
+/* ELIMINAR GASTO */
+
+.actividad.ELIMINAR_GASTO {
+
+  border-left:
+    4px solid #ef4444;
+
+}
+
+
+.actividad.ELIMINAR_GASTO
+.actividad-icono {
+
+  background: #fee2e2;
+
+}
+
+
+/* REGISTRAR PAGO */
+
+.actividad.REGISTRAR_PAGO {
+
+  border-left:
+    4px solid #14a098;
+
+}
+
+
+.actividad.REGISTRAR_PAGO
+.actividad-icono {
+
+  background: #ccfbf1;
+
+}
+
+
+/* =========================
  *  MÓVIL
  * ========================= */
 
@@ -355,6 +485,17 @@
     gap: 12px;
 
     margin-bottom: 25px;
+
+  }
+
+
+  .cabecera-titulo {
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
 
   }
 
@@ -382,6 +523,13 @@
   }
 
 
+  .btn-vaciar {
+
+    width: 100%;
+
+  }
+
+
   .actividad {
 
     padding: 16px;
@@ -398,81 +546,6 @@
     height: 42px;
 
     font-size: 19px;
-
-  }
-  /* =========================
-   *  TIPOS DE ACTIVIDAD
-   * ========================= */
-
-
-  /* CREAR GASTO */
-
-  .actividad.CREAR_GASTO {
-
-    border-left:
-    4px solid #22c55e;
-
-  }
-
-
-  .actividad.CREAR_GASTO
-  .actividad-icono {
-
-    background: #dcfce7;
-
-  }
-
-
-  /* EDITAR GASTO */
-
-  .actividad.EDITAR_GASTO {
-
-    border-left:
-    4px solid #3b82f6;
-
-  }
-
-
-  .actividad.EDITAR_GASTO
-  .actividad-icono {
-
-    background: #dbeafe;
-
-  }
-
-
-  /* ELIMINAR GASTO */
-
-  .actividad.ELIMINAR_GASTO {
-
-    border-left:
-    4px solid #ef4444;
-
-  }
-
-
-  .actividad.ELIMINAR_GASTO
-  .actividad-icono {
-
-    background: #fee2e2;
-
-  }
-
-
-  /* REGISTRAR PAGO */
-
-  .actividad.REGISTRAR_PAGO {
-
-    border-left:
-    4px solid #14a098;
-
-  }
-
-
-  .actividad.REGISTRAR_PAGO
-  .actividad-icono {
-
-    background: #ccfbf1;
 
   }
 

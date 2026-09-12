@@ -2,10 +2,10 @@ package com.perezbuseu.gastos.actividad;
 
 import java.util.List;
 
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-
 import jakarta.ws.rs.Produces;
 
 import jakarta.ws.rs.core.MediaType;
@@ -24,7 +24,7 @@ public class ActividadResource {
     ) {
 
         this.actividadService =
-        actividadService;
+                actividadService;
 
     }
 
@@ -45,6 +45,27 @@ public class ActividadResource {
 
         return actividadService
                 .obtenerPorGrupo(
+                        grupoId
+                );
+
+    }
+
+
+    /*
+     * Borrar todas las actividades
+     * de un grupo.
+     */
+    @DELETE
+    @Path("/grupo/{grupoId}")
+    public void vaciarActividades(
+
+            @PathParam("grupoId")
+            Long grupoId
+
+    ) {
+
+        actividadService
+                .vaciarPorGrupo(
                         grupoId
                 );
 

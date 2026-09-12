@@ -18,7 +18,7 @@ public class ActividadService {
     ) {
 
         this.actividadRepository =
-        actividadRepository;
+                actividadRepository;
 
     }
 
@@ -38,16 +38,16 @@ public class ActividadService {
     ) {
 
         Actividad actividad =
-        new Actividad();
+                new Actividad();
 
         actividad.grupoId =
-        grupoId;
+                grupoId;
 
         actividad.tipo =
-        tipo;
+                tipo;
 
         actividad.descripcion =
-        descripcion;
+                descripcion;
 
 
         actividadRepository.persist(
@@ -73,6 +73,25 @@ public class ActividadService {
                         "grupoId = ?1 order by fechaHora desc",
                         grupoId
                 );
+
+    }
+
+
+    /*
+     * Borrar todas las actividades
+     * de un grupo.
+     */
+    @Transactional
+    public void vaciarPorGrupo(
+
+            Long grupoId
+
+    ) {
+
+        actividadRepository.delete(
+                "grupoId = ?1",
+                grupoId
+        );
 
     }
 
