@@ -62,21 +62,12 @@ export class Auth {
         (usuario) => {
 
 
-          /*
-           * Guardamos el usuario
-           * en el navegador.
-           */
           localStorage.setItem(
             'usuario',
             JSON.stringify(usuario)
           );
 
 
-          /*
-           * Avisamos a la aplicación
-           * de que hay un usuario
-           * conectado.
-           */
           this.usuarioSubject.next(
             usuario
           );
@@ -116,20 +107,12 @@ export class Auth {
         (usuario) => {
 
 
-          /*
-           * Guardamos el usuario
-           * en el navegador.
-           */
           localStorage.setItem(
             'usuario',
             JSON.stringify(usuario)
           );
 
 
-          /*
-           * Actualizamos el usuario
-           * conectado.
-           */
           this.usuarioSubject.next(
             usuario
           );
@@ -137,6 +120,46 @@ export class Auth {
         }
       )
 
+    );
+
+  }
+
+
+  /*
+   * Solicitar recuperación
+   * de contraseña.
+   */
+  solicitarResetPassword(
+    email: string
+  ): Observable<any> {
+
+
+    return this.http.post<any>(
+      `${this.apiUrl}/forgot-password`,
+      {
+        email
+      }
+    );
+
+  }
+
+
+  /*
+   * Restablecer contraseña
+   * usando el token del correo.
+   */
+  restablecerPassword(
+    token: string,
+    password: string
+  ): Observable<any> {
+
+
+    return this.http.post<any>(
+      `${this.apiUrl}/reset-password`,
+      {
+        token,
+        password
+      }
     );
 
   }

@@ -43,6 +43,14 @@ import {
 } from './pages/actividad/actividad';
 
 import {
+  RecuperarPassword
+} from './pages/recuperar-password/recuperar-password';
+
+import {
+  RestablecerPassword
+} from './pages/restablecer-password/restablecer-password';
+
+import {
   authGuard
 } from './guards/auth-guard';
 
@@ -56,9 +64,6 @@ export const routes: Routes = [
 
   /*
    * LOGIN
-   *
-   * Si ya hay sesión,
-   * redirige a grupos.
    */
   {
     path: 'login',
@@ -71,148 +76,161 @@ export const routes: Routes = [
   },
 
 
-/*
- * PÁGINA INICIAL
- */
-{
-  path: '',
+  /*
+   * RECUPERAR CONTRASEÑA
+   */
+  {
+    path: 'recuperar-password',
 
-  redirectTo: 'login',
-
-  pathMatch: 'full'
-},
+    component: RecuperarPassword
+  },
 
 
-/*
- * GRUPOS
- */
-{
-  path: 'grupos',
+  /*
+   * RESTABLECER CONTRASEÑA
+   */
+  {
+    path: 'restablecer-password',
 
-  component: Grupos,
-
-  canActivate: [
-    authGuard
-  ]
-},
+    component: RestablecerPassword
+  },
 
 
-/*
- * NUEVO GRUPO
- */
-{
-  path: 'grupos/nuevo',
+  /*
+   * PÁGINA INICIAL
+   */
+  {
+    path: '',
 
-  component: NuevoGrupo,
+    redirectTo: 'login',
 
-  canActivate: [
-    authGuard
-  ]
-},
+    pathMatch: 'full'
+  },
 
 
-/*
- * NUEVO GASTO
- */
-{
-  path: 'grupos/:id/nuevo-gasto',
+  /*
+   * GRUPOS
+   */
+  {
+    path: 'grupos',
 
-  component: NuevoGasto,
+    component: Grupos,
 
-  canActivate: [
-    authGuard
-  ]
-},
-
-
-/*
- * DETALLE DEL GASTO
- *
- * Se accede al pulsar
- * sobre un gasto.
- */
-{
-  path: 'grupos/:id/gastos/:gastoId',
-
-  component: GastoDetalle,
-
-  canActivate: [
-    authGuard
-  ]
-},
+    canActivate: [
+      authGuard
+    ]
+  },
 
 
-/*
- * EDITAR GASTO
- */
-{
-  path: 'grupos/:id/editar-gasto/:gastoId',
+  /*
+   * NUEVO GRUPO
+   */
+  {
+    path: 'grupos/nuevo',
 
-  component: EditarGasto,
+    component: NuevoGrupo,
 
-  canActivate: [
-    authGuard
-  ]
-},
-
-
-/*
- * EDITAR GRUPO
- */
-{
-  path: 'grupos/:id/editar',
-
-  component: EditarGrupo,
-
-  canActivate: [
-    authGuard
-  ]
-},
+    canActivate: [
+      authGuard
+    ]
+  },
 
 
-/*
- * ACTIVIDAD
- */
-{
-  path: 'grupos/:id/actividad',
+  /*
+   * NUEVO GASTO
+   */
+  {
+    path: 'grupos/:id/nuevo-gasto',
 
-  component: Actividad,
+    component: NuevoGasto,
 
-  canActivate: [
-    authGuard
-  ]
-},
-
-
-/*
- * BALANCES
- */
-{
-  path: 'grupos/:id/balances',
-
-  component: Balances,
-
-  canActivate: [
-    authGuard
-  ]
-},
+    canActivate: [
+      authGuard
+    ]
+  },
 
 
-/*
- * DETALLE DEL GRUPO
- *
- * Esta ruta debe ir después
- * de las rutas más específicas.
- */
-{
-  path: 'grupos/:id',
+  /*
+   * DETALLE DEL GASTO
+   */
+  {
+    path: 'grupos/:id/gastos/:gastoId',
 
-  component: GrupoDetalle,
+    component: GastoDetalle,
 
-  canActivate: [
-    authGuard
-  ]
-}
+    canActivate: [
+      authGuard
+    ]
+  },
 
+
+  /*
+   * EDITAR GASTO
+   */
+  {
+    path: 'grupos/:id/editar-gasto/:gastoId',
+
+    component: EditarGasto,
+
+    canActivate: [
+      authGuard
+    ]
+  },
+
+
+  /*
+   * EDITAR GRUPO
+   */
+  {
+    path: 'grupos/:id/editar',
+
+    component: EditarGrupo,
+
+    canActivate: [
+      authGuard
+    ]
+  },
+
+
+  /*
+   * ACTIVIDAD
+   */
+  {
+    path: 'grupos/:id/actividad',
+
+    component: Actividad,
+
+    canActivate: [
+      authGuard
+    ]
+  },
+
+
+  /*
+   * BALANCES
+   */
+  {
+    path: 'grupos/:id/balances',
+
+    component: Balances,
+
+    canActivate: [
+      authGuard
+    ]
+  },
+
+
+  /*
+   * DETALLE DEL GRUPO
+   */
+  {
+    path: 'grupos/:id',
+
+    component: GrupoDetalle,
+
+    canActivate: [
+      authGuard
+    ]
+  }
 
 ];

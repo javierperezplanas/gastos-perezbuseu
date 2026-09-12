@@ -3,6 +3,8 @@ package com.perezbuseu.gastos.auth;
 import com.perezbuseu.gastos.auth.dto.LoginRequest;
 import com.perezbuseu.gastos.auth.dto.LoginResponse;
 import com.perezbuseu.gastos.auth.dto.RegisterRequest;
+import com.perezbuseu.gastos.auth.dto.RestablecerPasswordRequest;
+import com.perezbuseu.gastos.auth.dto.SolicitarResetPasswordRequest;
 
 import jakarta.inject.Inject;
 
@@ -28,9 +30,6 @@ public class AuthResource {
     AuthService authService;
 
 
-    /*
-     * Iniciar sesión.
-     */
     @POST
     @Path("/login")
     public LoginResponse login(
@@ -44,9 +43,6 @@ public class AuthResource {
     }
 
 
-    /*
-     * Registrar un nuevo usuario.
-     */
     @POST
     @Path("/register")
     public LoginResponse register(
@@ -55,6 +51,33 @@ public class AuthResource {
 
         return authService.register(
                 request
+        );
+
+    }
+
+
+    @POST
+    @Path("/forgot-password")
+    public void forgotPassword(
+            SolicitarResetPasswordRequest request
+    ) {
+
+        authService.solicitarResetPassword(
+                request.email
+        );
+
+    }
+
+
+    @POST
+    @Path("/reset-password")
+    public void resetPassword(
+            RestablecerPasswordRequest request
+    ) {
+
+        authService.restablecerPassword(
+                request.token,
+                request.password
         );
 
     }

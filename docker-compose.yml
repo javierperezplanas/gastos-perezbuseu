@@ -57,7 +57,19 @@ services:
 
       JDBC_DATABASE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
 
-      CORS_ORIGINS: http://localhost:4200,http://gastos-perezbuseu.duckdns.org,https://gastos-perezbuseu.duckdns.org
+      CORS_ORIGINS: ${CORS_ORIGINS}
+
+      MAIL_HOST: ${MAIL_HOST}
+
+      MAIL_PORT: ${MAIL_PORT}
+
+      MAIL_USERNAME: ${MAIL_USERNAME}
+
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+
+      MAIL_FROM: ${MAIL_FROM}
+
+      PUBLIC_APP_URL: ${PUBLIC_APP_URL}
 
     ports:
 

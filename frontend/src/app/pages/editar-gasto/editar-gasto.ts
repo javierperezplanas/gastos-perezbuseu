@@ -80,9 +80,9 @@ export class EditarGasto implements OnInit {
 
     private route: ActivatedRoute,
 
-      private router: Router,
+    private router: Router,
 
-        private gastosService: Gastos
+    private gastosService: Gastos
 
   ) {}
 
@@ -189,6 +189,29 @@ export class EditarGasto implements OnInit {
 
 
         /*
+         * En algunos tipos de división,
+         * como TOTAL_A_PAGADOR, el pagador
+         * puede no aparecer en los repartos.
+         *
+         * Lo añadimos para que, si se cambia
+         * posteriormente a IGUAL, participe
+         * correctamente en el reparto.
+         */
+        if (
+          this.pagador &&
+          !this.participantesIds.includes(
+            this.pagador
+          )
+        ) {
+
+          this.participantesIds.push(
+            this.pagador
+          );
+
+        }
+
+
+        /*
          * El backend devuelve
          * fechaHora.
          *
@@ -204,14 +227,14 @@ export class EditarGasto implements OnInit {
         : '';
 
 
-    console.log(
-      'Participantes:',
-      this.participantesIds
-    );
+        console.log(
+          'Participantes:',
+          this.participantesIds
+        );
 
 
-    this.cargando =
-    false;
+        this.cargando =
+        false;
 
       },
 
@@ -229,8 +252,8 @@ export class EditarGasto implements OnInit {
         'No se ha podido cargar el gasto.';
 
 
-          this.cargando =
-          false;
+        this.cargando =
+        false;
 
       }
 
@@ -362,8 +385,7 @@ export class EditarGasto implements OnInit {
 
 
       /*
-       * Enviamos los participantes
-       * obtenidos desde repartos.
+       * Enviamos los participantes.
        */
       participantesIds:
       this.participantesIds,

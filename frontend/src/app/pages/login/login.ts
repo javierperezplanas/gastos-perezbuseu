@@ -66,7 +66,7 @@ export class Login {
 
     private router: Router,
 
-      private authService: Auth
+    private authService: Auth
 
   ) {}
 
@@ -82,15 +82,8 @@ export class Login {
     !this.modoRegistro;
 
 
-    /*
-     * Limpiamos mensajes.
-     */
     this.error = '';
 
-
-    /*
-     * Limpiamos campos.
-     */
     this.nombre = '';
 
     this.email = '';
@@ -98,6 +91,19 @@ export class Login {
     this.password = '';
 
     this.confirmarPassword = '';
+
+  }
+
+
+  /*
+   * Ir a recuperar contraseña.
+   */
+  recuperarPassword(): void {
+
+
+    this.router.navigate([
+      '/recuperar-password'
+    ]);
 
   }
 
@@ -111,9 +117,6 @@ export class Login {
     this.error = '';
 
 
-    /*
-     * Comprobamos los datos.
-     */
     if (
       !this.email.trim()
       ||
@@ -123,7 +126,7 @@ export class Login {
       this.error =
       'Introduce el email y la contraseña.';
 
-    return;
+      return;
 
     }
 
@@ -135,7 +138,7 @@ export class Login {
     this.authService
     .login(
       this.email.trim(),
-           this.password
+      this.password
     )
     .subscribe({
 
@@ -152,9 +155,6 @@ export class Login {
         false;
 
 
-        /*
-         * Vamos a los grupos.
-         */
         this.router.navigate([
           '/grupos'
         ]);
@@ -194,9 +194,6 @@ export class Login {
     this.error = '';
 
 
-    /*
-     * Comprobamos el nombre.
-     */
     if (
       !this.nombre.trim()
     ) {
@@ -204,14 +201,11 @@ export class Login {
       this.error =
       'Introduce tu nombre.';
 
-    return;
+      return;
 
     }
 
 
-    /*
-     * Comprobamos el email.
-     */
     if (
       !this.email.trim()
     ) {
@@ -219,14 +213,11 @@ export class Login {
       this.error =
       'Introduce tu email.';
 
-    return;
+      return;
 
     }
 
 
-    /*
-     * Comprobamos la contraseña.
-     */
     if (
       !this.password
     ) {
@@ -239,10 +230,6 @@ export class Login {
     }
 
 
-    /*
-     * Comprobamos que las
-     * contraseñas coincidan.
-     */
     if (
       this.password !==
       this.confirmarPassword
@@ -260,14 +247,11 @@ export class Login {
     true;
 
 
-    /*
-     * Registramos al usuario.
-     */
     this.authService
     .register(
       this.nombre.trim(),
-              this.email.trim(),
-              this.password
+      this.email.trim(),
+      this.password
     )
     .subscribe({
 
@@ -284,11 +268,6 @@ export class Login {
         false;
 
 
-        /*
-         * Auth ya ha guardado
-         * el usuario y ha iniciado
-         * la sesión automáticamente.
-         */
         this.router.navigate([
           '/grupos'
         ]);
@@ -309,11 +288,6 @@ export class Login {
         false;
 
 
-        /*
-         * Mostramos el mensaje
-         * que envía el backend
-         * si está disponible.
-         */
         this.error =
         error?.error?.details
         ||

@@ -185,6 +185,43 @@ public class GastoService {
     ) {
 
 
+        /*
+         * ========================================
+         * INFORMACIÓN DE DEPURACIÓN
+         * ========================================
+         *
+         * Mostramos exactamente lo que recibe
+         * el backend desde Angular.
+         */
+        System.out.println(
+                "========================================"
+        );
+
+        System.out.println(
+                "ACTUALIZANDO GASTO: "
+                        + gastoId
+        );
+
+        System.out.println(
+                "TIPO DIVISION: "
+                        + request.tipoDivision
+        );
+
+        System.out.println(
+                "PARTICIPANTES: "
+                        + request.participantesIds
+        );
+
+        System.out.println(
+                "PAGADOR: "
+                        + request.pagadorId
+        );
+
+        System.out.println(
+                "========================================"
+        );
+
+
         validarParticipantes(
                 request
         );

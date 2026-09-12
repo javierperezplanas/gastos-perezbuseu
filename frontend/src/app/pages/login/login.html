@@ -122,6 +122,27 @@
       </div>
 
 
+      <!-- RECUPERAR CONTRASEÑA -->
+
+      @if (!modoRegistro) {
+
+        <div class="recuperar-password">
+
+          <button
+            type="button"
+            (click)="recuperarPassword()"
+            [disabled]="cargando"
+          >
+
+            ¿Has olvidado tu contraseña?
+
+          </button>
+
+        </div>
+
+      }
+
+
       <!-- CONFIRMAR CONTRASEÑA -->
 
       @if (modoRegistro) {
