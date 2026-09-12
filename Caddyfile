@@ -1,0 +1,7 @@
+gastos-perezbuseu.duckdns.org {
+
+    reverse_proxy /api/* backend:8080
+
+    reverse_proxy frontend:80
+
+}
