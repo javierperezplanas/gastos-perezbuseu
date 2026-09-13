@@ -1,0 +1,396 @@
+<div class="estadisticas-mensual-container">
+
+
+  <!-- =====================
+       CABECERA
+  ====================== -->
+
+  <div class="pagina-cabecera">
+
+
+    <button
+      type="button"
+      class="btn-volver"
+      (click)="volver()"
+    >
+
+      ← Volver a gráficos
+
+    </button>
+
+
+    <div class="titulo">
+
+
+      <h1>
+
+        📅 Gastos por mes
+
+      </h1>
+
+
+      <p>
+
+        Consulta la evolución
+        de los gastos mes a mes.
+
+      </p>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================
+       CARGANDO
+  ====================== -->
+
+  <div
+    class="cargando"
+    *ngIf="cargando"
+  >
+
+    Cargando estadísticas...
+
+  </div>
+
+
+  <!-- =====================
+       ERROR
+  ====================== -->
+
+  <div
+    class="error"
+    *ngIf="!cargando && error"
+  >
+
+    {{ error }}
+
+  </div>
+
+
+  <!-- =====================
+       CONTENIDO
+  ====================== -->
+
+  <div
+    class="estadisticas-contenido"
+    *ngIf="!cargando && !error"
+  >
+
+
+    <!-- =====================
+         SIN GASTOS
+    ====================== -->
+
+    <div
+      class="sin-gastos"
+      *ngIf="gastos.length === 0"
+    >
+
+
+      <div class="sin-gastos-icono">
+
+        📅
+
+      </div>
+
+
+      <h2>
+
+        Todavía no hay gastos
+
+      </h2>
+
+
+      <p>
+
+        Añade algunos gastos al grupo
+        para poder consultar
+        la evolución mensual.
+
+      </p>
+
+
+    </div>
+
+
+    <!-- =====================
+         ESTADÍSTICAS
+    ====================== -->
+
+    <div
+      *ngIf="gastos.length > 0"
+    >
+
+
+      <!-- =====================
+           RESUMEN
+      ====================== -->
+
+      <div class="resumen">
+
+
+        <!-- TOTAL -->
+
+        <div class="resumen-card">
+
+
+          <div class="resumen-icono">
+
+            💰
+
+          </div>
+
+
+          <div>
+
+
+            <span>
+
+              Total gastado
+
+            </span>
+
+
+            <strong>
+
+              {{ totalGastado | number:'1.2-2' }} €
+
+            </strong>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- GASTOS -->
+
+        <div class="resumen-card">
+
+
+          <div class="resumen-icono">
+
+            🧾
+
+          </div>
+
+
+          <div>
+
+
+            <span>
+
+              Número de gastos
+
+            </span>
+
+
+            <strong>
+
+              {{ gastos.length }}
+
+            </strong>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- MES ACTUAL -->
+
+        <div class="resumen-card">
+
+
+          <div class="resumen-icono">
+
+            📆
+
+          </div>
+
+
+          <div>
+
+
+            <span>
+
+              Mes con más gasto
+
+            </span>
+
+
+            <strong>
+
+              {{ mesMayorGasto }}
+
+            </strong>
+
+
+            <small>
+
+              {{ importeMayorGasto | number:'1.2-2' }} €
+
+            </small>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================
+           GRÁFICO
+      ====================== -->
+
+      <div class="grafico-card">
+
+
+        <div class="grafico-cabecera">
+
+
+          <div>
+
+
+            <h2>
+
+              📈 Evolución mensual
+
+            </h2>
+
+
+            <p>
+
+              Total gastado
+              en cada mes.
+
+            </p>
+
+
+          </div>
+
+
+        </div>
+
+
+        <div class="grafico-contenedor">
+
+
+          <canvas
+            #graficoMensual
+          >
+
+          </canvas>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================
+           DESGLOSE MENSUAL
+      ====================== -->
+
+      <div class="meses-card">
+
+
+        <div class="meses-cabecera">
+
+
+          <h2>
+
+            📋 Desglose por meses
+
+          </h2>
+
+
+          <p>
+
+            Consulta el gasto total
+            de cada mes.
+
+          </p>
+
+
+        </div>
+
+
+        <div class="lista-meses">
+
+
+          <div
+            class="mes-item"
+            *ngFor="let mes of meses"
+          >
+
+
+            <div class="mes-info">
+
+
+              <div class="mes-icono">
+
+                📅
+
+              </div>
+
+
+              <div>
+
+
+                <strong>
+
+                  {{ mes.nombre }}
+
+                </strong>
+
+
+                <span>
+
+                  {{ mes.numeroGastos }}
+
+                  gastos
+
+                </span>
+
+
+              </div>
+
+
+            </div>
+
+
+            <div class="mes-importe">
+
+
+              {{ mes.total | number:'1.2-2' }} €
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>

@@ -1,0 +1,431 @@
+<div class="estadisticas-container">
+
+
+  <!-- =====================
+       CABECERA
+  ====================== -->
+
+  <div class="pagina-cabecera">
+
+
+    <button
+      type="button"
+      class="btn-volver"
+      (click)="volver()"
+    >
+
+      ← Volver al grupo
+
+    </button>
+
+
+    <div class="titulo">
+
+
+      <h1>
+
+        📊 Gráficos
+
+      </h1>
+
+
+      <p>
+
+        Consulta las estadísticas
+        y tendencias de gasto del grupo.
+
+      </p>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================
+       CARGANDO
+  ====================== -->
+
+  <div
+    class="cargando"
+    *ngIf="cargando"
+  >
+
+    Cargando estadísticas...
+
+  </div>
+
+
+  <!-- =====================
+       ERROR
+  ====================== -->
+
+  <div
+    class="error"
+    *ngIf="!cargando && error"
+  >
+
+    {{ error }}
+
+  </div>
+
+
+  <!-- =====================
+       CONTENIDO
+  ====================== -->
+
+  <div
+    class="estadisticas-contenido"
+    *ngIf="!cargando && !error"
+  >
+
+
+    <!-- =====================
+         SIN GASTOS
+    ====================== -->
+
+    <div
+      class="sin-gastos"
+      *ngIf="gastos.length === 0"
+    >
+
+
+      <div class="sin-gastos-icono">
+
+        📊
+
+      </div>
+
+
+      <h2>
+
+        Todavía no hay estadísticas
+
+      </h2>
+
+
+      <p>
+
+        Añade algunos gastos al grupo
+        para poder consultar las estadísticas.
+
+      </p>
+
+
+    </div>
+
+
+    <!-- =====================
+         CONTENIDO
+    ====================== -->
+
+    <div
+      *ngIf="gastos.length > 0"
+    >
+
+
+      <!-- =====================
+           RESUMEN
+      ====================== -->
+
+      <div class="resumen">
+
+
+        <!-- TOTAL GASTADO -->
+
+        <div class="resumen-card">
+
+
+          <div class="resumen-icono">
+
+            💰
+
+          </div>
+
+
+          <div>
+
+
+            <span>
+
+              Total gastado
+
+            </span>
+
+
+            <strong>
+
+              {{ totalGastado | number:'1.2-2' }} €
+
+            </strong>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- NÚMERO DE GASTOS -->
+
+        <div class="resumen-card">
+
+
+          <div class="resumen-icono">
+
+            🧾
+
+          </div>
+
+
+          <div>
+
+
+            <span>
+
+              Número de gastos
+
+            </span>
+
+
+            <strong>
+
+              {{ gastos.length }}
+
+            </strong>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- GASTO MEDIO -->
+
+        <div class="resumen-card">
+
+
+          <div class="resumen-icono">
+
+            📊
+
+          </div>
+
+
+          <div>
+
+
+            <span>
+
+              Gasto medio
+
+            </span>
+
+
+            <strong>
+
+              {{ gastoMedio | number:'1.2-2' }} €
+
+            </strong>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================
+           SELECCIONAR GRÁFICO
+      ====================== -->
+
+      <div class="seccion-graficos">
+
+
+        <div class="seccion-titulo">
+
+
+          <h2>
+
+            ¿Qué quieres consultar?
+
+          </h2>
+
+
+          <p>
+
+            Selecciona una estadística
+            para ver el gráfico en detalle.
+
+          </p>
+
+
+        </div>
+
+
+        <!-- =====================
+             BOTONES
+        ====================== -->
+
+        <div class="graficos-menu">
+
+
+          <!-- CATEGORÍAS -->
+
+          <button
+            type="button"
+            class="grafico-opcion"
+            (click)="verCategorias()"
+          >
+
+
+            <div class="grafico-opcion-icono">
+
+              🥧
+
+            </div>
+
+
+            <div class="grafico-opcion-contenido">
+
+
+              <h3>
+
+                Gastos por categoría
+
+              </h3>
+
+
+              <p>
+
+                Consulta cuánto dinero
+                se ha gastado en cada categoría.
+
+              </p>
+
+
+            </div>
+
+
+            <div class="grafico-opcion-flecha">
+
+              →
+
+            </div>
+
+
+          </button>
+
+
+          <!-- GASTOS POR MES -->
+
+          <button
+            type="button"
+            class="grafico-opcion"
+            (click)="verMensual()"
+          >
+
+
+            <div class="grafico-opcion-icono">
+
+              📅
+
+            </div>
+
+
+            <div class="grafico-opcion-contenido">
+
+
+              <h3>
+
+                Gastos por mes
+
+              </h3>
+
+
+              <p>
+
+                Consulta la evolución
+                de los gastos mes a mes.
+
+              </p>
+
+
+            </div>
+
+
+            <div class="grafico-opcion-flecha">
+
+              →
+
+            </div>
+
+
+          </button>
+
+
+          <!-- GASTOS POR PERSONA -->
+
+          <button
+            type="button"
+            class="grafico-opcion"
+            (click)="verPersonas()"
+          >
+
+
+            <div class="grafico-opcion-icono">
+
+              👥
+
+            </div>
+
+
+            <div class="grafico-opcion-contenido">
+
+
+              <h3>
+
+                Gastos por persona
+
+              </h3>
+
+
+              <p>
+
+                Consulta cuánto ha pagado
+                cada miembro del grupo.
+
+              </p>
+
+
+            </div>
+
+
+            <div class="grafico-opcion-flecha">
+
+              →
+
+            </div>
+
+
+          </button>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>

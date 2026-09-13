@@ -1,0 +1,385 @@
+<div class="estadisticas-personas-container">
+
+  <!-- =====================
+       CABECERA
+  ====================== -->
+
+  <div class="pagina-cabecera">
+
+    <button
+      type="button"
+      class="btn-volver"
+      (click)="volver()"
+    >
+
+      ← Volver a gráficos
+
+    </button>
+
+
+    <div class="titulo">
+
+      <h1>
+
+        👥 Gastos por persona
+
+      </h1>
+
+
+      <p>
+
+        Consulta cuánto dinero
+        ha pagado cada miembro del grupo.
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================
+       CARGANDO
+  ====================== -->
+
+  <div
+    class="cargando"
+    *ngIf="cargando"
+  >
+
+    Cargando estadísticas...
+
+  </div>
+
+
+  <!-- =====================
+       ERROR
+  ====================== -->
+
+  <div
+    class="error"
+    *ngIf="!cargando && error"
+  >
+
+    {{ error }}
+
+  </div>
+
+
+  <!-- =====================
+       CONTENIDO
+  ====================== -->
+
+  <div
+    class="estadisticas-contenido"
+    *ngIf="!cargando && !error"
+  >
+
+
+    <!-- =====================
+         SIN GASTOS
+    ====================== -->
+
+    <div
+      class="sin-gastos"
+      *ngIf="gastos.length === 0"
+    >
+
+      <div class="sin-gastos-icono">
+
+        👥
+
+      </div>
+
+
+      <h2>
+
+        Todavía no hay gastos
+
+      </h2>
+
+
+      <p>
+
+        Añade algunos gastos al grupo
+        para poder consultar cuánto
+        ha pagado cada persona.
+
+      </p>
+
+    </div>
+
+
+    <!-- =====================
+         ESTADÍSTICAS
+    ====================== -->
+
+    <div
+      *ngIf="gastos.length > 0"
+    >
+
+
+      <!-- =====================
+           RESUMEN
+      ====================== -->
+
+      <div class="resumen">
+
+
+        <!-- TOTAL GASTADO -->
+
+        <div class="resumen-card">
+
+          <div class="resumen-icono">
+
+            💰
+
+          </div>
+
+
+          <div>
+
+            <span>
+
+              Total gastado
+
+            </span>
+
+
+            <strong>
+
+              {{ totalGastado | number:'1.2-2' }} €
+
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- NÚMERO DE GASTOS -->
+
+        <div class="resumen-card">
+
+          <div class="resumen-icono">
+
+            🧾
+
+          </div>
+
+
+          <div>
+
+            <span>
+
+              Número de gastos
+
+            </span>
+
+
+            <strong>
+
+              {{ gastos.length }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- PERSONA QUE MÁS HA PAGADO -->
+
+        <div class="resumen-card">
+
+          <div class="resumen-icono">
+
+            🏆
+
+          </div>
+
+
+          <div>
+
+            <span>
+
+              Quien más ha pagado
+
+            </span>
+
+
+            <strong>
+
+              {{ personaMayorGasto }}
+
+            </strong>
+
+
+            <small>
+
+              {{ importeMayorGasto | number:'1.2-2' }} €
+
+            </small>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================
+           GRÁFICO
+      ====================== -->
+
+      <div class="grafico-card">
+
+
+        <div class="grafico-cabecera">
+
+          <div>
+
+            <h2>
+
+              📊 Total pagado por persona
+
+            </h2>
+
+
+            <p>
+
+              Comparativa del dinero
+              pagado por cada miembro.
+
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="grafico-contenedor">
+
+          <canvas
+            #graficoPersonas
+          >
+
+          </canvas>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================
+           DESGLOSE POR PERSONA
+      ====================== -->
+
+      <div class="personas-card">
+
+
+        <div class="personas-cabecera">
+
+          <h2>
+
+            📋 Desglose por persona
+
+          </h2>
+
+
+          <p>
+
+            Consulta el total pagado
+            y el número de gastos
+            de cada miembro.
+
+          </p>
+
+        </div>
+
+
+        <div class="lista-personas">
+
+
+          <div
+            class="persona-item"
+            *ngFor="let persona of personas"
+          >
+
+
+            <!-- INFORMACIÓN -->
+
+            <div class="persona-info">
+
+
+              <div class="persona-icono">
+
+                👤
+
+              </div>
+
+
+              <div class="persona-datos">
+
+                <strong>
+
+                  {{ persona.nombre }}
+
+                </strong>
+
+
+                <span>
+
+                  {{ persona.numeroGastos }}
+
+                  <ng-container
+                    *ngIf="persona.numeroGastos === 1"
+                  >
+
+                    gasto
+
+                  </ng-container>
+
+                  <ng-container
+                    *ngIf="persona.numeroGastos !== 1"
+                  >
+
+                    gastos
+
+                  </ng-container>
+
+                </span>
+
+              </div>
+
+
+            </div>
+
+
+            <!-- IMPORTE -->
+
+            <div class="persona-importe">
+
+              {{ persona.total | number:'1.2-2' }} €
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>

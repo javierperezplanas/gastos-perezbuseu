@@ -81,9 +81,13 @@
   justify-content: center;
 
   background: linear-gradient(
+
     135deg,
+
     #e8f5f3,
+
     #d6eeeb
+
   );
 
   font-size: 38px;
@@ -265,10 +269,15 @@
   background: #fff;
 
   box-shadow: 0 3px 10px rgba(
+
     0,
+
     0,
+
     0,
+
     .035
+
   );
 
 }
@@ -320,10 +329,15 @@
   background: #fff;
 
   box-shadow: 0 3px 10px rgba(
+
     0,
+
     0,
+
     0,
+
     .035
+
   );
 
 }
@@ -357,7 +371,24 @@
 }
 
 
-.btn-secundario {
+/* =====================
+   ACCIONES DE GASTOS
+===================== */
+
+.seccion-acciones {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+}
+
+
+/* BOTÓN GRÁFICOS */
+
+.btn-graficos {
 
   display: inline-flex;
 
@@ -365,19 +396,108 @@
 
   justify-content: center;
 
-  padding: 8px 12px;
+  gap: 7px;
 
-  border: 1px solid #dce3e5;
+  padding: 10px 15px;
 
-  border-radius: 7px;
+  border-radius: 9px;
 
-  background: #fff;
+  background: #2f9e94;
 
-  color: #5c6b73;
+  color: #fff;
 
   text-decoration: none;
 
-  font-size: 13px;
+  font-size: 14px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  box-shadow: 0 3px 8px rgba(
+
+    47,
+
+    158,
+
+    148,
+
+    .20
+
+  );
+
+  transition:
+
+    transform .15s ease,
+
+    box-shadow .15s ease;
+
+}
+
+
+.btn-graficos:hover {
+
+  transform: translateY(-1px);
+
+  box-shadow: 0 5px 12px rgba(
+
+    47,
+
+    158,
+
+    148,
+
+    .28
+
+  );
+
+}
+
+
+/* BOTÓN ACTIVIDAD */
+
+.btn-actividad {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 10px 15px;
+
+  border: 1px solid #c8dedb;
+
+  border-radius: 9px;
+
+  background: #edf7f6;
+
+  color: #27877e;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  transition:
+
+    background .15s ease,
+
+    transform .15s ease;
+
+}
+
+
+.btn-actividad:hover {
+
+  background: #e2f1ef;
+
+  transform: translateY(-1px);
 
 }
 
@@ -633,9 +753,13 @@
   border-radius: 14px;
 
   background: linear-gradient(
+
     135deg,
+
     #f0f8f7,
+
     #f8fbfb
+
   );
 
 }
@@ -960,19 +1084,32 @@
 
     padding: 11px 13px;
 
+    align-items: flex-start;
+
   }
 
 
   .seccion-cabecera h2 {
+
+    padding-top: 8px;
 
     font-size: 15px;
 
   }
 
 
-  .btn-secundario {
+  .seccion-acciones {
 
-    padding: 6px 8px;
+    gap: 6px;
+
+  }
+
+
+  .btn-graficos,
+
+  .btn-actividad {
+
+    padding: 8px 9px;
 
     font-size: 11px;
 

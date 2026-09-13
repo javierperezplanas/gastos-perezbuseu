@@ -43,6 +43,22 @@ import {
 } from './pages/actividad/actividad';
 
 import {
+  Estadisticas
+} from './pages/estadisticas/estadisticas';
+
+import {
+  EstadisticasMensual
+} from './pages/estadisticas-mensual/estadisticas-mensual';
+
+import {
+  EstadisticasPersonas
+} from './pages/estadisticas-personas/estadisticas-personas';
+
+import {
+  EstadisticasCategorias
+} from './pages/estadisticas-categorias/estadisticas-categorias';
+
+import {
   RecuperarPassword
 } from './pages/recuperar-password/recuperar-password';
 
@@ -213,6 +229,62 @@ export const routes: Routes = [
     path: 'grupos/:id/balances',
 
     component: Balances,
+
+    canActivate: [
+      authGuard
+    ]
+  },
+
+
+  /*
+   * GASTOS POR MES
+   */
+  {
+    path: 'grupos/:id/estadisticas/mensual',
+
+    component: EstadisticasMensual,
+
+    canActivate: [
+      authGuard
+    ]
+  },
+
+
+  /*
+   * GASTOS POR PERSONA
+   */
+  {
+    path: 'grupos/:id/estadisticas/personas',
+
+    component: EstadisticasPersonas,
+
+    canActivate: [
+      authGuard
+    ]
+  },
+
+
+  /*
+   * GASTOS POR CATEGORÍA
+   */
+  {
+    path: 'grupos/:id/estadisticas/categorias',
+
+    component: EstadisticasCategorias,
+
+    canActivate: [
+      authGuard
+    ]
+  },
+
+
+  /*
+   * ESTADÍSTICAS
+   */
+  {
+    path: 'grupos/:id/estadisticas',
+
+    component: Estadisticas,
 
     canActivate: [
       authGuard

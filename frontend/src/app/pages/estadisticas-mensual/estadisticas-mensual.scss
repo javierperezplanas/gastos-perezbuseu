@@ -1,0 +1,799 @@
+/* =====================
+   CONTENEDOR PRINCIPAL
+===================== */
+
+.estadisticas-mensual-container {
+
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 40px 20px 60px;
+
+}
+
+
+/* =====================
+   CABECERA
+===================== */
+
+.pagina-cabecera {
+
+  margin-bottom: 30px;
+
+}
+
+
+.btn-volver {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-bottom: 18px;
+
+  padding: 9px 14px;
+
+  border: 1px solid #dce3e5;
+
+  border-radius: 8px;
+
+  background: #ffffff;
+
+  color: #5c6b73;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+
+}
+
+
+.btn-volver:hover {
+
+  background: #f8fbfb;
+
+  border-color: #bfcacc;
+
+  transform: translateY(-1px);
+
+}
+
+
+.titulo h1 {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin: 0;
+
+  color: #263238;
+
+  font-size: 30px;
+
+  font-weight: 700;
+
+}
+
+
+.titulo p {
+
+  margin: 8px 0 0;
+
+  color: #718096;
+
+  font-size: 15px;
+
+}
+
+
+/* =====================
+   CONTENIDO
+===================== */
+
+.estadisticas-contenido {
+
+  width: 100%;
+
+}
+
+
+/* =====================
+   CARGANDO
+===================== */
+
+.cargando {
+
+  padding: 80px 20px;
+
+  color: #718096;
+
+  text-align: center;
+
+  font-size: 16px;
+
+}
+
+
+/* =====================
+   ERROR
+===================== */
+
+.error {
+
+  padding: 16px 18px;
+
+  border: 1px solid #f3caca;
+
+  border-radius: 10px;
+
+  background: #fff5f5;
+
+  color: #c05656;
+
+  font-size: 14px;
+
+}
+
+
+/* =====================
+   RESUMEN
+===================== */
+
+.resumen {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 18px;
+
+  margin-bottom: 25px;
+
+}
+
+
+/* =====================
+   TARJETAS RESUMEN
+===================== */
+
+.resumen-card {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  min-width: 0;
+
+  padding: 20px;
+
+  border: 1px solid #e7ecee;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 10px
+    rgba(0, 0, 0, 0.04);
+
+}
+
+
+.resumen-icono {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 50px;
+
+  height: 50px;
+
+  border-radius: 13px;
+
+  background: #edf7f6;
+
+  font-size: 23px;
+
+}
+
+
+.resumen-card span {
+
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #718096;
+
+  font-size: 13px;
+
+}
+
+
+.resumen-card strong {
+
+  display: block;
+
+  overflow: hidden;
+
+  color: #263238;
+
+  font-size: 19px;
+
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+}
+
+
+.resumen-card small {
+
+  display: block;
+
+  margin-top: 4px;
+
+  color: #2f9e94;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+}
+
+
+/* =====================
+   TARJETA GRÁFICO
+===================== */
+
+.grafico-card {
+
+  margin-bottom: 25px;
+
+  padding: 25px;
+
+  border: 1px solid #e7ecee;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 10px
+    rgba(0, 0, 0, 0.04);
+
+}
+
+
+/* =====================
+   CABECERA GRÁFICO
+===================== */
+
+.grafico-cabecera {
+
+  margin-bottom: 22px;
+
+}
+
+
+.grafico-cabecera h2 {
+
+  margin: 0 0 6px;
+
+  color: #2d3748;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+}
+
+
+.grafico-cabecera p {
+
+  margin: 0;
+
+  color: #718096;
+
+  font-size: 14px;
+
+}
+
+
+/* =====================
+   CONTENEDOR GRÁFICO
+===================== */
+
+.grafico-contenedor {
+
+  position: relative;
+
+  width: 100%;
+
+  height: 420px;
+
+}
+
+
+/* =====================
+   TARJETA MESES
+===================== */
+
+.meses-card {
+
+  padding: 25px;
+
+  border: 1px solid #e7ecee;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 10px
+    rgba(0, 0, 0, 0.04);
+
+}
+
+
+/* =====================
+   CABECERA MESES
+===================== */
+
+.meses-cabecera {
+
+  margin-bottom: 20px;
+
+}
+
+
+.meses-cabecera h2 {
+
+  margin: 0 0 6px;
+
+  color: #2d3748;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+}
+
+
+.meses-cabecera p {
+
+  margin: 0;
+
+  color: #718096;
+
+  font-size: 14px;
+
+}
+
+
+/* =====================
+   LISTA DE MESES
+===================== */
+
+.lista-meses {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+}
+
+
+/* =====================
+   ELEMENTO MES
+===================== */
+
+.mes-item {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 16px 18px;
+
+  border: 1px solid #edf0f1;
+
+  border-radius: 10px;
+
+  background: #fafcfc;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+
+}
+
+
+.mes-item:hover {
+
+  background: #f3f8f8;
+
+  transform: translateY(-1px);
+
+}
+
+
+/* =====================
+   INFORMACIÓN MES
+===================== */
+
+.mes-info {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+}
+
+
+.mes-icono {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 44px;
+
+  height: 44px;
+
+  border-radius: 11px;
+
+  background: #edf7f6;
+
+  font-size: 20px;
+
+}
+
+
+.mes-info strong {
+
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #374151;
+
+  font-size: 15px;
+
+}
+
+
+.mes-info span {
+
+  display: block;
+
+  color: #718096;
+
+  font-size: 13px;
+
+}
+
+
+/* =====================
+   IMPORTE MES
+===================== */
+
+.mes-importe {
+
+  flex-shrink: 0;
+
+  color: #263238;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+}
+
+
+/* =====================
+   SIN GASTOS
+===================== */
+
+.sin-gastos {
+
+  padding: 70px 25px;
+
+  border: 1px solid #e7ecee;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  text-align: center;
+
+  box-shadow:
+    0 3px 10px
+    rgba(0, 0, 0, 0.04);
+
+}
+
+
+.sin-gastos-icono {
+
+  margin-bottom: 16px;
+
+  font-size: 46px;
+
+}
+
+
+.sin-gastos h2 {
+
+  margin: 0 0 10px;
+
+  color: #374151;
+
+  font-size: 21px;
+
+}
+
+
+.sin-gastos p {
+
+  max-width: 420px;
+
+  margin: 0 auto;
+
+  color: #718096;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+}
+
+
+/* =====================
+   TABLET
+===================== */
+
+@media (max-width: 850px) {
+
+
+  .resumen {
+
+    grid-template-columns:
+      1fr;
+
+    gap: 12px;
+
+  }
+
+
+  .grafico-contenedor {
+
+    height: 360px;
+
+  }
+
+}
+
+
+/* =====================
+   MÓVIL
+===================== */
+
+@media (max-width: 600px) {
+
+
+  .estadisticas-mensual-container {
+
+    padding:
+      18px
+      12px
+      35px;
+
+  }
+
+
+  /* CABECERA */
+
+
+  .pagina-cabecera {
+
+    margin-bottom: 20px;
+
+  }
+
+
+  .btn-volver {
+
+    margin-bottom: 14px;
+
+    padding: 8px 12px;
+
+    font-size: 12px;
+
+  }
+
+
+  .titulo h1 {
+
+    font-size: 24px;
+
+  }
+
+
+  .titulo p {
+
+    font-size: 13px;
+
+  }
+
+
+  /* RESUMEN */
+
+
+  .resumen {
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+  }
+
+
+  .resumen-card {
+
+    padding: 15px;
+
+  }
+
+
+  .resumen-icono {
+
+    width: 44px;
+
+    height: 44px;
+
+    font-size: 20px;
+
+  }
+
+
+  .resumen-card strong {
+
+    font-size: 17px;
+
+  }
+
+
+  /* GRÁFICO */
+
+
+  .grafico-card {
+
+    padding: 16px;
+
+    border-radius: 11px;
+
+  }
+
+
+  .grafico-cabecera h2 {
+
+    font-size: 17px;
+
+  }
+
+
+  .grafico-cabecera p {
+
+    font-size: 12px;
+
+  }
+
+
+  .grafico-contenedor {
+
+    height: 300px;
+
+  }
+
+
+  /* MESES */
+
+
+  .meses-card {
+
+    padding: 16px;
+
+    border-radius: 11px;
+
+  }
+
+
+  .meses-cabecera h2 {
+
+    font-size: 17px;
+
+  }
+
+
+  .meses-cabecera p {
+
+    font-size: 12px;
+
+  }
+
+
+  .mes-item {
+
+    padding: 13px;
+
+  }
+
+
+  .mes-icono {
+
+    width: 40px;
+
+    height: 40px;
+
+    font-size: 18px;
+
+  }
+
+
+  .mes-info strong {
+
+    font-size: 13px;
+
+  }
+
+
+  .mes-info span {
+
+    font-size: 11px;
+
+  }
+
+
+  .mes-importe {
+
+    font-size: 15px;
+
+  }
+
+}

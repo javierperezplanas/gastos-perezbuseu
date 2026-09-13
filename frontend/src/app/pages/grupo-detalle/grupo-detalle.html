@@ -96,12 +96,14 @@
 
 
         {{
+
           (
             saldoUsuario < 0
               ? -saldoUsuario
               : saldoUsuario
           )
           | number:'1.2-2'
+
         }}
 
         €
@@ -225,18 +227,44 @@
         </h2>
 
 
-        <a
-          class="btn-secundario"
-          [routerLink]="[
-            '/grupos',
-            grupoId,
-            'actividad'
-          ]"
-        >
+        <!-- ACCIONES DE GASTOS -->
 
-          Ver actividad
+        <div class="seccion-acciones">
 
-        </a>
+
+          <!-- GRÁFICOS -->
+
+          <a
+            class="btn-graficos"
+            [routerLink]="[
+              '/grupos',
+              grupoId,
+              'estadisticas'
+            ]"
+          >
+
+            📊 Gráficos
+
+          </a>
+
+
+          <!-- ACTIVIDAD -->
+
+          <a
+            class="btn-actividad"
+            [routerLink]="[
+              '/grupos',
+              grupoId,
+              'actividad'
+            ]"
+          >
+
+            📋 Actividad
+
+          </a>
+
+
+        </div>
 
 
       </div>
@@ -251,9 +279,7 @@
 
 
         <!-- =========================
-
              GASTOS AGRUPADOS POR MES
-
         ========================== -->
 
         <div

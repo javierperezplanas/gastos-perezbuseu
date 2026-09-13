@@ -1,0 +1,522 @@
+<div class="estadisticas-categorias-container">
+
+
+  <!-- =====================
+       CABECERA
+  ====================== -->
+
+  <div class="pagina-cabecera">
+
+
+    <button
+      type="button"
+      class="btn-volver"
+      (click)="volver()"
+    >
+
+      ← Volver a gráficos
+
+    </button>
+
+
+    <div class="titulo">
+
+
+      <h1>
+
+        🥧 Gastos por categoría
+
+      </h1>
+
+
+      <p>
+
+        Consulta cómo se distribuyen
+        los gastos según su categoría.
+
+      </p>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- =====================
+       CARGANDO
+  ====================== -->
+
+  <div
+    class="cargando"
+    *ngIf="cargando"
+  >
+
+    Cargando estadísticas...
+
+  </div>
+
+
+  <!-- =====================
+       ERROR
+  ====================== -->
+
+  <div
+    class="error"
+    *ngIf="!cargando && error"
+  >
+
+    {{ error }}
+
+  </div>
+
+
+  <!-- =====================
+       CONTENIDO
+  ====================== -->
+
+  <div
+    class="estadisticas-contenido"
+    *ngIf="!cargando && !error"
+  >
+
+
+    <!-- =====================
+         SIN GASTOS
+    ====================== -->
+
+    <div
+      class="sin-gastos"
+      *ngIf="gastos.length === 0"
+    >
+
+
+      <div class="sin-gastos-icono">
+
+        🥧
+
+      </div>
+
+
+      <h2>
+
+        Todavía no hay gastos
+
+      </h2>
+
+
+      <p>
+
+        Añade algunos gastos al grupo
+        para poder consultar
+        las estadísticas por categoría.
+
+      </p>
+
+
+    </div>
+
+
+    <!-- =====================
+         ESTADÍSTICAS
+    ====================== -->
+
+    <div
+      *ngIf="gastos.length > 0"
+    >
+
+
+      <!-- =====================
+           SELECTOR DE PERIODO
+      ====================== -->
+
+      <div class="filtro-card">
+
+
+        <div class="filtro-info">
+
+
+          <div class="filtro-icono">
+
+            📅
+
+          </div>
+
+
+          <div>
+
+
+            <h2>
+
+              Periodo
+
+            </h2>
+
+
+            <p>
+
+              Selecciona el mes
+              que quieres consultar.
+
+            </p>
+
+
+          </div>
+
+
+        </div>
+
+
+        <div class="filtro-select-container">
+
+
+          <select
+            class="filtro-select"
+            [value]="mesSeleccionado"
+            (change)="cambiarMes($event)"
+          >
+
+
+            <option
+              value="todos"
+            >
+
+              📊 Todos los meses
+
+            </option>
+
+
+            <option
+              *ngFor="
+                let mes of mesesDisponibles
+              "
+              [value]="mes.clave"
+            >
+
+              {{ mes.nombre }}
+
+            </option>
+
+
+          </select>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================
+           PERIODO ACTUAL
+      ====================== -->
+
+      <div class="periodo-actual">
+
+
+        Mostrando:
+
+        <strong>
+
+          {{ obtenerPeriodoActual() }}
+
+        </strong>
+
+
+      </div>
+
+
+      <!-- =====================
+           RESUMEN
+      ====================== -->
+
+      <div class="resumen">
+
+
+        <!-- TOTAL GASTADO -->
+
+        <div class="resumen-card">
+
+
+          <div class="resumen-icono">
+
+            💰
+
+          </div>
+
+
+          <div class="resumen-info">
+
+
+            <span>
+
+              Total gastado
+
+            </span>
+
+
+            <strong>
+
+              {{ totalGastado | number:'1.2-2' }} €
+
+            </strong>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- NÚMERO CATEGORÍAS -->
+
+        <div class="resumen-card">
+
+
+          <div class="resumen-icono">
+
+            📂
+
+          </div>
+
+
+          <div class="resumen-info">
+
+
+            <span>
+
+              Categorías
+
+            </span>
+
+
+            <strong>
+
+              {{ numeroCategorias }}
+
+            </strong>
+
+
+          </div>
+
+
+        </div>
+
+
+        <!-- CATEGORÍA MAYOR GASTO -->
+
+        <div class="resumen-card">
+
+
+          <div class="resumen-icono">
+
+            🏆
+
+          </div>
+
+
+          <div class="resumen-info">
+
+
+            <span>
+
+              Mayor gasto
+
+            </span>
+
+
+            <strong>
+
+              {{ categoriaMayorGasto }}
+
+            </strong>
+
+
+            <small>
+
+              {{ importeMayorGasto | number:'1.2-2' }} €
+
+            </small>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================
+           GRÁFICO
+      ====================== -->
+
+      <div class="grafico-card">
+
+
+        <div class="grafico-cabecera">
+
+
+          <h2>
+
+            🥧 Distribución por categoría
+
+          </h2>
+
+
+          <p>
+
+            {{ obtenerPeriodoActual() }}
+
+          </p>
+
+
+        </div>
+
+
+        <div class="grafico-contenedor">
+
+
+          <canvas
+            #graficoCategorias
+          >
+
+          </canvas>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- =====================
+           DESGLOSE
+      ====================== -->
+
+      <div class="categorias-card">
+
+
+        <div class="categorias-cabecera">
+
+
+          <h2>
+
+            📋 Desglose por categoría
+
+          </h2>
+
+
+          <p>
+
+            Consulta el gasto total
+            y el número de gastos
+            de cada categoría.
+
+          </p>
+
+
+        </div>
+
+
+        <div class="lista-categorias">
+
+
+          <div
+            class="categoria-item"
+            *ngFor="
+              let categoria of categorias
+            "
+          >
+
+
+            <!-- INFORMACIÓN -->
+
+            <div class="categoria-info">
+
+
+              <div class="categoria-icono">
+
+                📂
+
+              </div>
+
+
+              <div class="categoria-texto">
+
+
+                <strong>
+
+                  {{ categoria.nombre }}
+
+                </strong>
+
+
+                <span>
+
+                  {{ categoria.numeroGastos }}
+
+                  gasto<span
+                    *ngIf="
+                      categoria.numeroGastos !== 1
+                    "
+                  >
+
+                    s
+
+                  </span>
+
+                </span>
+
+
+              </div>
+
+
+            </div>
+
+
+            <!-- IMPORTE -->
+
+            <div class="categoria-derecha">
+
+
+              <strong>
+
+                {{ categoria.total | number:'1.2-2' }} €
+
+              </strong>
+
+
+              <span>
+
+                {{
+                  obtenerPorcentaje(
+                    categoria.total
+                  )
+                  |
+                  number:'1.1-1'
+                }}%
+
+              </span>
+
+
+            </div>
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
