@@ -147,6 +147,7 @@
 
         <div class="informacion-fila">
 
+
           <span class="informacion-icono">
 
             🏷️
@@ -155,6 +156,7 @@
 
 
           <div>
+
 
             <span class="informacion-etiqueta">
 
@@ -173,6 +175,7 @@
 
             </strong>
 
+
           </div>
 
 
@@ -183,6 +186,7 @@
 
         <div class="informacion-fila">
 
+
           <span class="informacion-icono">
 
             💳
@@ -191,6 +195,7 @@
 
 
           <div>
+
 
             <span class="informacion-etiqueta">
 
@@ -205,6 +210,7 @@
 
             </strong>
 
+
           </div>
 
 
@@ -215,6 +221,7 @@
 
         <div class="informacion-fila">
 
+
           <span class="informacion-icono">
 
             📅
@@ -223,6 +230,7 @@
 
 
           <div>
+
 
             <span class="informacion-etiqueta">
 
@@ -240,6 +248,7 @@
 
             </strong>
 
+
           </div>
 
 
@@ -250,6 +259,7 @@
 
         <div class="informacion-fila">
 
+
           <span class="informacion-icono">
 
             ⚖️
@@ -258,6 +268,7 @@
 
 
           <div>
+
 
             <span class="informacion-etiqueta">
 
@@ -276,6 +287,7 @@
 
             </strong>
 
+
           </div>
 
 
@@ -283,6 +295,143 @@
 
 
       </div>
+
+
+    </div>
+
+
+    <!-- =====================
+         TENDENCIA DE GASTO
+    ====================== -->
+
+    <div class="tendencia-card">
+
+
+      <!-- CABECERA -->
+
+      <div class="tendencia-cabecera">
+
+
+        <div>
+
+
+          <h2>
+
+            📊 Tendencia de gasto
+
+          </h2>
+
+
+          <p>
+
+            {{
+              obtenerNombreCategoria(
+                gasto.categoria
+              )
+            }}
+
+            · Últimos 3 meses
+
+          </p>
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- CARGANDO -->
+
+      @if (cargandoTendencia) {
+
+
+        <div class="tendencia-cargando">
+
+          Calculando estadísticas...
+
+        </div>
+
+
+      }
+
+
+      <!-- GRÁFICO -->
+
+      @if (
+
+        !cargandoTendencia
+
+        &&
+
+        tendencia.length > 0
+
+      ) {
+
+
+        <div class="grafico-tendencia">
+
+
+          @for (
+
+            mes of tendencia;
+
+            track mes.anio + '-' + mes.mes
+
+          ) {
+
+
+            <div class="tendencia-fila">
+
+
+              <!-- MES -->
+
+              <div class="tendencia-mes">
+
+                {{ mes.nombre }}
+
+              </div>
+
+
+              <!-- BARRA -->
+
+              <div class="barra-contenedor">
+
+
+                <div
+                  class="barra"
+                  [style.width.%]="mes.porcentaje"
+                >
+
+                </div>
+
+
+              </div>
+
+
+              <!-- IMPORTE -->
+
+              <div class="tendencia-importe">
+
+                {{
+                  mes.total
+                  | number:'1.2-2'
+                }}
+                €
+
+              </div>
+
+
+            </div>
+
+
+          }
+
+
+        </div>
+
+
+      }
 
 
     </div>
@@ -303,9 +452,13 @@
 
 
       @if (
+
         gasto.repartos
+
         &&
+
         gasto.repartos.length > 0
+
       ) {
 
 
@@ -313,14 +466,19 @@
 
 
           @for (
+
             reparto
             of gasto.repartos;
+
             track reparto.usuarioId
+
           ) {
 
 
             <div class="participante">
 
+
+              <!-- AVATAR -->
 
               <div class="avatar">
 
@@ -334,6 +492,8 @@
 
               </div>
 
+
+              <!-- INFORMACIÓN -->
 
               <div class="participante-info">
 
@@ -357,6 +517,8 @@
 
               </div>
 
+
+              <!-- IMPORTE -->
 
               <div class="participante-importe">
 

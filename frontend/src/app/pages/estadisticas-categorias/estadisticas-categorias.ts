@@ -83,8 +83,7 @@ OnDestroy {
 
   /*
    * Gastos después de
-   * aplicar el filtro
-   * del mes.
+   * aplicar los filtros.
    */
 
   gastosFiltrados: any[] = [];
@@ -92,29 +91,55 @@ OnDestroy {
 
   /*
    * Categorías calculadas
-   * según el filtro actual.
+   * según los filtros.
    */
 
   categorias: any[] = [];
 
 
   /*
-   * Meses disponibles
-   * para el selector.
+   * Meses disponibles.
    */
 
   mesesDisponibles: any[] = [];
 
 
   /*
-   * Mes seleccionado.
-   *
+   * Categorías disponibles
+   * para el selector.
+   */
+
+  categoriasDisponibles: string[] = [];
+
+
+  /*
+   * =====================
+   * FILTROS
+   * =====================
+   */
+
+
+  /*
    * "todos" =
-   * mostrar todos los gastos.
+   * todos los meses.
    */
 
   mesSeleccionado = 'todos';
 
+
+  /*
+   * "todas" =
+   * todas las categorías.
+   */
+
+  categoriaSeleccionada = 'todas';
+
+
+  /*
+   * =====================
+   * ESTADÍSTICAS
+   * =====================
+   */
 
   totalGastado = 0;
 
@@ -161,6 +186,7 @@ OnDestroy {
 
 
     this.grupoId =
+
     Number(
       this.route.snapshot.paramMap.get(
         'id'
@@ -225,24 +251,26 @@ OnDestroy {
 
 
         /*
-         * Obtenemos los meses
+         * Obtenemos los filtros
          * disponibles.
          */
 
         this.obtenerMesesDisponibles();
 
 
+        this.obtenerCategoriasDisponibles();
+
+
         /*
-         * Aplicamos el filtro
-         * inicial.
+         * Aplicamos los filtros
+         * iniciales.
          */
 
-        this.aplicarFiltroMes();
+        this.aplicarFiltros();
 
 
         /*
-         * Indicamos que la
-         * carga ha terminado.
+         * Finaliza la carga.
          */
 
         this.cargando =
@@ -252,12 +280,7 @@ OnDestroy {
         /*
          * Esperamos a que Angular
          * termine de pintar
-         * completamente la vista.
-         *
-         * Esto evita que el gráfico
-         * aparezca en blanco en
-         * algunas ocasiones,
-         * especialmente en móvil.
+         * la vista.
          */
 
         setTimeout(
@@ -309,17 +332,8 @@ OnDestroy {
 
   /*
    * =====================
-   * OBTENER FECHA DEL GASTO
+   * OBTENER FECHA
    * =====================
-   *
-   * El backend utiliza:
-   *
-   * fechaHora
-   *
-   * Mantenemos también
-   * compatibilidad con
-   * fecha por si en algún
-   * momento cambia.
    */
 
   obtenerFechaGasto(
@@ -369,6 +383,34 @@ OnDestroy {
 
   /*
    * =====================
+   * OBTENER NOMBRE
+   * DE CATEGORÍA
+   * =====================
+   */
+
+  obtenerNombreCategoria(
+    gasto: any
+  ): string {
+
+
+    const categoria =
+
+    gasto.categoria?.nombre
+    ||
+    gasto.categoria
+    ||
+    'Sin categoría';
+
+
+    return String(
+      categoria
+    );
+
+  }
+
+
+  /*
+   * =====================
    * OBTENER MESES
    * DISPONIBLES
    * =====================
@@ -390,11 +432,6 @@ OnDestroy {
         gasto
       ) => {
 
-
-        /*
-         * Obtenemos la fecha
-         * del gasto.
-         */
 
         const fecha =
         this.obtenerFechaGasto(
@@ -420,13 +457,8 @@ OnDestroy {
         fecha.getMonth();
 
 
-        /*
-         * Ejemplo:
-         *
-         * 2026-09
-         */
-
         const clave =
+
         `${anio}-${String(
           mes + 1
         ).padStart(
@@ -443,6 +475,7 @@ OnDestroy {
 
 
           const nombre =
+
           new Intl.DateTimeFormat(
 
             'es-ES',
@@ -465,6 +498,7 @@ OnDestroy {
             {
 
               clave,
+
 
               nombre:
 
@@ -489,15 +523,6 @@ OnDestroy {
     );
 
 
-    /*
-     * Convertimos el Map
-     * en array.
-     *
-     * Ordenamos los meses
-     * del más reciente
-     * al más antiguo.
-     */
-
     this.mesesDisponibles =
 
     Array
@@ -513,12 +538,74 @@ OnDestroy {
 
 
         return (
+
           b.clave.localeCompare(
             a.clave
           )
+
         );
 
       }
+
+    );
+
+  }
+
+
+  /*
+   * =====================
+   * OBTENER CATEGORÍAS
+   * DISPONIBLES
+   * =====================
+   */
+
+  obtenerCategoriasDisponibles(): void {
+
+
+    const categorias =
+    new Set<string>();
+
+
+    this.gastos.forEach(
+
+      (
+        gasto
+      ) => {
+
+
+        const nombre =
+        this.obtenerNombreCategoria(
+          gasto
+        );
+
+
+        categorias.add(
+          nombre
+        );
+
+      }
+
+    );
+
+
+    this.categoriasDisponibles =
+
+    Array
+    .from(
+      categorias
+    )
+    .sort(
+
+      (
+        a,
+        b
+      ) =>
+
+
+      a.localeCompare(
+        b,
+        'es'
+      )
 
     );
 
@@ -544,16 +631,63 @@ OnDestroy {
     select.value;
 
 
+    this.actualizarEstadisticas();
+
+  }
+
+
+  /*
+   * =====================
+   * CAMBIAR CATEGORÍA
+   * =====================
+   */
+
+  cambiarCategoria(
+    event: Event
+  ): void {
+
+
+    const select =
+    event.target as HTMLSelectElement;
+
+
+    this.categoriaSeleccionada =
+    select.value;
+
+
+    this.actualizarEstadisticas();
+
+  }
+
+
+  /*
+   * =====================
+   * ACTUALIZAR
+   * ESTADÍSTICAS
+   * =====================
+   */
+
+  actualizarEstadisticas(): void {
+
+
     /*
-     * Aplicamos el nuevo filtro.
+     * Aplicamos los filtros.
      */
 
-    this.aplicarFiltroMes();
+    this.aplicarFiltros();
+
+
+    /*
+     * Destruimos el gráfico
+     * anterior.
+     */
+
+    this.destruirGrafico();
 
 
     /*
      * Esperamos a que Angular
-     * actualice la vista.
+     * actualice el canvas.
      */
 
     setTimeout(
@@ -570,14 +704,6 @@ OnDestroy {
         }
 
 
-        else {
-
-
-          this.destruirGrafico();
-
-        }
-
-
       },
       50
     );
@@ -587,51 +713,44 @@ OnDestroy {
 
   /*
    * =====================
-   * APLICAR FILTRO
+   * APLICAR FILTROS
    * =====================
    */
 
-  aplicarFiltroMes(): void {
+  aplicarFiltros(): void {
 
 
     /*
-     * TODOS LOS MESES
+     * Comenzamos con todos
+     * los gastos.
+     */
+
+    let gastos =
+    [
+      ...this.gastos
+    ];
+
+
+    /*
+     * =====================
+     * FILTRO POR MES
+     * =====================
      */
 
     if (
-      this.mesSeleccionado ===
+      this.mesSeleccionado !==
       'todos'
     ) {
 
 
-      this.gastosFiltrados =
-      [
-        ...this.gastos
-      ];
+      gastos =
 
-    }
-
-
-    /*
-     * MES CONCRETO
-     */
-
-    else {
-
-
-      this.gastosFiltrados =
-
-      this.gastos.filter(
+      gastos.filter(
 
         (
           gasto
         ) => {
 
-
-          /*
-           * Obtenemos la fecha
-           * del gasto.
-           */
 
           const fecha =
           this.obtenerFechaGasto(
@@ -658,6 +777,7 @@ OnDestroy {
 
 
           const clave =
+
           `${anio}-${String(
             mes + 1
           ).padStart(
@@ -681,7 +801,56 @@ OnDestroy {
 
 
     /*
-     * Recalculamos todas
+     * =====================
+     * FILTRO POR CATEGORÍA
+     * =====================
+     */
+
+    if (
+      this.categoriaSeleccionada !==
+      'todas'
+    ) {
+
+
+      gastos =
+
+      gastos.filter(
+
+        (
+          gasto
+        ) => {
+
+
+          const categoria =
+          this.obtenerNombreCategoria(
+            gasto
+          );
+
+
+          return (
+
+            categoria ===
+            this.categoriaSeleccionada
+
+          );
+
+        }
+
+      );
+
+    }
+
+
+    /*
+     * Guardamos el resultado.
+     */
+
+    this.gastosFiltrados =
+    gastos;
+
+
+    /*
+     * Recalculamos
      * las estadísticas.
      */
 
@@ -741,8 +910,7 @@ OnDestroy {
 
 
     /*
-     * Reiniciamos los datos
-     * de la categoría mayor.
+     * Reiniciamos los datos.
      */
 
     this.categoriaMayorGasto =
@@ -821,20 +989,10 @@ OnDestroy {
       ) => {
 
 
-        /*
-         * Obtenemos la categoría.
-         *
-         * Si no existe,
-         * usamos "Sin categoría".
-         */
-
         const nombre =
-
-        gasto.categoria?.nombre
-        ||
-        gasto.categoria
-        ||
-        'Sin categoría';
+        this.obtenerNombreCategoria(
+          gasto
+        );
 
 
         if (
@@ -887,14 +1045,6 @@ OnDestroy {
     );
 
 
-    /*
-     * Convertimos el Map
-     * en array.
-     *
-     * Ordenamos de mayor
-     * a menor gasto.
-     */
-
     this.categorias =
 
     Array
@@ -930,47 +1080,17 @@ OnDestroy {
   crearGrafico(): void {
 
 
-    /*
-     * Destruimos el gráfico
-     * anterior si existe.
-     */
-
     this.destruirGrafico();
 
 
     /*
-     * Comprobamos que el
-     * canvas exista.
+     * Comprobamos que exista
+     * el canvas.
      */
 
     if (
       !this.graficoCategorias
     ) {
-
-
-      /*
-       * Si Angular todavía no
-       * ha creado el canvas,
-       * esperamos un poco más.
-       */
-
-      setTimeout(
-        () => {
-
-
-          if (
-            this.gastosFiltrados.length > 0
-          ) {
-
-
-            this.crearGrafico();
-
-          }
-
-
-        },
-        50
-      );
 
 
       return;
@@ -1006,6 +1126,7 @@ OnDestroy {
 
     const configuracion:
     ChartConfiguration<'doughnut'> = {
+
 
       type:
       'doughnut',
@@ -1142,10 +1263,8 @@ OnDestroy {
                 ?
 
                 (
-
                   valor /
                   this.totalGastado
-
                 )
                 *
                 100
@@ -1295,6 +1414,31 @@ OnDestroy {
       'Mes seleccionado'
 
     );
+
+  }
+
+
+  /*
+   * =====================
+   * TEXTO DE CATEGORÍA
+   * =====================
+   */
+
+  obtenerCategoriaActual(): string {
+
+
+    if (
+      this.categoriaSeleccionada ===
+      'todas'
+    ) {
+
+
+      return 'Todas las categorías';
+
+    }
+
+
+    return this.categoriaSeleccionada;
 
   }
 

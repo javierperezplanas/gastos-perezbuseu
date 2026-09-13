@@ -70,6 +70,29 @@ implements OnInit {
   error: string = '';
 
 
+  /*
+   * Gastos del grupo.
+   *
+   * Se utilizan para calcular
+   * la tendencia de los últimos
+   * tres meses.
+   */
+  gastosGrupo: any[] = [];
+
+
+  /*
+   * Datos de la tendencia.
+   */
+  tendencia: any[] = [];
+
+
+  /*
+   * Indica si estamos cargando
+   * la tendencia.
+   */
+  cargandoTendencia: boolean = false;
+
+
   constructor(
 
     private route: ActivatedRoute,
@@ -108,14 +131,20 @@ implements OnInit {
     );
 
 
+    /*
+     * Cargamos el gasto.
+     */
     this.cargarGasto();
 
   }
 
 
   /*
-   * Cargar los datos
-   * del gasto.
+   * =====================
+   *
+   * CARGAR GASTO
+   *
+   * =====================
    */
   cargarGasto(): void {
 
@@ -155,12 +184,26 @@ implements OnInit {
         );
 
 
+        /*
+         * Guardamos el gasto.
+         */
         this.gasto =
         gasto;
 
 
+        /*
+         * Terminamos la carga
+         * del gasto principal.
+         */
         this.cargando =
         false;
+
+
+        /*
+         * Cargamos la tendencia
+         * de la categoría.
+         */
+        this.cargarTendencia();
 
       },
 
@@ -189,7 +232,404 @@ implements OnInit {
 
 
   /*
-   * Editar el gasto.
+   * =====================
+   *
+   * CARGAR TENDENCIA
+   *
+   * =====================
+   */
+  cargarTendencia(): void {
+
+
+    /*
+     * Si todavía no tenemos
+     * el gasto no hacemos nada.
+     */
+    if (!this.gasto) {
+
+      return;
+
+    }
+
+
+    this.cargandoTendencia =
+    true;
+
+
+    /*
+     * Obtenemos todos los gastos
+     * del grupo.
+     */
+    this.gastosService
+    .obtenerGastosPorGrupo(
+      this.grupoId
+    )
+    .subscribe({
+
+      next: (gastos: any[]) => {
+
+
+        console.log(
+          'Gastos del grupo para tendencia:',
+          gastos
+        );
+
+
+        /*
+         * Guardamos los gastos.
+         */
+        this.gastosGrupo =
+        gastos || [];
+
+
+        /*
+         * Calculamos los últimos
+         * tres meses.
+         */
+        this.calcularTendencia();
+
+
+        this.cargandoTendencia =
+        false;
+
+      },
+
+
+      error: (error: any) => {
+
+
+        console.error(
+          'Error cargando tendencia:',
+          error
+        );
+
+
+        /*
+         * No mostramos error en toda
+         * la página porque el gasto
+         * principal sigue funcionando.
+         */
+        this.tendencia =
+        [];
+
+
+        this.cargandoTendencia =
+        false;
+
+      }
+
+    });
+
+  }
+
+
+  /*
+   * =====================
+   *
+   * CALCULAR TENDENCIA
+   *
+   * =====================
+   */
+  calcularTendencia(): void {
+
+
+    /*
+     * Fecha actual.
+     */
+    const fechaActual =
+    new Date();
+
+
+    /*
+     * Creamos los últimos
+     * tres meses.
+     */
+    const meses: any[] =
+    [];
+
+
+    /*
+     * Recorremos:
+     *
+     * - Hace 2 meses
+     * - Hace 1 mes
+     * - Mes actual
+     */
+    for (
+
+      let i = 2;
+
+      i >= 0;
+
+      i--
+
+    ) {
+
+
+      const fecha =
+      new Date(
+
+        fechaActual.getFullYear(),
+
+        fechaActual.getMonth() - i,
+
+        1
+
+      );
+
+
+      const anio =
+      fecha.getFullYear();
+
+
+      const mes =
+      fecha.getMonth();
+
+
+      /*
+       * Nombre corto.
+       */
+      const nombre =
+      this.obtenerNombreMes(
+        mes
+      );
+
+
+      /*
+       * Calculamos el total
+       * de la categoría durante
+       * ese mes.
+       */
+      const total =
+      this.gastosGrupo
+      .filter(
+        (gasto: any) => {
+
+
+          /*
+           * Debe ser de la misma
+           * categoría.
+           */
+          if (
+
+            gasto.categoria !==
+            this.gasto.categoria
+
+          ) {
+
+            return false;
+
+          }
+
+
+          /*
+           * Debe tener fecha.
+           */
+          if (!gasto.fechaHora) {
+
+            return false;
+
+          }
+
+
+          const fechaGasto =
+          new Date(
+            gasto.fechaHora
+          );
+
+
+          return (
+
+            fechaGasto.getFullYear()
+            ===
+            anio
+
+            &&
+
+            fechaGasto.getMonth()
+            ===
+            mes
+
+          );
+
+        }
+      )
+      .reduce(
+
+        (
+          total: number,
+
+          gasto: any
+        ) => {
+
+
+          return (
+
+            total +
+
+            Number(
+              gasto.importe || 0
+            )
+
+          );
+
+        },
+
+        0
+
+      );
+
+
+      meses.push({
+
+        nombre:
+        nombre,
+
+        total:
+        total,
+
+        anio:
+        anio,
+
+        mes:
+        mes
+
+      });
+
+    }
+
+
+    /*
+     * Calculamos el mayor importe.
+     *
+     * Nos sirve para calcular
+     * el tamaño de las barras.
+     */
+    const mayorTotal =
+    Math.max(
+
+      ...meses.map(
+        mes => mes.total
+      ),
+
+      0
+
+    );
+
+
+    /*
+     * Añadimos el porcentaje
+     * de cada barra.
+     */
+    this.tendencia =
+    meses.map(
+      mes => {
+
+
+        let porcentaje =
+        0;
+
+
+        if (
+
+          mayorTotal > 0
+
+        ) {
+
+
+          porcentaje =
+
+          (
+            mes.total /
+
+            mayorTotal
+
+          )
+
+          *
+
+          100;
+
+        }
+
+
+        return {
+
+          ...mes,
+
+          porcentaje:
+          porcentaje
+
+        };
+
+      }
+    );
+
+
+    console.log(
+      'Tendencia calculada:',
+      this.tendencia
+    );
+
+  }
+
+
+  /*
+   * =====================
+   *
+   * NOMBRE DEL MES
+   *
+   * =====================
+   */
+  obtenerNombreMes(
+    mes: number
+  ): string {
+
+
+    const meses = [
+
+      'Ene',
+
+      'Feb',
+
+      'Mar',
+
+      'Abr',
+
+      'May',
+
+      'Jun',
+
+      'Jul',
+
+      'Ago',
+
+      'Sep',
+
+      'Oct',
+
+      'Nov',
+
+      'Dic'
+
+    ];
+
+
+    return (
+      meses[mes]
+      ||
+      ''
+    );
+
+  }
+
+
+  /*
+   * =====================
+   *
+   * EDITAR GASTO
+   *
+   * =====================
    */
   editarGasto(): void {
 
@@ -205,7 +645,11 @@ implements OnInit {
 
 
   /*
-   * Eliminar el gasto.
+   * =====================
+   *
+   * ELIMINAR GASTO
+   *
+   * =====================
    */
   eliminarGasto(): void {
 
@@ -280,7 +724,11 @@ implements OnInit {
 
 
   /*
-   * Volver al grupo.
+   * =====================
+   *
+   * VOLVER
+   *
+   * =====================
    */
   volver(): void {
 
@@ -294,8 +742,11 @@ implements OnInit {
 
 
   /*
-   * Obtener el icono
-   * de la categoría.
+   * =====================
+   *
+   * ICONO CATEGORÍA
+   *
+   * =====================
    */
   obtenerIconoCategoria(
     categoria: string
@@ -335,8 +786,11 @@ implements OnInit {
 
 
   /*
-   * Formatear el nombre
-   * de la categoría.
+   * =====================
+   *
+   * NOMBRE CATEGORÍA
+   *
+   * =====================
    */
   obtenerNombreCategoria(
     categoria: string
@@ -368,7 +822,11 @@ implements OnInit {
 
       default:
 
-        return categoria || 'Sin categoría';
+        return (
+          categoria
+          ||
+          'Sin categoría'
+        );
 
     }
 
@@ -376,8 +834,11 @@ implements OnInit {
 
 
   /*
-   * Obtener el nombre de
-   * la forma de reparto.
+   * =====================
+   *
+   * NOMBRE DIVISIÓN
+   *
+   * =====================
    */
   obtenerNombreTipoDivision(
     tipoDivision: string
