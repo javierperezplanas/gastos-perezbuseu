@@ -14,245 +14,293 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @ApplicationScoped
 public class BalanceService {
 
 
-    @Inject
-    MiembroGrupoRepository miembroGrupoRepository;
+private static final Long GRUPO_FAMILIA_ID = 1L;
+
+private static final Long USUARIO_JAVI_ID = 1L;
+
+private static final Long USUARIO_MIRIAM_ID = 2L;
 
 
-    @Inject
-    GastoRepository gastoRepository;
+private static final BigDecimal SALDO_INICIAL =
+        new BigDecimal("169.14");
 
 
-    @Inject
-    RepartoGastoRepository repartoGastoRepository;
+@Inject
+MiembroGrupoRepository miembroGrupoRepository;
 
 
-    @Inject
-    PagoDeudaRepository pagoDeudaRepository;
+@Inject
+GastoRepository gastoRepository;
 
 
-    public List<BalanceUsuarioResponse> obtenerBalances(
-            Long grupoId) {
+@Inject
+RepartoGastoRepository repartoGastoRepository;
 
 
-        List<MiembroGrupo> miembros =
-                miembroGrupoRepository.list(
-                        "grupo.id",
-                        grupoId
-                );
+@Inject
+PagoDeudaRepository pagoDeudaRepository;
 
 
-        List<BalanceUsuarioResponse> balances =
-                new ArrayList<>();
+public List<BalanceUsuarioResponse> obtenerBalances(
+        Long grupoId) {
 
 
-        for (MiembroGrupo miembro : miembros) {
-
-
-            Usuario usuario =
-                    miembro.usuario;
-
-
-            BigDecimal totalPagado =
-                    calcularTotalPagado(
-                            grupoId,
-                            usuario.id
-                    );
-
-
-            BigDecimal totalDebe =
-                    calcularTotalDebe(
-                            grupoId,
-                            usuario.id
-                    );
-
-
-            BigDecimal pagosRealizados =
-                    calcularPagosRealizados(
-                            grupoId,
-                            usuario.id
-                    );
-
-
-            BigDecimal pagosRecibidos =
-                    calcularPagosRecibidos(
-                            grupoId,
-                            usuario.id
-                    );
-
-
-            BalanceUsuarioResponse balance =
-                    new BalanceUsuarioResponse();
-
-
-            balance.usuarioId =
-                    usuario.id;
-
-
-            balance.nombreUsuario =
-                    usuario.nombre;
-
-
-            balance.totalPagado =
-                    totalPagado;
-
-
-            balance.totalDebe =
-                    totalDebe;
-
-
-            balance.saldo =
-                    totalPagado
-                            .subtract(totalDebe)
-                            .add(pagosRealizados)
-                            .subtract(pagosRecibidos);
-
-
-            balances.add(
-                    balance
+    List<MiembroGrupo> miembros =
+            miembroGrupoRepository.list(
+                    "grupo.id",
+                    grupoId
             );
 
-        }
+
+    List<BalanceUsuarioResponse> balances =
+            new ArrayList<>();
 
 
-        return balances;
-
-    }
+    for (MiembroGrupo miembro : miembros) {
 
 
-    private BigDecimal calcularTotalPagado(
-            Long grupoId,
-            Long usuarioId) {
+        Usuario usuario =
+                miembro.usuario;
 
 
-        List<Gasto> gastos =
-                gastoRepository.list(
-                        "grupo.id = ?1 and pagador.id = ?2",
+        BigDecimal totalPagado =
+                calcularTotalPagado(
                         grupoId,
-                        usuarioId
+                        usuario.id
                 );
 
 
-        BigDecimal total =
-                BigDecimal.ZERO;
-
-
-        for (Gasto gasto : gastos) {
-
-
-            total =
-                    total.add(
-                            gasto.importe
-                    );
-
-        }
-
-
-        return total;
-
-    }
-
-
-    private BigDecimal calcularTotalDebe(
-            Long grupoId,
-            Long usuarioId) {
-
-
-        List<RepartoGasto> repartos =
-                repartoGastoRepository.list(
-                        "gasto.grupo.id = ?1 and usuario.id = ?2",
+        BigDecimal totalDebe =
+                calcularTotalDebe(
                         grupoId,
-                        usuarioId
+                        usuario.id
                 );
 
 
-        BigDecimal total =
-                BigDecimal.ZERO;
-
-
-        for (RepartoGasto reparto : repartos) {
-
-
-            total =
-                    total.add(
-                            reparto.importe
-                    );
-
-        }
-
-
-        return total;
-
-    }
-
-
-    private BigDecimal calcularPagosRealizados(
-            Long grupoId,
-            Long usuarioId) {
-
-
-        List<PagoDeuda> pagos =
-                pagoDeudaRepository.list(
-                        "grupo.id = ?1 and deudor.id = ?2",
+        BigDecimal pagosRealizados =
+                calcularPagosRealizados(
                         grupoId,
-                        usuarioId
+                        usuario.id
                 );
 
 
-        BigDecimal total =
-                BigDecimal.ZERO;
-
-
-        for (PagoDeuda pago : pagos) {
-
-
-            total =
-                    total.add(
-                            pago.importe
-                    );
-
-        }
-
-
-        return total;
-
-    }
-
-
-    private BigDecimal calcularPagosRecibidos(
-            Long grupoId,
-            Long usuarioId) {
-
-
-        List<PagoDeuda> pagos =
-                pagoDeudaRepository.list(
-                        "grupo.id = ?1 and acreedor.id = ?2",
+        BigDecimal pagosRecibidos =
+                calcularPagosRecibidos(
                         grupoId,
-                        usuarioId
+                        usuario.id
                 );
 
 
-        BigDecimal total =
-                BigDecimal.ZERO;
+        BigDecimal saldoInicial =
+                obtenerSaldoInicial(
+                        grupoId,
+                        usuario.id
+                );
 
 
-        for (PagoDeuda pago : pagos) {
+        BalanceUsuarioResponse balance =
+                new BalanceUsuarioResponse();
 
 
-            total =
-                    total.add(
-                            pago.importe
-                    );
-
-        }
+        balance.usuarioId =
+                usuario.id;
 
 
-        return total;
+        balance.nombreUsuario =
+                usuario.nombre;
+
+
+        balance.totalPagado =
+                totalPagado;
+
+
+        balance.totalDebe =
+                totalDebe;
+
+
+        balance.saldo =
+                totalPagado
+                        .subtract(totalDebe)
+                        .add(pagosRealizados)
+                        .subtract(pagosRecibidos)
+                        .add(saldoInicial);
+
+
+        balances.add(
+                balance
+        );
 
     }
+
+
+    return balances;
+
+}
+
+
+private BigDecimal obtenerSaldoInicial(
+        Long grupoId,
+        Long usuarioId) {
+
+
+    if (!GRUPO_FAMILIA_ID.equals(grupoId)) {
+
+        return BigDecimal.ZERO;
+
+    }
+
+
+    if (USUARIO_MIRIAM_ID.equals(usuarioId)) {
+
+        return SALDO_INICIAL;
+
+    }
+
+
+    if (USUARIO_JAVI_ID.equals(usuarioId)) {
+
+        return SALDO_INICIAL.negate();
+
+    }
+
+
+    return BigDecimal.ZERO;
+
+}
+
+
+private BigDecimal calcularTotalPagado(
+        Long grupoId,
+        Long usuarioId) {
+
+
+    List<Gasto> gastos =
+            gastoRepository.list(
+                    "grupo.id = ?1 and pagador.id = ?2",
+                    grupoId,
+                    usuarioId
+            );
+
+
+    BigDecimal total =
+            BigDecimal.ZERO;
+
+
+    for (Gasto gasto : gastos) {
+
+
+        total =
+                total.add(
+                        gasto.importe
+                );
+
+    }
+
+
+    return total;
+
+}
+
+
+private BigDecimal calcularTotalDebe(
+        Long grupoId,
+        Long usuarioId) {
+
+
+    List<RepartoGasto> repartos =
+            repartoGastoRepository.list(
+                    "gasto.grupo.id = ?1 and usuario.id = ?2",
+                    grupoId,
+                    usuarioId
+            );
+
+
+    BigDecimal total =
+            BigDecimal.ZERO;
+
+
+    for (RepartoGasto reparto : repartos) {
+
+
+        total =
+                total.add(
+                        reparto.importe
+                );
+
+    }
+
+
+    return total;
+
+}
+
+
+private BigDecimal calcularPagosRealizados(
+        Long grupoId,
+        Long usuarioId) {
+
+
+    List<PagoDeuda> pagos =
+            pagoDeudaRepository.list(
+                    "grupo.id = ?1 and deudor.id = ?2",
+                    grupoId,
+                    usuarioId
+            );
+
+
+    BigDecimal total =
+            BigDecimal.ZERO;
+
+
+    for (PagoDeuda pago : pagos) {
+
+
+        total =
+                total.add(
+                        pago.importe
+                );
+
+    }
+return total;
+
+
+}
+
+private BigDecimal calcularPagosRecibidos(
+Long grupoId,
+Long usuarioId) {
+
+
+List<PagoDeuda> pagos =
+        pagoDeudaRepository.list(
+                "grupo.id = ?1 and acreedor.id = ?2",
+                grupoId,
+                usuarioId
+        );
+
+
+BigDecimal total =
+        BigDecimal.ZERO;
+
+
+for (PagoDeuda pago : pagos) {
+
+
+    total =
+            total.add(
+                    pago.importe
+            );
+
+}
+
+
+return total;
+
+
+}
 
 }

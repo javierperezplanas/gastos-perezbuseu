@@ -14,6 +14,15 @@ import {
 } from '@angular/router';
 
 import {
+  forkJoin,
+  of
+} from 'rxjs';
+
+import {
+  catchError
+} from 'rxjs/operators';
+
+import {
   Gastos
 } from '../../services/gastos';
 
@@ -42,18 +51,43 @@ export class GrupoDetalle
 implements OnInit {
 
 
+  /*
+   * ID del grupo.
+   */
   grupoId: number = 0;
 
 
+  /*
+   * Información del grupo.
+   */
   grupo: any = null;
 
 
+  /*
+   * Lista de gastos.
+   *
+   * Cada gasto se carga después
+   * individualmente para obtener
+   * también los repartos.
+   */
   gastos: any[] = [];
 
 
+  /*
+   * Gastos agrupados por mes.
+   */
+  gastosPorMes: any[] = [];
+
+
+  /*
+   * Miembros del grupo.
+   */
   miembros: any[] = [];
 
 
+  /*
+   * Total gastado.
+   */
   totalGastado: number = 0;
 
 
@@ -64,6 +98,15 @@ implements OnInit {
   saldoUsuario: number = 0;
 
 
+  /*
+   * Usuario conectado.
+   */
+  usuarioActual: any = null;
+
+
+  /*
+   * Estado de carga.
+   */
   cargando: boolean = true;
 
 
@@ -71,13 +114,13 @@ implements OnInit {
 
     private route: ActivatedRoute,
 
-      private router: Router,
+    private router: Router,
 
-        private gastosService: Gastos,
+    private gastosService: Gastos,
 
-          private gruposService: GruposService,
+    private gruposService: GruposService,
 
-            private authService: Auth
+    private authService: Auth
 
   ) {}
 
@@ -97,6 +140,20 @@ implements OnInit {
     );
 
 
+    /*
+     * Obtenemos el usuario
+     * actualmente conectado.
+     */
+    this.usuarioActual =
+    this.authService.obtenerUsuario();
+
+
+    console.log(
+      'Usuario actual:',
+      this.usuarioActual
+    );
+
+
     this.cargarGrupo();
 
 
@@ -106,10 +163,6 @@ implements OnInit {
     this.cargarMiembros();
 
 
-    /*
-     * Cargamos el saldo
-     * del usuario conectado.
-     */
     this.cargarSaldoUsuario();
 
   }
@@ -128,7 +181,9 @@ implements OnInit {
     )
     .subscribe({
 
-      next: (grupo: any) => {
+      next: (
+        grupo: any
+      ) => {
 
 
         console.log(
@@ -143,7 +198,9 @@ implements OnInit {
       },
 
 
-      error: (error: any) => {
+      error: (
+        error: any
+      ) => {
 
 
         console.error(
@@ -161,8 +218,19 @@ implements OnInit {
   /*
    * Cargar gastos
    * del grupo.
+   *
+   * Primero obtenemos la lista
+   * de gastos.
+   *
+   * Después obtenemos el detalle
+   * completo de cada gasto para
+   * disponer de gasto.repartos.
    */
   cargarGastos(): void {
+
+
+    this.cargando =
+    true;
 
 
     this.gastosService
@@ -171,29 +239,176 @@ implements OnInit {
     )
     .subscribe({
 
-      next: (respuesta: any[]) => {
+      next: (
+        respuesta: any[]
+      ) => {
 
 
         console.log(
-          'Gastos recibidos:',
+          'Lista inicial de gastos:',
           respuesta
         );
 
 
-        this.gastos =
-        respuesta;
+        /*
+         * Si no hay gastos,
+         * terminamos aquí.
+         */
+        if (
+          !respuesta
+          ||
+          respuesta.length === 0
+        ) {
 
 
-        this.calcularTotal();
+          this.gastos =
+          [];
 
 
-        this.cargando =
-        false;
+          this.gastosPorMes =
+          [];
+
+
+          this.calcularTotal();
+
+
+          this.cargando =
+          false;
+
+
+          return;
+
+        }
+
+
+        /*
+         * Para cada gasto obtenemos
+         * su detalle completo.
+         *
+         * El detalle contiene
+         * gasto.repartos.
+         */
+        const peticiones =
+        respuesta.map(
+
+          (gasto: any) =>
+
+            this.gastosService
+            .obtenerGasto(
+              gasto.id
+            )
+            .pipe(
+
+              /*
+               * Si falla un gasto,
+               * mantenemos los datos
+               * originales para no
+               * romper toda la lista.
+               */
+              catchError(
+
+                (
+                  error: any
+                ) => {
+
+
+                  console.error(
+                    'Error obteniendo detalle del gasto:',
+                    gasto.id,
+                    error
+                  );
+
+
+                  return of(
+                    gasto
+                  );
+
+                }
+
+              )
+
+            )
+
+        );
+
+
+        /*
+         * Ejecutamos todas las
+         * peticiones.
+         */
+        forkJoin(
+          peticiones
+        )
+        .subscribe({
+
+          next: (
+            gastosCompletos: any[]
+          ) => {
+
+
+            console.log(
+              'Gastos completos con repartos:',
+              gastosCompletos
+            );
+
+
+            this.gastos =
+            gastosCompletos;
+
+
+            /*
+             * Ordenamos y agrupamos
+             * los gastos por mes.
+             */
+            this.agruparGastosPorMes();
+
+
+            /*
+             * Calculamos el total.
+             */
+            this.calcularTotal();
+
+
+            this.cargando =
+            false;
+
+          },
+
+
+          error: (
+            error: any
+          ) => {
+
+
+            console.error(
+              'Error obteniendo los detalles de los gastos:',
+              error
+            );
+
+
+            this.gastos =
+            respuesta;
+
+
+            this.agruparGastosPorMes();
+
+
+            this.calcularTotal();
+
+
+            this.cargando =
+            false;
+
+          }
+
+        });
 
       },
 
 
-      error: (error: any) => {
+      error: (
+        error: any
+      ) => {
 
 
         console.error(
@@ -225,7 +440,9 @@ implements OnInit {
     )
     .subscribe({
 
-      next: (miembros: any[]) => {
+      next: (
+        miembros: any[]
+      ) => {
 
 
         console.log(
@@ -240,7 +457,9 @@ implements OnInit {
       },
 
 
-      error: (error: any) => {
+      error: (
+        error: any
+      ) => {
 
 
         console.error(
@@ -256,14 +475,14 @@ implements OnInit {
 
 
   /*
-   * Cargar el saldo del
-   * usuario conectado.
+   * Cargar el saldo
+   * del usuario conectado.
    */
   cargarSaldoUsuario(): void {
 
 
     const usuario =
-    this.authService.obtenerUsuario();
+    this.usuarioActual;
 
 
     if (!usuario) {
@@ -302,23 +521,28 @@ implements OnInit {
         );
 
 
-        /*
-         * Buscamos el balance
-         * correspondiente al
-         * usuario conectado.
-         */
         const balanceUsuario =
         balances.find(
 
           (balance: any) =>
 
-          balance.usuarioId ===
-          usuario.id
+            Number(
+              balance.usuarioId
+            )
+            ===
+            Number(
+              usuario.id
+            )
 
-          ||
+            ||
 
-          balance.idUsuario ===
-          usuario.id
+            Number(
+              balance.idUsuario
+            )
+            ===
+            Number(
+              usuario.id
+            )
 
         );
 
@@ -339,13 +563,6 @@ implements OnInit {
 
 
         } else {
-
-
-          console.warn(
-            'No se ha encontrado '
-            +
-            'el balance del usuario.'
-          );
 
 
           this.saldoUsuario =
@@ -378,6 +595,207 @@ implements OnInit {
 
 
   /*
+   * Agrupar gastos
+   * por mes.
+   */
+  agruparGastosPorMes(): void {
+
+
+    /*
+     * Ordenamos primero los gastos
+     * del más reciente al más antiguo.
+     */
+    const gastosOrdenados =
+    this.gastos
+    .slice()
+    .sort(
+
+      (
+        a: any,
+        b: any
+      ) => {
+
+
+        const fechaA =
+        new Date(
+          a.fechaHora
+        ).getTime();
+
+
+        const fechaB =
+        new Date(
+          b.fechaHora
+        ).getTime();
+
+
+        const diferenciaFecha =
+        fechaB
+        -
+        fechaA;
+
+
+        /*
+         * Si dos gastos tienen exactamente
+         * la misma fecha y hora, usamos el
+         * ID como segundo criterio.
+         *
+         * El gasto creado después tiene un
+         * ID mayor, por lo que debe aparecer
+         * antes.
+         */
+        if (
+          diferenciaFecha !== 0
+        ) {
+
+
+          return diferenciaFecha;
+
+        }
+
+
+        return (
+          Number(b.id)
+          -
+          Number(a.id)
+        );
+
+      }
+
+    );
+
+
+    const grupos =
+    new Map<
+      string,
+      any[]
+    >();
+
+
+    for (
+      const gasto of gastosOrdenados
+    ) {
+
+
+      const fecha =
+      new Date(
+        gasto.fechaHora
+      );
+
+
+      const clave =
+      (
+        fecha.getFullYear()
+        +
+        '-'
+        +
+        String(
+          fecha.getMonth() + 1
+        ).padStart(
+          2,
+          '0'
+        )
+      );
+
+
+      if (
+        !grupos.has(
+          clave
+        )
+      ) {
+
+
+        grupos.set(
+          clave,
+          []
+        );
+
+      }
+
+
+      grupos.get(
+        clave
+      )?.push(
+        gasto
+      );
+
+    }
+
+
+    this.gastosPorMes =
+    [];
+
+
+    grupos.forEach(
+
+      (
+        gastos: any[],
+        clave: string
+      ) => {
+
+
+        const partes =
+        clave.split(
+          '-'
+        );
+
+
+        const anio =
+        Number(
+          partes[0]
+        );
+
+
+        const mes =
+        Number(
+          partes[1]
+        ) - 1;
+
+
+        const fecha =
+        new Date(
+          anio,
+          mes,
+          1
+        );
+
+
+        const nombre =
+        fecha.toLocaleDateString(
+
+          'es-ES',
+
+          {
+
+            month: 'long',
+
+            year: 'numeric'
+
+          }
+
+        );
+
+
+        this.gastosPorMes.push({
+
+          nombre:
+            nombre.charAt(0)
+            .toUpperCase()
+            +
+            nombre.slice(1),
+
+          gastos:
+            gastos
+
+        });
+
+      }
+
+    );
+
+  }
+
+
+  /*
    * Calcular el total
    * gastado.
    */
@@ -404,16 +822,359 @@ implements OnInit {
 
 
   /*
-   * Obtener sólo
-   * los últimos gastos.
+   * Comprobar si el gasto
+   * ha sido pagado por el
+   * usuario actual.
+   *
+   * IMPORTANTE:
+   * El backend devuelve
+   * pagadorId.
    */
-  obtenerUltimosGastos(): any[] {
+  esPagador(
+    gasto: any
+  ): boolean {
 
 
-    return this.gastos
-    .slice()
-    .reverse()
-    .slice(0, 5);
+    if (
+      !this.usuarioActual
+      ||
+      !gasto
+    ) {
+
+
+      return false;
+
+    }
+
+
+    return (
+
+      Number(
+        gasto.pagadorId
+      )
+
+      ===
+
+      Number(
+        this.usuarioActual.id
+      )
+
+    );
+
+  }
+
+
+  /*
+   * Comprobar si debemos
+   * mostrar PRESTASTE.
+   *
+   * Prestaste significa que
+   * el usuario actual fue
+   * quien pagó el gasto.
+   */
+  esPrestaste(
+    gasto: any
+  ): boolean {
+
+
+    return this.esPagador(
+      gasto
+    );
+
+  }
+
+
+  /*
+   * Comprobar si debemos
+   * mostrar PEDISTE.
+   *
+   * Pediste significa que
+   * otra persona pagó el
+   * gasto y al usuario
+   * actual le corresponde
+   * una parte.
+   */
+  esPediste(
+    gasto: any
+  ): boolean {
+
+
+    if (
+      this.esPagador(
+        gasto
+      )
+    ) {
+
+
+      return false;
+
+    }
+
+
+    return (
+      this.obtenerRepartoUsuarioActual(
+        gasto
+      )
+      >
+      0
+    );
+
+  }
+
+
+  /*
+   * Obtener el reparto
+   * del usuario actual.
+   *
+   * Usamos directamente el
+   * importe calculado por
+   * el backend.
+   */
+  obtenerRepartoUsuarioActual(
+    gasto: any
+  ): number {
+
+
+    if (
+      !this.usuarioActual
+      ||
+      !gasto
+      ||
+      !gasto.repartos
+    ) {
+
+
+      return 0;
+
+    }
+
+
+    const reparto =
+    gasto.repartos.find(
+
+      (reparto: any) =>
+
+        Number(
+          reparto.usuarioId
+        )
+
+        ===
+
+        Number(
+          this.usuarioActual.id
+        )
+
+    );
+
+
+    if (!reparto) {
+
+
+      return 0;
+
+    }
+
+
+    return Number(
+      reparto.importe
+    );
+
+  }
+
+
+  /*
+   * Obtener la cantidad
+   * que el usuario actual
+   * ha prestado.
+   *
+   * CASO IGUAL:
+   *
+   * Total menos la parte
+   * correspondiente al
+   * usuario que pagó.
+   *
+   * CASO TOTAL_A_PAGADOR:
+   *
+   * El usuario que pagó
+   * prestó el importe
+   * completo.
+   */
+  obtenerCantidadPrestaste(
+    gasto: any
+  ): number {
+
+
+    if (
+      !gasto
+    ) {
+
+
+      return 0;
+
+    }
+
+
+    const importeTotal =
+    Number(
+      gasto.importe
+    );
+
+
+    /*
+     * Se debe la cantidad
+     * total al pagador.
+     */
+    if (
+
+      gasto.tipoDivision
+      ===
+      'TOTAL_A_PAGADOR'
+
+    ) {
+
+
+      return importeTotal;
+
+    }
+
+
+    /*
+     * En los gastos divididos
+     * normalmente, el usuario
+     * ha prestado la parte que
+     * han consumido los demás.
+     */
+    const importePropio =
+    this.obtenerRepartoUsuarioActual(
+      gasto
+    );
+
+
+    let prestado =
+    importeTotal
+    -
+    importePropio;
+
+
+    /*
+     * Evitamos errores
+     * decimales.
+     */
+    prestado =
+    Math.round(
+      prestado * 100
+    )
+    /
+    100;
+
+
+    return prestado;
+
+  }
+
+
+  /*
+   * Obtener la cantidad
+   * que el usuario actual
+   * ha pedido.
+   *
+   * Usamos directamente
+   * el reparto calculado
+   * por el backend.
+   */
+  obtenerCantidadPediste(
+    gasto: any
+  ): number {
+
+
+    return this.obtenerRepartoUsuarioActual(
+      gasto
+    );
+
+  }
+
+
+  /*
+   * Obtener el día
+   * del gasto.
+   */
+  obtenerDia(
+    gasto: any
+  ): string {
+
+
+    if (
+      !gasto
+      ||
+      !gasto.fechaHora
+    ) {
+
+
+      return '';
+
+    }
+
+
+    const fecha =
+    new Date(
+      gasto.fechaHora
+    );
+
+
+    return String(
+      fecha.getDate()
+    );
+
+  }
+
+
+  /*
+   * Obtener el mes corto.
+   */
+  obtenerMesCorto(
+    gasto: any
+  ): string {
+
+
+    if (
+      !gasto
+      ||
+      !gasto.fechaHora
+    ) {
+
+
+      return '';
+
+    }
+
+
+    const fecha =
+    new Date(
+      gasto.fechaHora
+    );
+
+
+    const meses = [
+
+      'ene',
+      'feb',
+      'mar',
+      'abr',
+      'may',
+      'jun',
+      'jul',
+      'ago',
+      'sept',
+      'oct',
+      'nov',
+      'dic'
+
+    ];
+
+
+    return meses[
+      fecha.getMonth()
+    ];
 
   }
 
@@ -469,10 +1230,15 @@ implements OnInit {
 
 
     this.router.navigate([
+
       '/grupos',
+
       this.grupoId,
+
       'gastos',
+
       gastoId
+
     ]);
 
   }

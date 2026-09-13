@@ -68,6 +68,108 @@ public class GastoService {
 
 
     /*
+     * Busca la categoría utilizada
+     * anteriormente para una descripción
+     * dentro de un grupo.
+     *
+     * Se ignoran mayúsculas y minúsculas.
+     *
+     * Si existen varios gastos con la misma
+     * descripción, se utiliza el más reciente.
+     */
+    public String obtenerCategoriaPorDescripcion(
+            Long grupoId,
+            String descripcion
+    ) {
+
+
+        if (
+                descripcion == null
+                ||
+                descripcion.trim().isEmpty()
+        ) {
+
+            return null;
+
+        }
+
+
+        List<Gasto> gastos =
+                gastoRepository.list(
+                        "grupo.id",
+                        grupoId
+                );
+
+
+        String descripcionBuscada =
+                descripcion.trim();
+
+
+        Gasto gastoEncontrado =
+                null;
+
+
+        for (
+                Gasto gasto : gastos
+        ) {
+
+
+            if (
+                    gasto.descripcion != null
+                    &&
+                    gasto.descripcion.trim()
+                            .equalsIgnoreCase(
+                                    descripcionBuscada
+                            )
+            ) {
+
+
+                if (
+                        gastoEncontrado == null
+                ) {
+
+
+                    gastoEncontrado =
+                            gasto;
+
+                } else if (
+                        gasto.fechaHora != null
+                        &&
+                        (
+                                gastoEncontrado.fechaHora == null
+                                ||
+                                gasto.fechaHora.isAfter(
+                                        gastoEncontrado.fechaHora
+                                )
+                        )
+                ) {
+
+
+                    gastoEncontrado =
+                            gasto;
+
+                }
+
+            }
+
+        }
+
+
+        if (
+                gastoEncontrado == null
+        ) {
+
+            return null;
+
+        }
+
+
+        return gastoEncontrado.categoria.name();
+
+    }
+
+
+    /*
      * Obtiene un gasto por ID.
      */
     public Gasto obtenerPorId(

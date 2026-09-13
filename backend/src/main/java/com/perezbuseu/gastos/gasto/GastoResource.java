@@ -12,6 +12,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
@@ -49,6 +50,28 @@ public class GastoResource {
 
         return gastoService.listarPorGrupo(
                 grupoId
+        );
+
+    }
+
+
+    /*
+     * Busca la categoría utilizada
+     * anteriormente para una descripción
+     * dentro de un grupo.
+     *
+     * Devuelve null si no existe
+     * ningún gasto con esa descripción.
+     */
+    @GET
+    @Path("/grupo/{grupoId}/categoria")
+    public String obtenerCategoriaPorDescripcion(
+            @PathParam("grupoId") Long grupoId,
+            @QueryParam("descripcion") String descripcion) {
+
+        return gastoService.obtenerCategoriaPorDescripcion(
+                grupoId,
+                descripcion
         );
 
     }

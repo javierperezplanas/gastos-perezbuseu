@@ -63,6 +63,7 @@
         type="text"
         placeholder="Ej. Cena en el restaurante"
         [(ngModel)]="descripcion"
+        (blur)="buscarCategoriaAnterior()"
         name="descripcion"
       >
 

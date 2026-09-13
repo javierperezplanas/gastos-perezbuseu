@@ -74,9 +74,9 @@ implements OnInit {
 
     private route: ActivatedRoute,
 
-      private router: Router,
+    private router: Router,
 
-        private gastosService: Gastos
+    private gastosService: Gastos
 
   ) {}
 
@@ -149,6 +149,12 @@ implements OnInit {
         );
 
 
+        console.log(
+          'Repartos:',
+          gasto.repartos
+        );
+
+
         this.gasto =
         gasto;
 
@@ -172,8 +178,8 @@ implements OnInit {
         'No se ha podido cargar el gasto.';
 
 
-          this.cargando =
-          false;
+        this.cargando =
+        false;
 
       }
 
@@ -263,8 +269,8 @@ implements OnInit {
         'No se ha podido eliminar el gasto.';
 
 
-          this.eliminando =
-          false;
+        this.eliminando =
+        false;
 
       }
 
@@ -398,5 +404,6 @@ implements OnInit {
     }
 
   }
+
 
 }

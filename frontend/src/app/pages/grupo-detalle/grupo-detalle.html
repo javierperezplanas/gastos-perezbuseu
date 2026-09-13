@@ -3,10 +3,7 @@
   *ngIf="grupo"
 >
 
-
-  <!-- =====================
-       CABECERA
-  ====================== -->
+  <!-- CABECERA -->
 
   <div class="grupo-cabecera">
 
@@ -64,9 +61,7 @@
     </div>
 
 
-    <!-- =====================
-         SALDO DEL USUARIO
-    ====================== -->
+    <!-- SALDO -->
 
     <div
       class="grupo-saldo"
@@ -101,9 +96,11 @@
 
 
         {{
-          (saldoUsuario < 0
-            ? -saldoUsuario
-            : saldoUsuario)
+          (
+            saldoUsuario < 0
+              ? -saldoUsuario
+              : saldoUsuario
+          )
           | number:'1.2-2'
         }}
 
@@ -116,9 +113,7 @@
     </div>
 
 
-    <!-- =====================
-         ACCIONES
-    ====================== -->
+    <!-- ACCIONES -->
 
     <div class="grupo-acciones">
 
@@ -157,9 +152,7 @@
   </div>
 
 
-  <!-- =====================
-       RESUMEN
-  ====================== -->
+  <!-- RESUMEN -->
 
   <div class="resumen">
 
@@ -176,7 +169,12 @@
 
       <strong>
 
-        {{ totalGastado | number:'1.2-2' }} €
+        {{
+          totalGastado
+          | number:'1.2-2'
+        }}
+
+        €
 
       </strong>
 
@@ -204,39 +202,15 @@
     </div>
 
 
-    <div class="resumen-card">
-
-
-      <span>
-
-        👥 Miembros
-
-      </span>
-
-
-      <strong>
-
-        {{ miembros.length }}
-
-      </strong>
-
-
-    </div>
-
-
   </div>
 
 
-  <!-- =====================
-       CONTENIDO
-  ====================== -->
+  <!-- CONTENIDO -->
 
   <div class="contenido">
 
 
-    <!-- =====================
-         GASTOS
-    ====================== -->
+    <!-- GASTOS -->
 
     <div class="seccion">
 
@@ -246,7 +220,7 @@
 
         <h2>
 
-          📋 Últimos gastos
+          📋 Gastos
 
         </h2>
 
@@ -268,9 +242,7 @@
       </div>
 
 
-      <!-- =====================
-           LISTA DE GASTOS
-      ====================== -->
+      <!-- LISTA DE GASTOS -->
 
       <div
         class="lista-gastos"
@@ -278,66 +250,180 @@
       >
 
 
+        <!-- =========================
+
+             GASTOS AGRUPADOS POR MES
+
+        ========================== -->
+
         <div
-          class="gasto"
+          class="mes-grupo"
           *ngFor="
-            let gasto
-            of obtenerUltimosGastos()
+            let grupoMes
+            of gastosPorMes
           "
-          (click)="verGasto(gasto.id)"
         >
 
 
-          <!-- ICONO -->
+          <!-- TÍTULO DEL MES -->
 
-          <div class="gasto-icono">
+          <div class="mes-titulo">
 
-
-            {{
-              obtenerIconoCategoria(
-                gasto.categoria
-              )
-            }}
-
+            {{ grupoMes.nombre }}
 
           </div>
 
 
-          <!-- INFORMACIÓN -->
+          <!-- GASTOS DEL MES -->
 
-          <div class="gasto-info">
+          <div
+            class="gasto"
+            *ngFor="
+              let gasto
+              of grupoMes.gastos
+            "
+            (click)="verGasto(gasto.id)"
+          >
 
 
-            <div class="gasto-descripcion">
+            <!-- FECHA -->
 
-              {{ gasto.descripcion }}
+            <div class="gasto-fecha">
+
+
+              <strong>
+
+                {{
+                  obtenerDia(
+                    gasto
+                  )
+                }}
+
+              </strong>
+
+
+              <span>
+
+                {{
+                  obtenerMesCorto(
+                    gasto
+                  )
+                }}
+
+              </span>
+
 
             </div>
 
 
-            <div class="gasto-detalles">
+            <!-- ICONO -->
 
-              {{ gasto.nombrePagador }}
+            <div class="gasto-icono">
 
-            </div>
-
-
-          </div>
-
-
-          <!-- IMPORTE -->
-
-          <div class="gasto-derecha">
-
-
-            <div class="gasto-importe">
 
               {{
-                gasto.importe
-                | number:'1.2-2'
+                obtenerIconoCategoria(
+                  gasto.categoria
+                )
               }}
 
-              €
+
+            </div>
+
+
+            <!-- INFORMACIÓN -->
+
+            <div class="gasto-info">
+
+
+              <div class="gasto-descripcion">
+
+                {{ gasto.descripcion }}
+
+              </div>
+
+
+              <!-- PRESTASTE -->
+
+              <div
+                class="gasto-prestaste"
+                *ngIf="
+                  esPrestaste(
+                    gasto
+                  )
+                "
+              >
+
+                Prestaste
+
+                <strong>
+
+                  {{
+                    obtenerCantidadPrestaste(
+                      gasto
+                    )
+                    | number:'1.2-2'
+                  }}
+
+                  €
+
+                </strong>
+
+
+              </div>
+
+
+              <!-- PEDISTE -->
+
+              <div
+                class="gasto-pediste"
+                *ngIf="
+                  esPediste(
+                    gasto
+                  )
+                "
+              >
+
+                Pediste
+
+                <strong>
+
+                  {{
+                    obtenerCantidadPediste(
+                      gasto
+                    )
+                    | number:'1.2-2'
+                  }}
+
+                  €
+
+                </strong>
+
+
+              </div>
+
+
+            </div>
+
+
+            <!-- IMPORTE TOTAL -->
+
+            <div class="gasto-derecha">
+
+
+              <div class="gasto-importe">
+
+
+                {{
+                  gasto.importe
+                  | number:'1.2-2'
+                }}
+
+                €
+
+
+              </div>
+
 
             </div>
 
@@ -351,9 +437,7 @@
       </div>
 
 
-      <!-- =====================
-           SIN GASTOS
-      ====================== -->
+      <!-- SIN GASTOS -->
 
       <div
         class="sin-gastos"
@@ -388,105 +472,10 @@
     </div>
 
 
-    <!-- =====================
-         MIEMBROS
-    ====================== -->
-
-    <div class="seccion">
-
-
-      <div class="seccion-cabecera">
-
-
-        <h2>
-
-          👥 Miembros
-
-        </h2>
-
-
-      </div>
-
-
-      <div
-        class="lista-miembros"
-        *ngIf="miembros.length > 0"
-      >
-
-
-        <div
-          class="miembro"
-          *ngFor="
-            let miembro
-            of miembros
-          "
-        >
-
-
-          <div class="avatar">
-
-
-            {{
-              obtenerIniciales(
-                miembro
-              )
-            }}
-
-
-          </div>
-
-
-          <div>
-
-
-            <strong>
-
-              {{ miembro.usuario?.nombre }}
-
-            </strong>
-
-
-            <span>
-
-              Miembro del grupo
-
-            </span>
-
-
-          </div>
-
-
-        </div>
-
-
-      </div>
-
-
-      <div
-        class="sin-gastos"
-        *ngIf="miembros.length === 0"
-      >
-
-
-        <p>
-
-          No hay miembros.
-
-        </p>
-
-
-      </div>
-
-
-    </div>
-
-
   </div>
 
 
-  <!-- =====================
-       BALANCE
-  ====================== -->
+  <!-- BALANCE -->
 
   <div class="balance-resumen">
 
@@ -538,9 +527,7 @@
 </div>
 
 
-<!-- =====================
-     CARGANDO
-====================== -->
+<!-- CARGANDO -->
 
 <div
   class="cargando"
