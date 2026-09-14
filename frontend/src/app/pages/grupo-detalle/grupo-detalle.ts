@@ -255,9 +255,13 @@ implements OnInit {
          * terminamos aquí.
          */
         if (
+
           !respuesta
+
           ||
+
           respuesta.length === 0
+
         ) {
 
 
@@ -529,7 +533,9 @@ implements OnInit {
             Number(
               balance.usuarioId
             )
+
             ===
+
             Number(
               usuario.id
             )
@@ -539,7 +545,9 @@ implements OnInit {
             Number(
               balance.idUsuario
             )
+
             ===
+
             Number(
               usuario.id
             )
@@ -654,9 +662,17 @@ implements OnInit {
 
 
         return (
-          Number(b.id)
+
+          Number(
+            b.id
+          )
+
           -
-          Number(a.id)
+
+          Number(
+            a.id
+          )
+
         );
 
       }
@@ -672,7 +688,8 @@ implements OnInit {
 
 
     for (
-      const gasto of gastosOrdenados
+      const gasto
+      of gastosOrdenados
     ) {
 
 
@@ -683,24 +700,29 @@ implements OnInit {
 
 
       const clave =
-      (
+
         fecha.getFullYear()
+
         +
+
         '-'
+
         +
+
         String(
           fecha.getMonth() + 1
         ).padStart(
           2,
           '0'
-        )
-      );
+        );
 
 
       if (
+
         !grupos.has(
           clave
         )
+
       ) {
 
 
@@ -748,7 +770,9 @@ implements OnInit {
         const mes =
         Number(
           partes[1]
-        ) - 1;
+        )
+        -
+        1;
 
 
         const fecha =
@@ -778,10 +802,14 @@ implements OnInit {
         this.gastosPorMes.push({
 
           nombre:
+
             nombre.charAt(0)
             .toUpperCase()
+
             +
+
             nombre.slice(1),
+
 
           gastos:
             gastos
@@ -807,7 +835,8 @@ implements OnInit {
 
 
     for (
-      const gasto of this.gastos
+      const gasto
+      of this.gastos
     ) {
 
 
@@ -836,9 +865,13 @@ implements OnInit {
 
 
     if (
+
       !this.usuarioActual
+
       ||
+
       !gasto
+
     ) {
 
 
@@ -900,9 +933,11 @@ implements OnInit {
 
 
     if (
+
       this.esPagador(
         gasto
       )
+
     ) {
 
 
@@ -912,11 +947,15 @@ implements OnInit {
 
 
     return (
+
       this.obtenerRepartoUsuarioActual(
         gasto
       )
+
       >
+
       0
+
     );
 
   }
@@ -936,11 +975,17 @@ implements OnInit {
 
 
     if (
+
       !this.usuarioActual
+
       ||
+
       !gasto
+
       ||
+
       !gasto.repartos
+
     ) {
 
 
@@ -987,17 +1032,16 @@ implements OnInit {
    * que el usuario actual
    * ha prestado.
    *
-   * CASO IGUAL:
+   * La cantidad prestada es
+   * exactamente la suma de
+   * los repartos de las otras
+   * personas.
    *
-   * Total menos la parte
-   * correspondiente al
-   * usuario que pagó.
-   *
-   * CASO TOTAL_A_PAGADOR:
-   *
-   * El usuario que pagó
-   * prestó el importe
-   * completo.
+   * De esta forma usamos los
+   * importes exactos calculados
+   * por el backend y respetamos
+   * correctamente los céntimos
+   * del redondeo.
    */
   obtenerCantidadPrestaste(
     gasto: any
@@ -1005,7 +1049,17 @@ implements OnInit {
 
 
     if (
+
       !gasto
+
+      ||
+
+      !this.usuarioActual
+
+      ||
+
+      !gasto.repartos
+
     ) {
 
 
@@ -1014,15 +1068,11 @@ implements OnInit {
     }
 
 
-    const importeTotal =
-    Number(
-      gasto.importe
-    );
-
-
     /*
-     * Se debe la cantidad
-     * total al pagador.
+     * TOTAL_A_PAGADOR.
+     *
+     * El pagador ha adelantado
+     * todo el importe.
      */
     if (
 
@@ -1033,32 +1083,57 @@ implements OnInit {
     ) {
 
 
-      return importeTotal;
+      return Number(
+        gasto.importe
+      );
 
     }
 
 
     /*
-     * En los gastos divididos
-     * normalmente, el usuario
-     * ha prestado la parte que
-     * han consumido los demás.
+     * Sumamos los repartos
+     * de todas las personas
+     * excepto el usuario actual.
      */
-    const importePropio =
-    this.obtenerRepartoUsuarioActual(
-      gasto
-    );
-
-
     let prestado =
-    importeTotal
-    -
-    importePropio;
+    0;
+
+
+    for (
+      const reparto
+      of gasto.repartos
+    ) {
+
+
+      if (
+
+        Number(
+          reparto.usuarioId
+        )
+
+        !==
+
+        Number(
+          this.usuarioActual.id
+        )
+
+      ) {
+
+
+        prestado +=
+        Number(
+          reparto.importe
+        );
+
+      }
+
+    }
 
 
     /*
-     * Evitamos errores
-     * decimales.
+     * Evitamos posibles errores
+     * de precisión decimal de
+     * JavaScript.
      */
     prestado =
     Math.round(
@@ -1104,9 +1179,13 @@ implements OnInit {
 
 
     if (
+
       !gasto
+
       ||
+
       !gasto.fechaHora
+
     ) {
 
 
@@ -1137,9 +1216,13 @@ implements OnInit {
 
 
     if (
+
       !gasto
+
       ||
+
       !gasto.fechaHora
+
     ) {
 
 
@@ -1254,7 +1337,9 @@ implements OnInit {
 
 
     if (
+
       !miembro?.usuario?.nombre
+
     ) {
 
 
@@ -1268,5 +1353,6 @@ implements OnInit {
     .toUpperCase();
 
   }
+
 
 }

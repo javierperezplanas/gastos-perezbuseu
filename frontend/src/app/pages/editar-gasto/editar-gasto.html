@@ -1,6 +1,8 @@
 <div class="editar-gasto-container">
 
-  <!-- CABECERA -->
+  <!-- =====================
+       CABECERA
+  ====================== -->
 
   <div class="pagina-cabecera">
 
@@ -18,6 +20,7 @@
         Editar gasto
       </h1>
 
+
       <p>
         Modifica los datos del gasto
       </p>
@@ -27,7 +30,9 @@
   </div>
 
 
-  <!-- CARGANDO -->
+  <!-- =====================
+       CARGANDO
+  ====================== -->
 
   <div
     class="mensaje"
@@ -39,7 +44,9 @@
   </div>
 
 
-  <!-- ERROR -->
+  <!-- =====================
+       ERROR
+  ====================== -->
 
   <div
     class="mensaje error"
@@ -51,7 +58,9 @@
   </div>
 
 
-  <!-- FORMULARIO -->
+  <!-- =====================
+       FORMULARIO
+  ====================== -->
 
   <div
     class="formulario"
@@ -61,7 +70,10 @@
     "
   >
 
-    <!-- DESCRIPCIÓN -->
+
+    <!-- =====================
+         DESCRIPCIÓN
+    ====================== -->
 
     <div class="campo">
 
@@ -81,7 +93,9 @@
     </div>
 
 
-    <!-- CATEGORÍA -->
+    <!-- =====================
+         CATEGORÍA
+    ====================== -->
 
     <div class="campo">
 
@@ -125,7 +139,9 @@
     </div>
 
 
-    <!-- IMPORTE -->
+    <!-- =====================
+         IMPORTE
+    ====================== -->
 
     <div class="campo">
 
@@ -156,7 +172,9 @@
     </div>
 
 
-    <!-- QUIÉN HA PAGADO -->
+    <!-- =====================
+         QUIÉN HA PAGADO
+    ====================== -->
 
     <div class="campo">
 
@@ -171,23 +189,17 @@
         name="pagador"
       >
 
-        <option
-          [ngValue]="0"
-        >
+        <option [ngValue]="0">
           Selecciona quién ha pagado
         </option>
 
 
-        <option
-          [ngValue]="1"
-        >
+        <option [ngValue]="1">
           Javi
         </option>
 
 
-        <option
-          [ngValue]="2"
-        >
+        <option [ngValue]="2">
           Miriam
         </option>
 
@@ -196,7 +208,9 @@
     </div>
 
 
-    <!-- DIVIDIR GASTO -->
+    <!-- =====================
+         DIVIDIR GASTO
+    ====================== -->
 
     <div class="campo">
 
@@ -225,26 +239,57 @@
     </div>
 
 
-    <!-- FECHA -->
+    <!-- =====================
+         FECHA Y HORA
+    ====================== -->
 
-    <div class="campo">
-
-      <label for="fecha">
-        Fecha
-      </label>
+    <div class="fecha-hora">
 
 
-      <input
-        id="fecha"
-        type="date"
-        [(ngModel)]="fecha"
-        name="fecha"
-      >
+      <!-- FECHA -->
+
+      <div class="campo">
+
+        <label for="fecha">
+          Fecha
+        </label>
+
+
+        <input
+          id="fecha"
+          type="date"
+          [(ngModel)]="fecha"
+          name="fecha"
+        >
+
+      </div>
+
+
+      <!-- HORA -->
+
+      <div class="campo">
+
+        <label for="hora">
+          Hora
+        </label>
+
+
+        <input
+          id="hora"
+          type="time"
+          [(ngModel)]="hora"
+          name="hora"
+        >
+
+      </div>
+
 
     </div>
 
 
-    <!-- BOTONES -->
+    <!-- =====================
+         BOTONES
+    ====================== -->
 
     <div class="formulario-botones">
 
@@ -278,6 +323,8 @@
 
     </div>
 
+
   </div>
+
 
 </div>

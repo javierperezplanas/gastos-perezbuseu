@@ -33,62 +33,82 @@ implements OnInit {
 
 
   /*
-   * ID del grupo.
+   * =====================
+   *
+   * ID DEL GRUPO
+   *
+   * =====================
    */
   grupoId: number = 0;
 
 
   /*
-   * ID del gasto.
+   * =====================
+   *
+   * ID DEL GASTO
+   *
+   * =====================
    */
   gastoId: number = 0;
 
 
   /*
-   * Datos del gasto.
+   * =====================
+   *
+   * DATOS DEL GASTO
+   *
+   * =====================
    */
   gasto: any = null;
 
 
   /*
-   * Indica si estamos
-   * cargando los datos.
+   * =====================
+   *
+   * CARGANDO
+   *
+   * =====================
    */
   cargando: boolean = true;
 
 
   /*
-   * Indica si estamos
-   * eliminando el gasto.
+   * =====================
+   *
+   * ELIMINANDO
+   *
+   * =====================
    */
   eliminando: boolean = false;
 
 
   /*
-   * Mensaje de error.
+   * =====================
+   *
+   * ERROR
+   *
+   * =====================
    */
   error: string = '';
 
 
   /*
-   * Gastos del grupo.
+   * =====================
    *
-   * Se utilizan para calcular
-   * la tendencia de los últimos
-   * tres meses.
-   */
-  gastosGrupo: any[] = [];
-
-
-  /*
-   * Datos de la tendencia.
+   * TENDENCIA
+   *
+   * =====================
+   *
+   * Últimos tres meses
+   * de gastos de la misma
+   * categoría.
    */
   tendencia: any[] = [];
 
 
   /*
-   * Indica si estamos cargando
-   * la tendencia.
+   * Indica si estamos
+   * cargando la tendencia.
    */
   cargandoTendencia: boolean = false;
 
@@ -104,6 +124,13 @@ implements OnInit {
   ) {}
 
 
+  /*
+   * =====================
+   *
+   * INICIALIZACIÓN
+   *
+   * =====================
+   */
   ngOnInit(): void {
 
 
@@ -192,8 +219,7 @@ implements OnInit {
 
 
         /*
-         * Terminamos la carga
-         * del gasto principal.
+         * Terminamos la carga.
          */
         this.cargando =
         false;
@@ -201,7 +227,7 @@ implements OnInit {
 
         /*
          * Cargamos la tendencia
-         * de la categoría.
+         * de los últimos 3 meses.
          */
         this.cargarTendencia();
 
@@ -237,13 +263,18 @@ implements OnInit {
    * CARGAR TENDENCIA
    *
    * =====================
+   *
+   * Calculamos los gastos
+   * de la misma categoría
+   * durante los últimos
+   * tres meses.
    */
   cargarTendencia(): void {
 
 
     /*
      * Si todavía no tenemos
-     * el gasto no hacemos nada.
+     * el gasto, no hacemos nada.
      */
     if (!this.gasto) {
 
@@ -257,8 +288,8 @@ implements OnInit {
 
 
     /*
-     * Obtenemos todos los gastos
-     * del grupo.
+     * Obtenemos todos los
+     * gastos del grupo.
      */
     this.gastosService
     .obtenerGastosPorGrupo(
@@ -269,24 +300,13 @@ implements OnInit {
       next: (gastos: any[]) => {
 
 
-        console.log(
-          'Gastos del grupo para tendencia:',
+        /*
+         * Calculamos los datos
+         * de los últimos 3 meses.
+         */
+        this.calcularTendencia(
           gastos
         );
-
-
-        /*
-         * Guardamos los gastos.
-         */
-        this.gastosGrupo =
-        gastos || [];
-
-
-        /*
-         * Calculamos los últimos
-         * tres meses.
-         */
-        this.calcularTendencia();
 
 
         this.cargandoTendencia =
@@ -305,9 +325,9 @@ implements OnInit {
 
 
         /*
-         * No mostramos error en toda
-         * la página porque el gasto
-         * principal sigue funcionando.
+         * No mostramos error general.
+         * Simplemente dejamos la
+         * tendencia vacía.
          */
         this.tendencia =
         [];
@@ -330,14 +350,29 @@ implements OnInit {
    *
    * =====================
    */
-  calcularTendencia(): void {
+  calcularTendencia(
+    gastos: any[]
+  ): void {
+
+
+    if (!this.gasto) {
+
+      this.tendencia =
+      [];
+
+
+      return;
+
+    }
 
 
     /*
-     * Fecha actual.
+     * Fecha del gasto actual.
      */
-    const fechaActual =
-    new Date();
+    const fechaGasto =
+    new Date(
+      this.gasto.fechaHora
+    );
 
 
     /*
@@ -349,11 +384,8 @@ implements OnInit {
 
 
     /*
-     * Recorremos:
-     *
-     * - Hace 2 meses
-     * - Hace 1 mes
-     * - Mes actual
+     * Meses empezando por
+     * el más antiguo.
      */
     for (
 
@@ -368,131 +400,34 @@ implements OnInit {
 
       const fecha =
       new Date(
-
-        fechaActual.getFullYear(),
-
-        fechaActual.getMonth() - i,
-
+        fechaGasto.getFullYear(),
+        fechaGasto.getMonth() - i,
         1
-
-      );
-
-
-      const anio =
-      fecha.getFullYear();
-
-
-      const mes =
-      fecha.getMonth();
-
-
-      /*
-       * Nombre corto.
-       */
-      const nombre =
-      this.obtenerNombreMes(
-        mes
-      );
-
-
-      /*
-       * Calculamos el total
-       * de la categoría durante
-       * ese mes.
-       */
-      const total =
-      this.gastosGrupo
-      .filter(
-        (gasto: any) => {
-
-
-          /*
-           * Debe ser de la misma
-           * categoría.
-           */
-          if (
-
-            gasto.categoria !==
-            this.gasto.categoria
-
-          ) {
-
-            return false;
-
-          }
-
-
-          /*
-           * Debe tener fecha.
-           */
-          if (!gasto.fechaHora) {
-
-            return false;
-
-          }
-
-
-          const fechaGasto =
-          new Date(
-            gasto.fechaHora
-          );
-
-
-          return (
-
-            fechaGasto.getFullYear()
-            ===
-            anio
-
-            &&
-
-            fechaGasto.getMonth()
-            ===
-            mes
-
-          );
-
-        }
-      )
-      .reduce(
-
-        (
-          total: number,
-
-          gasto: any
-        ) => {
-
-
-          return (
-
-            total +
-
-            Number(
-              gasto.importe || 0
-            )
-
-          );
-
-        },
-
-        0
-
       );
 
 
       meses.push({
 
-        nombre:
-        nombre,
+        mes:
+        fecha.getMonth(),
 
-        total:
-        total,
 
         anio:
-        anio,
+        fecha.getFullYear(),
 
-        mes:
-        mes
+
+        nombre:
+        this.obtenerNombreMes(
+          fecha.getMonth()
+        ),
+
+
+        total:
+        0,
+
+
+        porcentaje:
+        0
 
       });
 
@@ -500,16 +435,91 @@ implements OnInit {
 
 
     /*
-     * Calculamos el mayor importe.
-     *
-     * Nos sirve para calcular
-     * el tamaño de las barras.
+     * Recorremos todos
+     * los gastos.
      */
-    const mayorTotal =
+    for (
+      const gasto of gastos
+    ) {
+
+
+      /*
+       * Solo queremos gastos
+       * de la misma categoría.
+       */
+      if (
+
+        gasto.categoria
+        !==
+        this.gasto.categoria
+
+      ) {
+
+        continue;
+
+      }
+
+
+      /*
+       * Fecha del gasto.
+       */
+      const fecha =
+      new Date(
+        gasto.fechaHora
+      );
+
+
+      /*
+       * Buscamos el mes
+       * correspondiente.
+       */
+      const mes =
+      meses.find(
+
+        (item: any) =>
+
+          item.mes
+          ===
+          fecha.getMonth()
+
+          &&
+
+          item.anio
+          ===
+          fecha.getFullYear()
+
+      );
+
+
+      /*
+       * Si pertenece a uno
+       * de los tres meses,
+       * sumamos el importe.
+       */
+      if (mes) {
+
+
+        mes.total +=
+        Number(
+          gasto.importe
+          || 0
+        );
+
+      }
+
+    }
+
+
+    /*
+     * Buscamos el importe
+     * máximo.
+     */
+    const maximo =
     Math.max(
 
       ...meses.map(
-        mes => mes.total
+        (mes: any) =>
+        mes.total
       ),
 
       0
@@ -518,58 +528,43 @@ implements OnInit {
 
 
     /*
-     * Añadimos el porcentaje
-     * de cada barra.
+     * Calculamos el porcentaje
+     * para la barra gráfica.
      */
-    this.tendencia =
-    meses.map(
-      mes => {
+    for (
+      const mes of meses
+    ) {
 
 
-        let porcentaje =
+      if (maximo > 0) {
+
+
+        mes.porcentaje =
+        (
+          mes.total
+          /
+          maximo
+        )
+        *
+        100;
+
+
+      } else {
+
+
+        mes.porcentaje =
         0;
 
-
-        if (
-
-          mayorTotal > 0
-
-        ) {
-
-
-          porcentaje =
-
-          (
-            mes.total /
-
-            mayorTotal
-
-          )
-
-          *
-
-          100;
-
-        }
-
-
-        return {
-
-          ...mes,
-
-          porcentaje:
-          porcentaje
-
-        };
-
       }
-    );
+
+    }
 
 
-    console.log(
-      'Tendencia calculada:',
-      this.tendencia
-    );
+    /*
+     * Guardamos el resultado.
+     */
+    this.tendencia =
+    meses;
 
   }
 
@@ -588,38 +583,34 @@ implements OnInit {
 
     const meses = [
 
-      'Ene',
+      'Enero',
 
-      'Feb',
+      'Febrero',
 
-      'Mar',
+      'Marzo',
 
-      'Abr',
+      'Abril',
 
-      'May',
+      'Mayo',
 
-      'Jun',
+      'Junio',
 
-      'Jul',
+      'Julio',
 
-      'Ago',
+      'Agosto',
 
-      'Sep',
+      'Septiembre',
 
-      'Oct',
+      'Octubre',
 
-      'Nov',
+      'Noviembre',
 
-      'Dic'
+      'Diciembre'
 
     ];
 
 
-    return (
-      meses[mes]
-      ||
-      ''
-    );
+    return meses[mes];
 
   }
 
@@ -635,10 +626,15 @@ implements OnInit {
 
 
     this.router.navigate([
+
       '/grupos',
+
       this.grupoId,
+
       'editar-gasto',
+
       this.gastoId
+
     ]);
 
   }
@@ -656,7 +652,7 @@ implements OnInit {
 
     const confirmar =
     confirm(
-      '¿Seguro que quieres eliminar este gasto?'
+      '¿Seguro que quieres eliminar el gasto?'
     );
 
 
@@ -693,8 +689,11 @@ implements OnInit {
          * Volvemos al grupo.
          */
         this.router.navigate([
+
           '/grupos',
+
           this.grupoId
+
         ]);
 
       },
@@ -726,7 +725,7 @@ implements OnInit {
   /*
    * =====================
    *
-   * VOLVER
+   * VOLVER AL GRUPO
    *
    * =====================
    */
@@ -734,8 +733,11 @@ implements OnInit {
 
 
     this.router.navigate([
+
       '/grupos',
+
       this.grupoId
+
     ]);
 
   }
@@ -822,11 +824,8 @@ implements OnInit {
 
       default:
 
-        return (
-          categoria
-          ||
-          'Sin categoría'
-        );
+        return categoria
+        || 'Sin categoría';
 
     }
 
@@ -836,7 +835,7 @@ implements OnInit {
   /*
    * =====================
    *
-   * NOMBRE DIVISIÓN
+   * NOMBRE TIPO DIVISIÓN
    *
    * =====================
    */
@@ -863,6 +862,141 @@ implements OnInit {
         return 'Dividido por igual';
 
     }
+
+  }
+
+
+  /*
+   * =====================
+   *
+   * BALANCE DEL PARTICIPANTE
+   *
+   * =====================
+   *
+   * Para mostrar el balance
+   * del detalle utilizamos
+   * DIRECTAMENTE el importe
+   * que ya tiene asignado
+   * cada participante.
+   *
+   * NO recalculamos nada.
+   *
+   * Ejemplo:
+   *
+   * Gasto: 40,95 €
+   *
+   * Javi:
+   * reparto = 20,48 €
+   *
+   * Miriam:
+   * reparto = 20,47 €
+   */
+  obtenerBalance(
+    reparto: any
+  ): number {
+
+
+    return Number(
+      reparto.importe
+      || 0
+    );
+
+  }
+
+
+  /*
+   * =====================
+   *
+   * TEXTO DEL BALANCE
+   *
+   * =====================
+   *
+   * Si el usuario es quien
+   * ha pagado el gasto:
+   *
+   * Prestaste.
+   *
+   * Si no es el pagador:
+   *
+   * Pediste.
+   */
+  obtenerTextoBalance(
+    reparto: any
+  ): string {
+
+
+    if (!this.gasto) {
+
+      return '';
+
+    }
+
+
+    /*
+     * El pagador adelantó
+     * el dinero.
+     */
+    if (
+
+      reparto.usuarioId
+      ===
+      this.gasto.pagadorId
+
+    ) {
+
+      return 'Prestaste';
+
+    }
+
+
+    /*
+     * El resto de participantes
+     * deben su parte.
+     */
+    return 'Pediste';
+
+  }
+
+
+  /*
+   * =====================
+   *
+   * CLASE DEL BALANCE
+   *
+   * =====================
+   */
+  obtenerClaseBalance(
+    reparto: any
+  ): string {
+
+
+    if (!this.gasto) {
+
+      return 'balance-saldado';
+
+    }
+
+
+    /*
+     * Pagador.
+     */
+    if (
+
+      reparto.usuarioId
+      ===
+      this.gasto.pagadorId
+
+    ) {
+
+      return 'balance-favor';
+
+    }
+
+
+    /*
+     * Resto de participantes.
+     */
+    return 'balance-debe';
 
   }
 

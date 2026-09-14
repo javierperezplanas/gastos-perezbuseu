@@ -42,8 +42,11 @@ public class RepartoService {
             String tipoDivision) {
 
 
-        if (participantesIds == null
-                || participantesIds.isEmpty()) {
+        if (
+                participantesIds == null
+                ||
+                participantesIds.isEmpty()
+        ) {
 
             throw new IllegalArgumentException(
                     "Debe haber al menos un participante"
@@ -62,8 +65,11 @@ public class RepartoService {
          * Si no se recibe ningún tipo,
          * usamos IGUAL por defecto.
          */
-        if (tipoDivision == null
-                || tipoDivision.isBlank()) {
+        if (
+                tipoDivision == null
+                ||
+                tipoDivision.isBlank()
+        ) {
 
             tipoDivision = "IGUAL";
 
@@ -79,18 +85,31 @@ public class RepartoService {
          * El importe se divide entre
          * el resto de participantes.
          */
-        if (tipoDivision.equals("TOTAL_A_PAGADOR")) {
+        if (
+                tipoDivision.equals(
+                        "TOTAL_A_PAGADOR"
+                )
+        ) {
 
 
             List<Usuario> deudores =
                     new ArrayList<>();
 
 
-            for (Usuario usuario : participantes) {
+            for (
+                    Usuario usuario
+                    : participantes
+            ) {
 
-                if (!usuario.id.equals(pagador.id)) {
+                if (
+                        !usuario.id.equals(
+                                pagador.id
+                        )
+                ) {
 
-                    deudores.add(usuario);
+                    deudores.add(
+                            usuario
+                    );
 
                 }
 
@@ -101,7 +120,9 @@ public class RepartoService {
              * Si no hay otros participantes,
              * el pagador asume el gasto.
              */
-            if (deudores.isEmpty()) {
+            if (
+                    deudores.isEmpty()
+            ) {
 
                 guardarReparto(
                         gasto,
@@ -114,9 +135,18 @@ public class RepartoService {
             }
 
 
+            /*
+             * El pagador no participa
+             * en este reparto.
+             *
+             * Los céntimos sobrantes
+             * se distribuyen entre
+             * los deudores.
+             */
             dividirEntreUsuarios(
                     gasto,
-                    deudores
+                    deudores,
+                    null
             );
 
 
@@ -130,10 +160,21 @@ public class RepartoService {
          *
          * Se divide entre todos
          * los participantes.
+         *
+         * IMPORTANTE:
+         *
+         * Si sobra algún céntimo,
+         * se reparte primero entre
+         * los participantes que
+         * NO son el pagador.
+         *
+         * De esta forma el redondeo
+         * favorece al pagador.
          */
         dividirEntreUsuarios(
                 gasto,
-                participantes
+                participantes,
+                pagador
         );
 
     }
@@ -145,7 +186,8 @@ public class RepartoService {
      */
     @Transactional
     public void eliminarRepartosDeGasto(
-            Long gastoId) {
+            Long gastoId
+    ) {
 
 
         repartoGastoRepository.delete(
@@ -162,17 +204,29 @@ public class RepartoService {
      *
      * Se trabaja en céntimos para
      * evitar problemas de decimales.
+     *
+     * Si existe un pagador dentro
+     * del reparto, los céntimos
+     * sobrantes se asignan primero
+     * a los demás participantes.
+     *
+     * Así el redondeo favorece
+     * al pagador.
      */
     private void dividirEntreUsuarios(
             Gasto gasto,
-            List<Usuario> usuarios) {
+            List<Usuario> usuarios,
+            Usuario pagador
+    ) {
 
 
         int numeroUsuarios =
                 usuarios.size();
 
 
-        if (numeroUsuarios == 0) {
+        if (
+                numeroUsuarios == 0
+        ) {
 
             throw new IllegalArgumentException(
                     "No hay usuarios para repartir el gasto"
@@ -181,44 +235,166 @@ public class RepartoService {
         }
 
 
+        /*
+         * Convertimos el importe
+         * completo a céntimos.
+         *
+         * Ejemplo:
+         *
+         * 40,95 €
+         *
+         * = 4095 céntimos
+         */
         int totalCentimos =
                 gasto.importe
                         .movePointRight(2)
                         .intValueExact();
 
 
+        /*
+         * Parte base para cada
+         * participante.
+         *
+         * Ejemplo:
+         *
+         * 4095 / 2 = 2047
+         */
         int centimosBase =
                 totalCentimos
-                        / numeroUsuarios;
-
-
-        int restoCentimos =
-                totalCentimos
-                        % numeroUsuarios;
+                        /
+                        numeroUsuarios;
 
 
         /*
-         * Repartimos los céntimos
-         * restantes entre los primeros
-         * usuarios de la lista.
+         * Céntimos que sobran
+         * después de dividir.
          *
-         * Así garantizamos que la suma
-         * sea exactamente igual al importe.
+         * Ejemplo:
+         *
+         * 4095 % 2 = 1
          */
-        for (int i = 0;
-             i < numeroUsuarios;
-             i++) {
+        int restoCentimos =
+                totalCentimos
+                        %
+                        numeroUsuarios;
+
+
+        /*
+         * Guardamos los céntimos
+         * extra que recibirá
+         * cada usuario.
+         */
+        int[] centimosExtra =
+                new int[
+                        numeroUsuarios
+                ];
+
+
+        /*
+         * PRIMERA PASADA
+         *
+         * Repartimos los céntimos
+         * sobrantes entre los usuarios
+         * que NO son el pagador.
+         *
+         * Esto hace que el redondeo
+         * favorezca al pagador.
+         */
+        for (
+                int i = 0;
+                i < numeroUsuarios;
+                i++
+        ) {
+
+
+            if (
+                    restoCentimos <= 0
+            ) {
+
+                break;
+
+            }
+
+
+            /*
+             * Si hay pagador y este
+             * usuario es el pagador,
+             * lo dejamos para el final.
+             */
+            if (
+
+                    pagador != null
+
+                    &&
+
+                    usuarios.get(i).id.equals(
+                            pagador.id
+                    )
+
+            ) {
+
+                continue;
+
+            }
+
+
+            centimosExtra[i]++;
+
+
+            restoCentimos--;
+
+        }
+
+
+        /*
+         * SEGUNDA PASADA
+         *
+         * Normalmente no será necesaria.
+         *
+         * Solo se ejecuta si todavía
+         * quedan céntimos por repartir.
+         *
+         * En ese caso se pueden
+         * asignar también al pagador.
+         */
+        for (
+                int i = 0;
+                i < numeroUsuarios;
+                i++
+        ) {
+
+
+            if (
+                    restoCentimos <= 0
+            ) {
+
+                break;
+
+            }
+
+
+            centimosExtra[i]++;
+
+
+            restoCentimos--;
+
+        }
+
+
+        /*
+         * Guardamos los repartos.
+         */
+        for (
+                int i = 0;
+                i < numeroUsuarios;
+                i++
+        ) {
 
 
             int centimos =
-                    centimosBase;
-
-
-            if (i < restoCentimos) {
-
-                centimos++;
-
-            }
+                    centimosBase
+                            +
+                            centimosExtra[i];
 
 
             guardarReparto(
@@ -237,14 +413,18 @@ public class RepartoService {
      * participantes.
      */
     private List<Usuario> obtenerParticipantes(
-            List<Long> participantesIds) {
+            List<Long> participantesIds
+    ) {
 
 
         List<Usuario> participantes =
                 new ArrayList<>();
 
 
-        for (Long usuarioId : participantesIds) {
+        for (
+                Long usuarioId
+                : participantesIds
+        ) {
 
 
             Usuario usuario =
@@ -253,7 +433,9 @@ public class RepartoService {
                     );
 
 
-            if (usuario == null) {
+            if (
+                    usuario == null
+            ) {
 
                 throw new IllegalArgumentException(
                         "Usuario no encontrado: "
@@ -282,7 +464,8 @@ public class RepartoService {
     private void guardarReparto(
             Gasto gasto,
             Usuario usuario,
-            BigDecimal importe) {
+            BigDecimal importe
+    ) {
 
 
         RepartoGasto reparto =
@@ -319,7 +502,8 @@ public class RepartoService {
     private void guardarReparto(
             Gasto gasto,
             Usuario usuario,
-            int centimos) {
+            int centimos
+    ) {
 
 
         BigDecimal importe =

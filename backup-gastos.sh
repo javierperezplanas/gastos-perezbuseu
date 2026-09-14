@@ -7,19 +7,23 @@ set -e
 # =========================
 
 PROYECTO="/home/javi/proyectos/gastos-perezbuseu"
-DESTINO="/mnt/disco/backups-gastos-perezbuseu"
 
 GOOGLE_DRIVE="gastos-google-drive:Backups Gastos PerezBuseu"
 
 FECHA=$(date +"%Y-%m-%d_%H-%M-%S")
 
-BACKUP="$DESTINO/backup-$FECHA"
-ARCHIVO="$DESTINO/backup-$FECHA.tar.gz"
+BACKUP="/tmp/backup-gastos-perezbuseu-$FECHA"
+
+ARCHIVO="/tmp/backup-$FECHA.tar.gz"
 
 
 # =========================
-# CREAR CARPETA
+# CREAR CARPETA TEMPORAL
 # =========================
+
+echo "================================="
+echo " INICIANDO BACKUP"
+echo "================================="
 
 mkdir -p "$BACKUP"
 
@@ -28,6 +32,7 @@ mkdir -p "$BACKUP"
 # BASE DE DATOS
 # =========================
 
+echo ""
 echo "Copiando base de datos..."
 
 docker exec gastos-perezbuseu-postgres \
@@ -43,9 +48,13 @@ pg_dump \
 
 echo "Copiando archivos subidos..."
 
-cp -r \
-"$PROYECTO/backend/uploads" \
-"$BACKUP/uploads"
+if [ -d "$PROYECTO/backend/uploads" ]; then
+
+    cp -r \
+    "$PROYECTO/backend/uploads" \
+    "$BACKUP/uploads"
+
+fi
 
 
 # =========================
@@ -69,7 +78,6 @@ cp "$PROYECTO/Caddyfile" \
 # =========================
 
 cat > "$BACKUP/INFO.txt" << EOF
-
 Backup Gastos PérezBuseu
 
 Fecha:
@@ -94,14 +102,15 @@ echo "Comprimiendo backup..."
 
 tar -czf \
 "$ARCHIVO" \
--C "$DESTINO" \
-"backup-$FECHA"
+-C "/tmp" \
+"backup-gastos-perezbuseu-$FECHA"
 
 
 # =========================
 # SUBIR A GOOGLE DRIVE
 # =========================
 
+echo ""
 echo "Subiendo backup a Google Drive..."
 
 rclone copy \
@@ -114,27 +123,36 @@ rclone copy \
 # COMPROBAR SUBIDA
 # =========================
 
+echo ""
 echo "Comprobando subida a Google Drive..."
 
 NOMBRE_ARCHIVO=$(basename "$ARCHIVO")
 
 if rclone lsf "$GOOGLE_DRIVE" | grep -Fxq "$NOMBRE_ARCHIVO"; then
 
+    echo ""
     echo "Backup subido correctamente a Google Drive."
 
 else
 
+    echo ""
     echo "ERROR: No se ha podido comprobar la subida a Google Drive."
+
     exit 1
 
 fi
 
 
 # =========================
-# BORRAR CARPETA TEMPORAL
+# BORRAR ARCHIVOS TEMPORALES
 # =========================
 
+echo ""
+echo "Borrando archivos temporales..."
+
 rm -rf "$BACKUP"
+
+rm -f "$ARCHIVO"
 
 
 # =========================
@@ -147,10 +165,7 @@ echo " BACKUP TERMINADO CORRECTAMENTE"
 echo "================================="
 echo ""
 
-echo "Archivo local:"
-echo "$ARCHIVO"
+echo "Copia guardada en:"
+echo "$GOOGLE_DRIVE/$NOMBRE_ARCHIVO"
 
 echo ""
-
-echo "Copia en Google Drive:"
-echo "$GOOGLE_DRIVE/$NOMBRE_ARCHIVO"
