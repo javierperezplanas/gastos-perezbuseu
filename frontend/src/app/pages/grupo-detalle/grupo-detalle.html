@@ -28,7 +28,7 @@
           *ngIf="!grupo.foto"
         >
 
-          👨‍👩‍👧
+          
 
         </div>
 
@@ -90,7 +90,7 @@
 
         @if (saldoUsuario < 0) {
 
-          −
+          -
 
         }
 
@@ -129,7 +129,7 @@
         ]"
       >
 
-        ✏️ Editar
+         Editar
 
       </a>
 
@@ -143,7 +143,7 @@
         ]"
       >
 
-        ➕ Añadir gasto
+         Añadir gasto
 
       </a>
 
@@ -164,7 +164,7 @@
 
       <span>
 
-        💰 Total gastado
+         Total gastado
 
       </span>
 
@@ -189,7 +189,7 @@
 
       <span>
 
-        🧾 Gastos
+         Gastos
 
       </span>
 
@@ -222,7 +222,7 @@
 
         <h2>
 
-          📋 Gastos
+           Gastos
 
         </h2>
 
@@ -243,7 +243,7 @@
             ]"
           >
 
-            📊 Gráficos
+             Gráficos
 
           </a>
 
@@ -259,7 +259,7 @@
             ]"
           >
 
-            📋 Actividad
+             Actividad
 
           </a>
 
@@ -272,9 +272,43 @@
 
       <!-- LISTA DE GASTOS -->
 
+
+      <!-- BUSCADOR DE GASTOS -->
+      <div class="buscador-gastos">
+        <div class="buscador-input">
+          <span class="buscador-icono"></span>
+          <input
+            type="search"
+            [(ngModel)]="textoBusqueda"
+            (input)="buscarGastos()"
+            placeholder="Buscar gastos..."
+            aria-label="Buscar gastos"
+          >
+          <button
+            type="button"
+            class="buscador-limpiar"
+            *ngIf="textoBusqueda"
+            (click)="textoBusqueda = ''; buscarGastos()"
+            aria-label="Limpiar búsqueda"
+          >
+            ×
+          </button>
+        </div>
+
+        <div
+          class="total-busqueda"
+          *ngIf="textoBusqueda"
+        >
+          Total encontrado:
+          <strong>
+            {{ totalBusqueda | number:'1.2-2' }} €
+          </strong>
+        </div>
+      </div>
+
       <div
         class="lista-gastos"
-        *ngIf="gastos.length > 0"
+        *ngIf="gastosPorMes.length > 0"
       >
 
 
@@ -463,6 +497,40 @@
       </div>
 
 
+      <!-- SIN RESULTADOS DE BÚSQUEDA -->
+
+      <div
+        class="sin-gastos"
+        *ngIf="
+          gastos.length > 0 &&
+          gastosPorMes.length === 0
+        "
+      >
+
+        <div class="sin-gastos-icono">
+
+          
+
+        </div>
+
+
+        <h3>
+
+          No se han encontrado gastos
+
+        </h3>
+
+
+        <p>
+
+          Prueba con otra descripción.
+
+        </p>
+
+
+      </div>
+
+
       <!-- SIN GASTOS -->
 
       <div
@@ -473,7 +541,7 @@
 
         <div class="sin-gastos-icono">
 
-          💸
+          
 
         </div>
 
@@ -514,7 +582,7 @@
 
         <h2>
 
-          ⚖️ Balance
+           Balance
 
         </h2>
 
@@ -539,7 +607,7 @@
         ]"
       >
 
-        Ver balances →
+        Ver balances 
 
       </a>
 
@@ -548,6 +616,80 @@
 
 
   </div>
+
+
+  <!-- ANÁLISIS INTELIGENTE -->
+
+      <!-- ANÁLISIS INTELIGENTE -->
+
+      <div class="analisis-ia">
+
+        <div class="analisis-ia-cabecera">
+
+          <div>
+
+            <h2>
+               Análisis inteligente
+            </h2>
+
+            <p>
+              Analiza automáticamente los gastos de este grupo.
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            class="btn-analizar-ia"
+            (click)="analizarGastosIA()"
+            [disabled]="cargandoAnalisisIA"
+          >
+
+            <span *ngIf="!cargandoAnalisisIA">
+                Analizar gastos
+            </span>
+
+            <span *ngIf="cargandoAnalisisIA">
+              Analizando...
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- RESULTADO DEL ANÁLISIS -->
+
+        <div
+          class="analisis-ia-resultado"
+*ngIf="analisisIAHtml"        >
+
+          <h3>
+            Resultado del análisis
+          </h3>
+
+   <div
+  class="analisis-ia-texto"
+  [innerHTML]="analisisIAHtml"
+></div>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        <div
+          class="analisis-ia-error"
+          *ngIf="errorAnalisisIA"
+        >
+
+          {{ errorAnalisisIA }}
+
+        </div>
+
+      </div>
+
+
 
 
 </div>

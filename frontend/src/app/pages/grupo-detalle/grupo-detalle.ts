@@ -1,3 +1,5 @@
+
+
 import {
   Component,
   OnInit
@@ -12,6 +14,11 @@ import {
   Router,
   RouterLink
 } from '@angular/router';
+
+import {
+  FormsModule
+} from '@angular/forms';
+import { marked } from 'marked';
 
 import {
   forkJoin,
@@ -34,12 +41,12 @@ import {
   Auth
 } from '../../services/auth';
 
-
 @Component({
   selector: 'app-grupo-detalle',
 
   imports: [
     CommonModule,
+    FormsModule,
     RouterLink
   ],
 
@@ -108,6 +115,31 @@ implements OnInit {
    * Estado de carga.
    */
   cargando: boolean = true;
+
+
+  /*
+   * Texto utilizado para buscar
+   * gastos por descripción.
+   */
+  textoBusqueda: string = '';
+
+
+  /*
+   * Total de los gastos encontrados
+   * en la búsqueda.
+   */
+  totalBusqueda: number = 0;
+
+
+  /*
+   * Análisis mediante inteligencia artificial.
+   */
+  analisisIA: string = '';
+  analisisIAHtml: string = '';
+
+  cargandoAnalisisIA: boolean = false;
+
+  errorAnalisisIA: string = '';
 
 
   constructor(
@@ -606,7 +638,159 @@ implements OnInit {
    * Agrupar gastos
    * por mes.
    */
-  agruparGastosPorMes(): void {
+  /*
+   * Buscar gastos por descripción.
+   *
+   * La búsqueda se realiza en tiempo real,
+   * ignorando mayúsculas, minúsculas y
+   * acentos.
+   */
+  buscarGastos(): void {
+
+    const texto =
+      this.normalizarTexto(
+        this.textoBusqueda
+      );
+
+
+    if (!texto) {
+
+      this.totalBusqueda = 0;
+
+      this.agruparGastosPorMes();
+
+      return;
+
+    }
+
+
+    const gastosFiltrados =
+      this.gastos.filter(
+
+        (gasto: any) =>
+
+          this.normalizarTexto(
+            gasto.descripcion
+          ).includes(
+            texto
+          )
+
+      );
+
+
+    this.totalBusqueda =
+      gastosFiltrados.reduce(
+        (
+          total: number,
+          gasto: any
+        ) =>
+          total +
+          Number(
+            gasto.importe || 0
+          ),
+        0
+      );
+
+    this.totalBusqueda =
+      Math.round(
+        this.totalBusqueda * 100
+      ) / 100;
+
+
+    this.agruparGastosPorMes(
+      gastosFiltrados
+    );
+
+  }
+
+
+  /*
+   * Analizar los gastos mediante
+   * inteligencia artificial.
+   */
+  analizarGastosIA(): void {
+
+    this.cargandoAnalisisIA = true;
+    this.errorAnalisisIA = '';
+    this.analisisIA = '';
+    this.analisisIAHtml = '';
+
+
+    this.gastosService
+      .analizarGastosIA(this.grupoId)
+      .subscribe({
+
+        next: (
+          respuesta: { analisis: string }
+        ) => {
+
+          this.analisisIA =
+  respuesta.analisis;
+
+this.analisisIAHtml =
+  marked.parse(
+    respuesta.analisis
+  ) as string;
+          this.cargandoAnalisisIA = false;
+
+        },
+
+        error: (
+          error: any
+        ) => {
+
+          console.error(
+            'Error realizando análisis IA:',
+            error
+          );
+
+          this.errorAnalisisIA =
+            'No se ha podido realizar el análisis.';
+
+          this.cargandoAnalisisIA = false;
+
+        }
+
+      });
+
+  }
+
+
+  /*
+   * Normalizar texto para la búsqueda.
+   *
+   * Elimina acentos y convierte
+   * todo a minúsculas.
+   */
+  normalizarTexto(
+    texto: string
+  ): string {
+
+    return (
+      texto || ''
+    )
+    .toString()
+    .normalize('NFD')
+    .replace(
+      /[\u0300-\u036f]/g,
+      ''
+    )
+    .toLowerCase()
+    .trim();
+
+  }
+
+
+  /*
+   * Agrupar gastos
+   * por mes.
+   *
+   * Puede recibir una lista concreta
+   * de gastos para permitir la búsqueda.
+   */
+  agruparGastosPorMes(
+    gastosParaAgrupar: any[] = this.gastos
+  ): void {
 
 
     /*
@@ -614,77 +798,67 @@ implements OnInit {
      * del más reciente al más antiguo.
      */
     const gastosOrdenados =
-    this.gastos
-    .slice()
-    .sort(
+      gastosParaAgrupar
+      .slice()
+      .sort(
 
-      (
-        a: any,
-        b: any
-      ) => {
-
-
-        const fechaA =
-        new Date(
-          a.fechaHora
-        ).getTime();
+        (
+          a: any,
+          b: any
+        ) => {
 
 
-        const fechaB =
-        new Date(
-          b.fechaHora
-        ).getTime();
+          const fechaA =
+            new Date(
+              a.fechaHora
+            ).getTime();
 
 
-        const diferenciaFecha =
-        fechaB
-        -
-        fechaA;
+          const fechaB =
+            new Date(
+              b.fechaHora
+            ).getTime();
 
 
-        /*
-         * Si dos gastos tienen exactamente
-         * la misma fecha y hora, usamos el
-         * ID como segundo criterio.
-         *
-         * El gasto creado después tiene un
-         * ID mayor, por lo que debe aparecer
-         * antes.
-         */
-        if (
-          diferenciaFecha !== 0
-        ) {
+          const diferenciaFecha =
+            fechaB
+            -
+            fechaA;
 
 
-          return diferenciaFecha;
+          if (
+            diferenciaFecha !== 0
+          ) {
+
+            return diferenciaFecha;
+
+          }
+
+
+          return (
+
+            Number(
+              b.id
+            )
+
+            -
+
+            Number(
+              a.id
+            )
+
+          );
 
         }
 
-
-        return (
-
-          Number(
-            b.id
-          )
-
-          -
-
-          Number(
-            a.id
-          )
-
-        );
-
-      }
-
-    );
+      );
 
 
     const grupos =
-    new Map<
-      string,
-      any[]
-    >();
+      new Map<
+        string,
+        any[]
+      >();
 
 
     for (
@@ -694,9 +868,9 @@ implements OnInit {
 
 
       const fecha =
-      new Date(
-        gasto.fechaHora
-      );
+        new Date(
+          gasto.fechaHora
+        );
 
 
       const clave =
@@ -744,7 +918,7 @@ implements OnInit {
 
 
     this.gastosPorMes =
-    [];
+      [];
 
 
     grupos.forEach(
@@ -756,47 +930,47 @@ implements OnInit {
 
 
         const partes =
-        clave.split(
-          '-'
-        );
+          clave.split(
+            '-'
+          );
 
 
         const anio =
-        Number(
-          partes[0]
-        );
+          Number(
+            partes[0]
+          );
 
 
         const mes =
-        Number(
-          partes[1]
-        )
-        -
-        1;
+          Number(
+            partes[1]
+          )
+          -
+          1;
 
 
         const fecha =
-        new Date(
-          anio,
-          mes,
-          1
-        );
+          new Date(
+            anio,
+            mes,
+            1
+          );
 
 
         const nombre =
-        fecha.toLocaleDateString(
+          fecha.toLocaleDateString(
 
-          'es-ES',
+            'es-ES',
 
-          {
+            {
 
-            month: 'long',
+              month: 'long',
 
-            year: 'numeric'
+              year: 'numeric'
 
-          }
+            }
 
-        );
+          );
 
 
         this.gastosPorMes.push({
@@ -821,7 +995,6 @@ implements OnInit {
     );
 
   }
-
 
   /*
    * Calcular el total

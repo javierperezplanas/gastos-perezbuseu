@@ -50,6 +50,17 @@ export class Gastos {
   }
 
 
+  analizarGastosIA(
+    grupoId: number
+  ) {
+
+    return this.http.get<{ analisis: string }>(
+      `/api/analisis-ia/grupo/${grupoId}`
+    );
+
+  }
+
+
   /*
    * Busca una categoría utilizada
    * anteriormente para una descripción
