@@ -1,7 +1,9 @@
 package com.perezbuseu.gastos.analisis;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -39,6 +41,46 @@ public class AnalisisIAResource {
                                     + e.getMessage()
                     )
             ).build();
+        }
+    }
+
+    @POST
+    @Path("/grupo/{grupoId}/pregunta")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response responderPregunta(
+            @PathParam("grupoId") Long grupoId,
+            PreguntaIARequest request) {
+
+        try {
+
+            String respuesta =
+                    analisisIAService.responderPregunta(
+                            grupoId,
+                            request.pregunta
+                    );
+
+            return Response.ok(
+                    new AnalisisIAResponse(respuesta)
+            ).build();
+
+        } catch (Exception e) {
+
+            return Response.status(
+                    Response.Status.INTERNAL_SERVER_ERROR
+            ).entity(
+                    new AnalisisIAResponse(
+                            "Error al responder la pregunta: "
+                                    + e.getMessage()
+                    )
+            ).build();
+        }
+    }
+
+    public static class PreguntaIARequest {
+
+        public String pregunta;
+
+        public PreguntaIARequest() {
         }
     }
 

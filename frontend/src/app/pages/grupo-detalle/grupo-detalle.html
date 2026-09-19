@@ -687,6 +687,28 @@
 
         </div>
 
+
+        <!-- PREGUNTAS A LA IA -->
+
+        <div class="pregunta-ia-acceso">
+
+          <p>
+            ¿Quieres hacer preguntas sobre los gastos de este grupo?
+          </p>
+
+          <a
+            class="btn-preguntar-ia"
+            [routerLink]="[
+              '/grupos',
+              grupoId,
+              'analisis-ia'
+            ]"
+          >
+            💬 Preguntar sobre los gastos
+          </a>
+
+        </div>
+
       </div>
 
 

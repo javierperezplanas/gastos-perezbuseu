@@ -59,6 +59,10 @@ import {
 } from './pages/estadisticas-categorias/estadisticas-categorias';
 
 import {
+  AnalisisIa
+} from './pages/analisis-ia/analisis-ia';
+
+import {
   RecuperarPassword
 } from './pages/recuperar-password/recuperar-password';
 
@@ -285,6 +289,20 @@ export const routes: Routes = [
     path: 'grupos/:id/estadisticas',
 
     component: Estadisticas,
+
+    canActivate: [
+      authGuard
+    ]
+  },
+
+
+  /*
+   * ANÁLISIS INTELIGENTE
+   */
+  {
+    path: 'grupos/:id/analisis-ia',
+
+    component: AnalisisIa,
 
     canActivate: [
       authGuard

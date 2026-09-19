@@ -1036,6 +1036,92 @@
 
 }
 
+/* ACCESO A LAS PREGUNTAS DE LA IA */
+
+.pregunta-ia-acceso {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  margin-top: 18px;
+
+  padding: 16px 20px;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+}
+
+
+.pregunta-ia-acceso p {
+
+  margin: 0;
+
+  color: #718096;
+
+  font-size: 13px;
+
+}
+
+
+.pregunta-ia-acceso .btn-preguntar-ia {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 42px;
+
+  padding: 10px 16px;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: #5b6ee1;
+
+  color: #fff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+}
+
+
+.pregunta-ia-acceso .btn-preguntar-ia:hover {
+
+  opacity: .92;
+
+}
+
+
+/* El botón de análisis mantiene su comportamiento visual. */
+
+.btn-analizar-ia:hover:not(:disabled) {
+
+  opacity: .92;
+
+}
+
+
+
 
 /* BALANCE */
 
@@ -1620,6 +1706,46 @@
     font-size: 11px;
 
   }
+
+
+  .pregunta-ia-acceso {
+
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 12px;
+
+    padding: 13px 14px;
+
+    border-radius: 10px;
+
+  }
+
+
+  .pregunta-ia-acceso p {
+
+    font-size: 11px;
+
+  }
+
+
+  .pregunta-ia-acceso .btn-preguntar-ia {
+
+    width: 100%;
+
+    min-height: 40px;
+
+    padding: 8px 10px;
+
+    font-size: 12px;
+
+    box-sizing: border-box;
+
+  }
+
 
 
   .balance-resumen {

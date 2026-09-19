@@ -61,6 +61,21 @@ export class Gastos {
   }
 
 
+  responderPreguntaIA(
+    grupoId: number,
+    pregunta: string
+  ) {
+
+    return this.http.post<{ analisis: string }>(
+      `/api/analisis-ia/grupo/${grupoId}/pregunta`,
+      {
+        pregunta
+      }
+    );
+
+  }
+
+
   /*
    * Busca una categoría utilizada
    * anteriormente para una descripción

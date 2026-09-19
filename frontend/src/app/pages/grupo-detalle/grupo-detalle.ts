@@ -142,6 +142,7 @@ implements OnInit {
   errorAnalisisIA: string = '';
 
 
+
   constructor(
 
     private route: ActivatedRoute,

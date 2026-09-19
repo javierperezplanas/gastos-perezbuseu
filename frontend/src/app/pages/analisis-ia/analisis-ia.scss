@@ -1,0 +1,357 @@
+/* ========================================
+   ANÁLISIS INTELIGENTE
+======================================== */
+
+.analisis-ia-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+
+/* ========================================
+   CABECERA
+======================================== */
+
+.analisis-ia-cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.analisis-ia-cabecera h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+}
+
+.analisis-ia-cabecera p {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+}
+
+
+/* ========================================
+   BOTÓN VOLVER
+======================================== */
+
+.btn-volver {
+  border: none;
+  background: #f1f1f1;
+  color: #333;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.btn-volver:hover {
+  background: #e5e5e5;
+}
+
+
+/* ========================================
+   CARGANDO
+======================================== */
+
+.analisis-ia-cargando {
+  text-align: center;
+  padding: 50px 20px;
+  color: #666;
+}
+
+
+/* ========================================
+   CONTENEDOR CONVERSACIÓN
+======================================== */
+
+.analisis-ia-conversacion {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+
+/* ========================================
+   INTRODUCCIÓN
+======================================== */
+
+.analisis-ia-introduccion {
+  background: #f7f8fa;
+  border-radius: 14px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+}
+
+.analisis-ia-introduccion h2 {
+  margin: 0 0 10px;
+  font-size: 21px;
+}
+
+.analisis-ia-introduccion p {
+  margin: 6px 0;
+  color: #555;
+}
+
+.analisis-ia-introduccion .ejemplos {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.analisis-ia-introduccion .ejemplos span {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-size: 13px;
+  color: #555;
+}
+
+
+/* ========================================
+   HISTORIAL
+======================================== */
+
+.historial-ia {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.conversacion-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* ========================================
+   PREGUNTA DEL USUARIO
+======================================== */
+
+.pregunta-usuario {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.pregunta-etiqueta {
+  font-size: 12px;
+  font-weight: 600;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.pregunta-texto {
+  max-width: 80%;
+  background: #e8f0fe;
+  border-radius: 14px 14px 4px 14px;
+  padding: 12px 16px;
+  color: #222;
+}
+
+
+/* ========================================
+   RESPUESTA IA
+======================================== */
+
+.respuesta-ia {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.respuesta-etiqueta {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.respuesta-texto {
+  width: 100%;
+  box-sizing: border-box;
+  background: white;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px 14px 14px 14px;
+  padding: 18px 20px;
+  line-height: 1.6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+
+/* ========================================
+   MARKDOWN
+======================================== */
+
+.respuesta-texto h1,
+.respuesta-texto h2,
+.respuesta-texto h3,
+.respuesta-texto h4 {
+  margin-top: 18px;
+  margin-bottom: 10px;
+}
+
+.respuesta-texto h1:first-child,
+.respuesta-texto h2:first-child,
+.respuesta-texto h3:first-child,
+.respuesta-texto h4:first-child {
+  margin-top: 0;
+}
+
+.respuesta-texto p {
+  margin: 8px 0;
+}
+
+.respuesta-texto ul,
+.respuesta-texto ol {
+  margin: 10px 0;
+  padding-left: 24px;
+}
+
+.respuesta-texto li {
+  margin: 5px 0;
+}
+
+.respuesta-texto strong {
+  font-weight: 700;
+}
+
+.respuesta-texto code {
+  background: #f1f1f1;
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+
+/* ========================================
+   FORMULARIO
+======================================== */
+
+.pregunta-ia-formulario {
+  display: flex;
+  gap: 10px;
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: 14px 0;
+  border-top: 1px solid #eee;
+}
+
+.pregunta-ia-formulario input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 13px 15px;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.pregunta-ia-formulario input:focus {
+  border-color: #888;
+}
+
+.pregunta-ia-formulario input:disabled {
+  background: #f5f5f5;
+}
+
+
+/* ========================================
+   BOTÓN PREGUNTAR
+======================================== */
+
+.btn-preguntar-ia {
+  border: none;
+  border-radius: 10px;
+  padding: 0 22px;
+  background: #333;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-preguntar-ia:hover:not(:disabled) {
+  background: #222;
+}
+
+.btn-preguntar-ia:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* ========================================
+   CARGANDO RESPUESTA
+======================================== */
+
+.respuesta-cargando {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+  padding: 8px;
+}
+
+
+/* ========================================
+   ERROR
+======================================== */
+
+.analisis-ia-error {
+  background: #fff1f1;
+  border: 1px solid #f0caca;
+  color: #a33;
+  border-radius: 10px;
+  padding: 12px 15px;
+}
+
+
+/* ========================================
+   MÓVIL
+======================================== */
+
+@media (max-width: 700px) {
+
+  .analisis-ia-container {
+    padding: 16px;
+  }
+
+  .analisis-ia-cabecera {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .analisis-ia-cabecera h1 {
+    font-size: 24px;
+  }
+
+  .analisis-ia-introduccion {
+    padding: 18px;
+  }
+
+  .analisis-ia-introduccion .ejemplos {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pregunta-texto {
+    max-width: 90%;
+  }
+
+  .pregunta-ia-formulario {
+    flex-direction: column;
+  }
+
+  .btn-preguntar-ia {
+    min-height: 44px;
+  }
+
+}

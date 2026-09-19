@@ -1,0 +1,190 @@
+<div class="analisis-ia-container">
+
+  <!-- CABECERA -->
+
+  <div class="analisis-ia-cabecera">
+
+    <div>
+
+      <h1>
+        🤖 Análisis inteligente
+      </h1>
+
+      <p *ngIf="grupo">
+        {{ grupo.nombre }}
+      </p>
+
+    </div>
+
+    <button
+      type="button"
+      class="btn-volver"
+      (click)="volverAlGrupo()"
+    >
+      ← Volver al grupo
+    </button>
+
+  </div>
+
+
+  <!-- CARGANDO GRUPO -->
+
+  <div
+    class="analisis-ia-cargando"
+    *ngIf="cargandoGrupo"
+  >
+
+    Cargando grupo...
+
+  </div>
+
+
+  <!-- CONVERSACIÓN -->
+
+  <div
+    class="analisis-ia-conversacion"
+    *ngIf="!cargandoGrupo"
+  >
+
+    <!-- INTRODUCCIÓN -->
+
+    <div class="analisis-ia-introduccion">
+
+      <h2>
+        💬 Pregunta sobre tus gastos
+      </h2>
+
+      <p>
+        Puedes hacer cualquier pregunta sobre los gastos
+        de este grupo.
+      </p>
+
+      <p class="ejemplos">
+
+        Por ejemplo:
+
+        <span>
+          ¿En qué hemos gastado más?
+        </span>
+
+        <span>
+          ¿Cuánto hemos gastado en supermercados?
+        </span>
+
+        <span>
+          ¿Quién ha pagado más?
+        </span>
+
+      </p>
+
+    </div>
+
+
+    <!-- HISTORIAL -->
+
+    <div
+      class="historial-ia"
+      *ngIf="historial.length > 0"
+    >
+
+      <div
+        class="conversacion-item"
+        *ngFor="let item of historial"
+      >
+
+        <!-- PREGUNTA -->
+
+        <div class="pregunta-usuario">
+
+          <div class="pregunta-etiqueta">
+            Tú
+          </div>
+
+          <div class="pregunta-texto">
+            {{ item.pregunta }}
+          </div>
+
+        </div>
+
+
+        <!-- RESPUESTA -->
+
+        <div class="respuesta-ia">
+
+          <div class="respuesta-etiqueta">
+            🤖 IA
+          </div>
+
+          <div
+            class="respuesta-texto"
+            [innerHTML]="item.respuestaHtml"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div
+      class="analisis-ia-error"
+      *ngIf="errorPreguntaIA"
+    >
+
+      {{ errorPreguntaIA }}
+
+    </div>
+
+
+    <!-- FORMULARIO -->
+
+    <div class="pregunta-ia-formulario">
+
+      <input
+        type="text"
+        [(ngModel)]="preguntaIA"
+        placeholder="¿Qué quieres saber sobre estos gastos?"
+        (keyup.enter)="preguntarIA()"
+        [disabled]="cargandoPreguntaIA"
+      />
+
+      <button
+        type="button"
+        class="btn-preguntar-ia"
+        (click)="preguntarIA()"
+        [disabled]="
+          cargandoPreguntaIA ||
+          !preguntaIA.trim()
+        "
+      >
+
+        <span *ngIf="!cargandoPreguntaIA">
+          Preguntar
+        </span>
+
+        <span *ngIf="cargandoPreguntaIA">
+          Pensando...
+        </span>
+
+      </button>
+
+    </div>
+
+
+    <!-- RESPUESTA ACTUAL -->
+
+    <div
+      class="respuesta-cargando"
+      *ngIf="cargandoPreguntaIA"
+    >
+
+      🤖 Estoy analizando los gastos...
+
+    </div>
+
+  </div>
+
+</div>
